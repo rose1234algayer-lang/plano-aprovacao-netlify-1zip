@@ -156,6 +156,8 @@ function setupRevealAnimations() {
 }
 
 function enhanceFaqSection() {
+  document.querySelectorAll(".faq-trust-section").forEach((section) => section.remove());
+
   const faqSection = [...document.querySelectorAll("section")].find((section) => {
     return (section.textContent || "").includes("PERGUNTAS FREQUENTES");
   });
