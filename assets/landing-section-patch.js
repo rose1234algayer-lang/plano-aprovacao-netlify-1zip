@@ -414,9 +414,25 @@ function replaceMaterialSection() {
   return true;
 }
 
+function setupCheckoutHandler() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("button, a");
+    if (!btn) return;
+
+    const offerSection = btn.closest("#oferta");
+    if (offerSection) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+    }
+  }, true);
+}
+
+setupCheckoutHandler();
+
 const observer = new MutationObserver(() => {
   if (replaceMaterialSection()) observer.disconnect();
 });
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
-import("/assets/index-CIt76HRX.js?v=11");
+import("/assets/index-CIt76HRX.js?v=12");
