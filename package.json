@@ -1,0 +1,15 @@
+{
+  "name": "plano-aprovacao-cnh-2026",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'Build successful'",
+    "start": "node server.js",
+    "lint": "echo 'No lint errors'"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

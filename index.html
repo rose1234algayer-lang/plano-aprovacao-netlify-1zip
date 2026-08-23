@@ -6,33 +6,127 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <script>if(!sessionStorage.getItem('v3')){sessionStorage.setItem('v3','1');window.location.href=window.location.pathname+'?bust='+Date.now();}</script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#071B35" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
     <title>Plano Aprovação CNH 2026</title>
-    <meta name="description" content="Plano Aprovação CNH 2026 — built on Replit. Update this description to reflect the app." />
+    <meta name="description" content="Plano Aprovação CNH 2026 — Resumos objetivos, cronograma de 7 dias e questões comentadas do DETRAN." />
     <meta name="robots" content="index, follow" />
     <meta property="og:title" content="Plano Aprovação CNH 2026" />
-    <meta property="og:description" content="Plano Aprovação CNH 2026 — built on Replit. Update this description to reflect the app." />
+    <meta property="og:description" content="Plano Aprovação CNH 2026 — Resumos objetivos, cronograma de 7 dias e questões comentadas do DETRAN." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Plano Aprovação CNH 2026" />
-    <meta name="twitter:description" content="Plano Aprovação CNH 2026 — built on Replit. Update this description to reflect the app." />
+    <meta name="twitter:description" content="Plano Aprovação CNH 2026 — Resumos objetivos, cronograma de 7 dias e questões comentadas do DETRAN." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="/assets/apostila-cnh-2026.png" />
     <style>
-      /* The supplied transparent artwork should blend into the page instead of
-         getting an extra rectangular card treatment from the image wrapper. */
+      /* Mobile Performance & Smooth Interaction Optimizations */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+      }
+      
+      body {
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+      }
+
+      /* Instant responsive touch actions */
+      a, button, input, select, textarea, [role="button"] {
+        touch-action: manipulation;
+      }
+
+      /* Hardware Accelerated Rendering Layers for 60/120fps */
+      .material-section__item,
+      .material-section__book-wrap,
+      .material-section__cta-button,
+      .plan-card,
+      .receive-card,
+      .faq-enhanced button,
+      section > div {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+      }
+
+      /* Crisp, fluid image rendering without layout shift */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+
+      /* Optimize offscreen paint cycles on mobile */
+      @media (min-width: 1px) {
+        .material-section,
+        .faq-enhanced {
+          content-visibility: auto;
+          contain-intrinsic-size: auto 500px;
+        }
+      }
+      /* Hero character card: enlarged, straight flat bottom edge, and positioned with a refined gap to the next section */
+      section:nth-of-type(2) {
+        padding-top: 0.5rem !important;
+        padding-bottom: 1.1rem !important;
+        margin-bottom: 0 !important;
+      }
+
+      section:nth-of-type(2) > div {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+      }
+
       section:nth-of-type(2) .max-w-\[340px\] {
-        overflow: visible !important;
-        border-radius: 0 !important;
+        max-width: 385px !important;
+        width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 0 !important;
+        overflow: hidden !important;
+        border-top-left-radius: 2.25rem !important;
+        border-top-right-radius: 2.25rem !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
         box-shadow: none !important;
       }
 
+      section:nth-of-type(2) .max-w-\[340px\] img {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        margin-bottom: -5.6% !important;
+        transform: translateZ(0);
+      }
+
       /* Refine the benefit grid and full-bleed navy heading. */
+      section:nth-of-type(3) {
+        padding-top: 0.25rem !important;
+        margin-top: 0 !important;
+      }
+
       section:nth-of-type(3) > div > div:first-child {
         width: calc(100% + 2.5rem);
         margin-left: -1.25rem;
+        margin-top: 0 !important;
         border-radius: 0 !important;
         padding: 1.15rem 1.25rem !important;
         margin-bottom: 1.5rem !important;
@@ -113,54 +207,50 @@
         line-height: 1.2;
       }
 
-      /* Plan label: a thin, straight rectangle with one single-line phrase. */
+      /* Plan label: tilted badge with condensed tall font in a single line. */
       .plan-card {
         position: relative;
         z-index: 0;
-         display: inline-flex;
-         align-items: center;
-         justify-content: center;
-         gap: 0.5rem;
-         width: fit-content;
-         min-height: 0;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem;
+        width: fit-content;
+        min-height: 0;
         box-sizing: border-box;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        transform: none !important;
-         border-radius: 0.875rem !important;
-         padding: 0.55rem 0.85rem !important;
+        max-width: 95%;
+        margin: 0.3rem auto 0.6rem !important;
+        transform: rotate(-1.8deg) !important;
+        border-radius: 0.65rem !important;
+        padding: 0.28rem 1.1rem 0.32rem !important;
         background: #071b35 !important;
-        border: 1px solid #071b35;
-         box-shadow: 0 0.3rem 0.7rem rgba(7, 27, 53, 0.16);
+        border: none !important;
+        box-shadow: 0 4px 14px rgba(7, 27, 53, 0.28) !important;
       }
 
       .plan-card::before {
-        display: none;
+        display: none !important;
       }
 
-      .plan-card > span {
+      .plan-card > span,
+      .plan-card span {
         position: relative;
         z-index: 1;
-         display: inline-flex;
-         align-items: center;
-         justify-content: center;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         color: #ffffff;
-         width: auto;
-         font-family: "Roboto Condensed", "Arial Narrow", Arial, sans-serif;
-         font-size: clamp(0.78rem, 4vw, 1.12rem);
-        line-height: 1;
+        width: auto;
+        font-family: "Oswald", "Bebas Neue", "Roboto Condensed", sans-serif !important;
+        font-size: clamp(1.3rem, 5.2vw, 1.75rem) !important;
+        line-height: 1 !important;
         text-align: center;
         white-space: nowrap !important;
-         letter-spacing: -0.025em;
-        font-weight: 900;
-         transform: scaleX(0.94);
-         transform-origin: center;
-      }
-
-      .plan-card span {
-         white-space: nowrap !important;
-         letter-spacing: inherit;
+        letter-spacing: 0.03em !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        transform: scaleY(1.05) !important;
+        transform-origin: center !important;
       }
 
       /* Replacement for the imported bundle's "Dentro do plano" section. */
@@ -446,49 +536,42 @@
       }
 
       .plan-explanation-section .plan-title-highlight {
-        position: relative;
-        z-index: 0;
-        display: inline-block;
         color: #ff5a1f !important;
-        font-style: normal;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        display: inline-block !important;
+        padding: 0 !important;
+        margin: 0 0 0 0.45rem !important;
+        background: transparent !important;
+        position: static !important;
       }
 
       .plan-explanation-section .plan-title-highlight::before {
-        position: absolute;
-        z-index: -1;
-        content: "";
-        border-radius: 0.3rem;
-        background: #ff5a1f;
-        inset: 0.12em -0.18em;
-        transform: rotate(-1.2deg);
-      }
-
-      .plan-explanation-section .plan-title-highlight {
-        color: #ffffff !important;
-        padding: 0 0.18em;
+        display: none !important;
       }
 
        /* Give the supporting sentence a clear place between the two navy cards. */
        .plan-explanation-section > div > div:nth-child(3) {
          display: block;
-         margin: 1.5rem auto 1.65rem !important;
+         margin: 1rem auto 1.5rem !important;
        }
 
        .plan-explanation-section > div > div:nth-child(3) p {
          margin: 0 !important;
-         color: #ff5a1f !important;
-         font-size: 1.08rem !important;
-         font-weight: 800 !important;
-         letter-spacing: -0.015em;
-         line-height: 1.4 !important;
+         color: #374151 !important;
+         font-size: 1rem !important;
+         font-weight: 500 !important;
+         letter-spacing: -0.01em;
+         line-height: 1.45 !important;
          text-align: center;
        }
 
        .plan-intro {
-         color: #ff5a1f !important;
-         font-size: 1.08rem !important;
-         font-weight: 800 !important;
-         letter-spacing: -0.015em;
+         color: #071b35 !important;
+         font-size: 1.12rem !important;
+         font-weight: 700 !important;
+         letter-spacing: -0.01em;
+         margin-bottom: 0.75rem !important;
        }
 
        .receive-card {
@@ -824,13 +907,18 @@
            border-left: 0;
            padding-top: 2.25rem;
          }
+       }
 
-        .plan-explanation-section .plan-title-highlight {
-          margin-top: 0.25rem;
-        }
+      .footer-link {
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+      .footer-link:hover {
+        color: #FF5A1F !important;
       }
     </style>
-    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=2"></script>
+    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=24"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Cwo0zfvo.css">
   </head>
   <body>

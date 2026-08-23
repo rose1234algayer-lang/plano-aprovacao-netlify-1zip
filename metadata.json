@@ -1,0 +1,6 @@
+{
+  "name": "Plano Aprovação CNH 2026",
+  "description": "Página oficial do Plano de Aprovação CNH 2026 com cronograma de estudos de 7 dias, resumos objetivos, questões comentadas do DETRAN e simulados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
