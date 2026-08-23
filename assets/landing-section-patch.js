@@ -180,48 +180,6 @@ function enhanceFaqSection() {
     faqHeading.insertAdjacentElement("afterend", subtitle);
   }
 
-  const footer = document.querySelector("footer");
-  if (!footer || document.querySelector(".faq-trust-section")) return;
-
-  const trustSection = document.createElement("section");
-  trustSection.className = "faq-trust-section";
-  trustSection.innerHTML = `
-    <div class="faq-trust-section__inner">
-      <div class="faq-final-cta">
-        <p class="faq-final-cta__copy">
-          Não tirou sua dúvida? <strong>Clique abaixo e garanta seu acesso agora.</strong>
-        </p>
-        <button class="faq-final-cta__button" type="button">
-          <span>QUERO SER APROVADO <b>→</b></span>
-          <small>GARANTA AGORA SUA APOSTILA CNH</small>
-        </button>
-        <div class="faq-final-cta__badge">◯ Acesso enviado direto no seu WhatsApp</div>
-      </div>
-      <div class="faq-trust-grid">
-        <article class="faq-trust-item">
-          <div class="faq-trust-icon faq-trust-icon--image">
-            <img src="/assets/selo-garantia-7-dias.png" alt="Garantia de 7 dias">
-          </div>
-          <h3>7 DIAS DE GARANTIA</h3>
-          <p>Risco zero para você. Não gostou? Devolvemos 100% do seu dinheiro.</p>
-        </article>
-        <article class="faq-trust-item">
-          <div class="faq-trust-icon">▢</div>
-          <h3>COMPRA SEGURA</h3>
-          <p>Seus dados protegidos com total segurança e privacidade.</p>
-        </article>
-        <article class="faq-trust-item">
-          <div class="faq-trust-icon">✓</div>
-          <h3>ACESSO IMEDIATO</h3>
-          <p>Comece sua preparação para a prova teórica da CNH assim que comprar.</p>
-        </article>
-      </div>
-    </div>
-  `;
-  footer.before(trustSection);
-  trustSection.querySelector(".faq-final-cta__button")?.addEventListener("click", () => {
-    document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth" });
-  });
 }
 
 function replaceMaterialSection() {
