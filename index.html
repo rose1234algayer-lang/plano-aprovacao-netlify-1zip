@@ -52,24 +52,34 @@
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y;
+        background-color: #071B35;
       }
 
-      /* Instant responsive touch actions */
-      a, button, input, select, textarea, [role="button"] {
+      /* Instant responsive touch actions & eliminate 300ms tap delay */
+      a, button, input, select, textarea, [role="button"], iframe {
         touch-action: manipulation;
       }
 
-      /* Hardware Accelerated Rendering Layers for 60/120fps */
+      /* Hardware Accelerated Rendering Layers for silky smooth 60/120fps scrolling */
       .material-section__item,
       .material-section__book-wrap,
       .material-section__cta-button,
       .plan-card,
       .receive-card,
       .faq-enhanced button,
-      section > div {
+      #depoimento-video,
+      #oferta,
+      section {
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        transform: translateZ(0);
+        transform: translate3d(0, 0, 0);
+        will-change: auto;
+      }
+
+      /* GPU accelerated smooth transitions without frame dropping */
+      button, a, .group {
+        transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+        transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       /* Crisp, fluid image rendering without layout shift */
@@ -79,6 +89,14 @@
         display: block;
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+        content-visibility: auto;
+      }
+
+      /* Prevent iframe and video jitter on scroll */
+      iframe {
+        border: 0;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
       }
 
       /* Optimize offscreen paint cycles on mobile */
