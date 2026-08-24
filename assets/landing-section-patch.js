@@ -525,6 +525,56 @@ function replaceMaterialSection() {
   return true;
 }
 
+function optimizeImagesSmoothly() {
+  const images = document.querySelectorAll("img");
+  if (!images.length) return;
+
+  const isHeroImage = (src) => src.includes("logo-novo") || src.includes("hero-photo") || src.includes("logo-badge");
+
+  images.forEach((img) => {
+    // Set non-blocking asynchronous decoding
+    if (!img.getAttribute("decoding")) {
+      img.setAttribute("decoding", "async");
+    }
+
+    const src = img.getAttribute("src") || "";
+    if (isHeroImage(src)) {
+      img.setAttribute("fetchpriority", "high");
+      img.removeAttribute("loading");
+    } else {
+      if (!img.getAttribute("loading")) {
+        img.setAttribute("loading", "lazy");
+      }
+    }
+
+    // Pre-decode using native browser GPU thread
+    if (img.complete && typeof img.decode === "function") {
+      img.decode().catch(() => {});
+    }
+  });
+
+  // Pre-decode upcoming images smoothly before user reaches them
+  if ("IntersectionObserver" in window && !window.__imgPreDecodeObserver) {
+    window.__imgPreDecodeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (typeof img.decode === "function") {
+            img.decode().catch(() => {});
+          }
+          window.__imgPreDecodeObserver.unobserve(img);
+        }
+      });
+    }, { rootMargin: "600px 0px" });
+
+    images.forEach((img) => {
+      if (!img.complete) {
+        window.__imgPreDecodeObserver.observe(img);
+      }
+    });
+  }
+}
+
 function setupCheckoutHandler() {
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("button, a");
@@ -545,6 +595,7 @@ let materialReplaced = false;
 let videoOptimized = false;
 
 function runOptimizations() {
+  optimizeImagesSmoothly();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
   }
@@ -552,7 +603,7 @@ function runOptimizations() {
     videoOptimized = enhanceVideoDepoimento();
   }
   if (materialReplaced && videoOptimized) {
-    observer.disconnect();
+    // keep observer active for new dynamic elements but throttle checks
   }
 }
 

