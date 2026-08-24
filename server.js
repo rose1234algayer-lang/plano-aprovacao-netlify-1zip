@@ -1,4 +1,5 @@
 import express from "express";
+import compression from "compression";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -9,11 +10,31 @@ const app = express();
 const PORT = 3000;
 const HOST = "0.0.0.0";
 
-// Serve static assets from root directory
-app.use(express.static(__dirname));
+// Enable high-efficiency gzip/deflate compression for all text/html/js/css/json responses
+app.use(compression({
+  threshold: 1024,
+  level: 6
+}));
 
-// Serve index.html for all routes
+// Optimized static asset serving with caching headers
+app.use("/assets", express.static(path.join(__dirname, "assets"), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith(".html")) {
+      res.setHeader("Cache-Control", "no-cache");
+    } else {
+      res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+    }
+  }
+}));
+
+// Serve root static assets (favicon, robots, etc.)
+app.use(express.static(__dirname, {
+  maxAge: "1d"
+}));
+
+// Serve index.html for all routes with fast-revalidate headers
 app.get("*", (req, res) => {
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.sendFile(path.join(__dirname, "index.html"));
 });
 

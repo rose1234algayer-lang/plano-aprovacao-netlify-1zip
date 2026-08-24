@@ -104,7 +104,12 @@
       });
   }
 
-  fetchLocation();
+  // Defer location lookup to idle time so initial load is instant
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(fetchLocation, { timeout: 3500 });
+  } else {
+    setTimeout(fetchLocation, 2500);
+  }
 
   // Create Popup Toast in DOM
   const container = document.createElement("div");
@@ -391,6 +396,112 @@ function enhanceFaqSection() {
 
 }
 
+function enhanceVideoDepoimento() {
+  const videoSection = document.getElementById("depoimento-video");
+  if (!videoSection) return false;
+  if (videoSection.dataset.enhancedVideo === "true") return true;
+
+  // Locate the video container wrapper inside depoimento section
+  const videoWrapper = videoSection.querySelector('[style*="aspectRatio"], [style*="aspect-ratio"]') ||
+                       videoSection.querySelector(".overflow-hidden.shadow-2xl") ||
+                       videoSection.querySelector("iframe")?.parentElement;
+  
+  if (!videoWrapper) return false;
+
+  // Mark as enhanced to prevent duplicate initialization
+  videoSection.dataset.enhancedVideo = "true";
+
+  // Pre-connect to YouTube when user approaches the video section
+  if ("IntersectionObserver" in window) {
+    const preconnectObserver = new IntersectionObserver((entries, obs) => {
+      if (entries[0]?.isIntersecting) {
+        ["https://www.youtube-nocookie.com", "https://i.ytimg.com", "https://googleads.g.doubleclick.net"].forEach((url) => {
+          if (!document.querySelector(`link[href="${url}"]`)) {
+            const link = document.createElement("link");
+            link.rel = "preconnect";
+            link.href = url;
+            link.crossOrigin = "anonymous";
+            document.head.appendChild(link);
+          }
+        });
+        obs.disconnect();
+      }
+    }, { rootMargin: "350px" });
+    preconnectObserver.observe(videoSection);
+  }
+
+  // Inject High-Performance Pre-Optimized Video Facade
+  videoWrapper.innerHTML = `
+    <div class="video-facade-card" role="button" tabindex="0" aria-label="Assistir ao depoimento da aluna aprovada">
+      <img src="/assets/video-depoimento-thumb.jpg" 
+           alt="Depoimento em vídeo Plano Aprovação CNH" 
+           loading="lazy" 
+           decoding="async" 
+           width="720" 
+           height="1280"
+           onerror="this.src='https://i.ytimg.com/vi/jinexB5AnBg/maxresdefault.jpg'" />
+      
+      <!-- Vignette and dark gradient for maximum contrast -->
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 27, 53, 0.45) 0%, rgba(7, 27, 53, 0.05) 45%, rgba(7, 27, 53, 0.88) 100%); pointer-events: none;"></div>
+      
+      <!-- Top verified badge -->
+      <div style="position: absolute; top: 12px; left: 12px; display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: rgba(7, 27, 53, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.18); color: #ffffff; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 12px rgba(0,0,0,0.35);">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #FF5A1F; box-shadow: 0 0 8px #FF5A1F; display: inline-block;"></span>
+        <span>Depoimento Real</span>
+      </div>
+
+      <!-- Verified Student Badge (Top Right) -->
+      <div style="position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; background: rgba(37, 211, 102, 0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(37, 211, 102, 0.35); color: #25D366; font-size: 11px; font-weight: 800;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+        <span>Aprovada</span>
+      </div>
+
+      <!-- Glowing Center Play Button -->
+      <div class="video-facade-play" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" style="width: 30px; height: 30px; margin-left: 4px;">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+
+      <!-- Bottom Play CTA Overlay -->
+      <div style="position: absolute; bottom: 16px; left: 12px; right: 12px; text-align: center; pointer-events: none;">
+        <div style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 999px; background: rgba(7, 27, 53, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 90, 31, 0.45); color: #ffffff; font-size: 12px; font-weight: 800; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
+          <span style="color: #FF5A1F; font-size: 10px;">▶</span>
+          <span>CLIQUE PARA ASSISTIR</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  function startVideo() {
+    videoWrapper.innerHTML = `
+      <iframe 
+        class="w-full h-full border-0" 
+        src="https://www.youtube-nocookie.com/embed/jinexB5AnBg?autoplay=1&playsinline=1&rel=0&modestbranding=1" 
+        title="Depoimento Plano Aprovação CNH" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen="true"
+        style="width: 100%; height: 100%; border: 0; border-radius: inherit; display: block;">
+      </iframe>
+    `;
+  }
+
+  const card = videoWrapper.querySelector(".video-facade-card");
+  if (card) {
+    card.addEventListener("click", startVideo);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        startVideo();
+      }
+    });
+  }
+
+  return true;
+}
+
 function replaceMaterialSection() {
   const currentSection = [...document.querySelectorAll("section")].find((section) => {
     const text = section.textContent || "";
@@ -430,9 +541,30 @@ function setupCheckoutHandler() {
 
 setupCheckoutHandler();
 
-const observer = new MutationObserver(() => {
-  if (replaceMaterialSection()) observer.disconnect();
-});
+let materialReplaced = false;
+let videoOptimized = false;
 
+function runOptimizations() {
+  if (!materialReplaced) {
+    materialReplaced = replaceMaterialSection();
+  }
+  if (!videoOptimized) {
+    videoOptimized = enhanceVideoDepoimento();
+  }
+  if (materialReplaced && videoOptimized) {
+    observer.disconnect();
+  }
+}
+
+const observer = new MutationObserver(runOptimizations);
 observer.observe(document.documentElement, { childList: true, subtree: true });
+
+// Run immediately and upon idle
+runOptimizations();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", runOptimizations);
+}
+setTimeout(runOptimizations, 250);
+setTimeout(runOptimizations, 800);
+
 import("/assets/index-CIt76HRX.js?v=15");
