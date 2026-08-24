@@ -241,7 +241,7 @@ function createMaterialSection() {
         <div class="material-section__book-wrap">
           <!-- Imagem final da apostila inserida aqui. -->
           <div class="material-section__placeholder material-section__image-placeholder">
-            <img class="material-section__book-image" src="/assets/apostila-cnh-2026.webp" alt="Apostila Plano Aprovação CNH 2026" loading="lazy" decoding="async" width="560" height="740">
+            <img class="material-section__book-image" src="/assets/apostila-cnh-2026.png" alt="Apostila Plano Aprovação CNH 2026" loading="lazy" decoding="async" width="560" height="740">
           </div>
         </div>
         <div class="material-section__items">
@@ -435,4 +435,4 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
-import("/assets/index-CIt76HRX.js?v=21");
+import("/assets/index-CIt76HRX.js?v=25");
