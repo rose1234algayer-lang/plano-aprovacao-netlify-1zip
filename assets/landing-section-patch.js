@@ -548,6 +548,65 @@ function optimizeImagesSmoothly() {
 
 const CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
 
+// Global blocker: Never allow any script or browser call to scroll to oferta
+if (typeof Element !== "undefined" && Element.prototype.scrollIntoView) {
+  const originalScrollIntoView = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function(options) {
+    if (this && (this.id === "oferta" || (this.closest && this.closest("#oferta")))) {
+      redirectToCheckout();
+      return;
+    }
+    return originalScrollIntoView.apply(this, arguments);
+  };
+}
+
+function redirectToCheckout(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+    if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
+  }
+
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.href = CHECKOUT_URL;
+      return;
+    }
+  } catch (err) {
+    // Cross-origin iframe fallback
+    try {
+      window.open(CHECKOUT_URL, "_blank");
+      return;
+    } catch (e2) {}
+  }
+
+  window.location.href = CHECKOUT_URL;
+}
+
+function bindCheckoutButtons() {
+  const elements = document.querySelectorAll("button, a, .material-section__cta-button");
+  elements.forEach((el) => {
+    // Skip FAQ accordion collapse/expand question headers
+    if (el.closest(".space-y-2") && el.classList.contains("text-left")) {
+      return;
+    }
+    // Skip video player triggers
+    if (el.closest(".video-facade-card") || el.closest("#depoimento-video iframe")) {
+      return;
+    }
+    // Skip toast notifications
+    if (el.closest(".toast") || el.closest(".social-proof-toast")) {
+      return;
+    }
+
+    // Attach direct handler
+    el.setAttribute("data-direct-checkout", "true");
+    el.onclick = (e) => {
+      redirectToCheckout(e);
+    };
+  });
+}
+
 function setupCheckoutHandler() {
   document.addEventListener("click", (e) => {
     // Ignore video facade card or video player triggers
@@ -555,7 +614,7 @@ function setupCheckoutHandler() {
       return;
     }
 
-    const btn = e.target.closest("button, a, .material-section__cta-button");
+    const btn = e.target.closest("button, a, .material-section__cta-button, [data-direct-checkout]");
     if (!btn) return;
 
     // Ignore FAQ accordion collapse/expand question headers
@@ -568,26 +627,8 @@ function setupCheckoutHandler() {
       return;
     }
 
-    // Check if it is a conversion / CTA button on any section
-    const isCtaButton =
-      btn.closest("#oferta") ||
-      btn.classList.contains("material-section__cta-button") ||
-      btn.closest(".bg-\\[\\#FF5A1F\\]") ||
-      btn.classList.contains("bg-[#FF5A1F]") ||
-      (btn.textContent && (
-        btn.textContent.includes("QUERO") ||
-        btn.textContent.includes("COMEÇAR") ||
-        btn.textContent.includes("APROVAD") ||
-        btn.textContent.includes("PASSAR") ||
-        btn.textContent.includes("GARANTA") ||
-        btn.textContent.includes("ACESSO")
-      ));
-
-    if (isCtaButton) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.href = CHECKOUT_URL;
-    }
+    // Every other button/link on the page goes straight to checkout
+    redirectToCheckout(e);
   }, true);
 }
 
@@ -598,14 +639,12 @@ let videoOptimized = false;
 
 function runOptimizations() {
   optimizeImagesSmoothly();
+  bindCheckoutButtons();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
   }
   if (!videoOptimized) {
     videoOptimized = enhanceVideoDepoimento();
-  }
-  if (materialReplaced && videoOptimized) {
-    // keep observer active for new dynamic elements but throttle checks
   }
 }
 
@@ -620,4 +659,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-CIt76HRX.js?v=17");
+import("/assets/index-checkout-v3.js?v=direct_checkout_final");

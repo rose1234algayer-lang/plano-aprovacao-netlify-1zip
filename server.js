@@ -19,12 +19,14 @@ app.use(compression({
 // Optimized static asset serving with caching headers
 app.use("/assets", express.static(path.join(__dirname, "assets"), {
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith(".html")) {
-      res.setHeader("Cache-Control", "no-cache");
+    if (filePath.endsWith(".html") || filePath.endsWith(".js")) {
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
     } else if (/\.(png|jpg|jpeg|webp|svg|gif|ico|woff2|woff|ttf)$/i.test(filePath)) {
       res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     } else {
-      res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+      res.setHeader("Cache-Control", "no-cache");
     }
   }
 }));
