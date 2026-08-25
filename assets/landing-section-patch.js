@@ -270,8 +270,10 @@ function createMaterialSection() {
       </div>
     </div>
   `;
-  section.querySelector(".material-section__cta-button").addEventListener("click", () => {
-    document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth" });
+  section.querySelector(".material-section__cta-button").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.href = "https://pay.wiapy.com/Ejh7VyX6eSxN";
   });
   return section;
 }
@@ -544,16 +546,47 @@ function optimizeImagesSmoothly() {
   });
 }
 
+const CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+
 function setupCheckoutHandler() {
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest("button, a");
+    // Ignore video facade card or video player triggers
+    if (e.target.closest(".video-facade-card") || e.target.closest("#depoimento-video iframe")) {
+      return;
+    }
+
+    const btn = e.target.closest("button, a, .material-section__cta-button");
     if (!btn) return;
 
-    const offerSection = btn.closest("#oferta");
-    if (offerSection) {
+    // Ignore FAQ accordion collapse/expand question headers
+    if (btn.closest(".space-y-2") && btn.classList.contains("text-left")) {
+      return;
+    }
+
+    // Ignore toast notification interactions if any
+    if (btn.closest(".toast") || btn.closest(".social-proof-toast")) {
+      return;
+    }
+
+    // Check if it is a conversion / CTA button on any section
+    const isCtaButton =
+      btn.closest("#oferta") ||
+      btn.classList.contains("material-section__cta-button") ||
+      btn.closest(".bg-\\[\\#FF5A1F\\]") ||
+      btn.classList.contains("bg-[#FF5A1F]") ||
+      (btn.textContent && (
+        btn.textContent.includes("QUERO") ||
+        btn.textContent.includes("COMEÇAR") ||
+        btn.textContent.includes("APROVAD") ||
+        btn.textContent.includes("PASSAR") ||
+        btn.textContent.includes("GARANTA") ||
+        btn.textContent.includes("ACESSO")
+      ));
+
+    if (isCtaButton) {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+      window.location.href = CHECKOUT_URL;
     }
   }, true);
 }
@@ -587,4 +620,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-CIt76HRX.js?v=15");
+import("/assets/index-CIt76HRX.js?v=16");
