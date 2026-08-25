@@ -620,4 +620,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-CIt76HRX.js?v=17");
+import("/assets/index-CIt76HRX.js?v=18");
