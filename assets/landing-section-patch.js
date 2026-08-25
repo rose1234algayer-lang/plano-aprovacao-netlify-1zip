@@ -294,6 +294,72 @@ function createMaterialSection() {
   return section;
 }
 
+function createPlatformSection() {
+  const section = document.createElement("section");
+  section.className = "platform-section";
+  section.setAttribute("aria-labelledby", "platform-section-title");
+  section.innerHTML = `
+    <div class="platform-section__inner">
+      <p class="platform-section__eyebrow">
+        <span aria-hidden="true">✦</span>
+        BENEFÍCIO EXTRA INCLUSO
+      </p>
+      <h2 class="platform-section__title" id="platform-section-title">
+        E TEM MAIS:<br>
+        SEU PLANO NÃO TERMINA<br>
+        <strong>NA APOSTILA.</strong>
+      </h2>
+      <p class="platform-section__subtitle">
+        Além do Plano Aprovação CNH 2026, você também recebe acesso à
+        <strong>Plataforma Plano Aprovação</strong> para continuar sua preparação
+        de forma prática, organizada e muito mais completa.
+      </p>
+      <div class="platform-section__explanation">
+        <p>
+          Enquanto a apostila mostra exatamente o que estudar, a
+          <strong>Plataforma Plano Aprovação</strong> transforma seu plano em prática
+          e acompanha sua evolução até a prova.
+        </p>
+        <p>
+          Você responde questões, faz simulados, acompanha seu progresso e identifica
+          exatamente quais matérias precisam de mais atenção — para
+          <strong>focar no que realmente pode tirar pontos da sua prova.</strong>
+        </p>
+      </div>
+      <div class="platform-section__screenshots" aria-label="Espaços reservados para screenshots da plataforma">
+        <figure class="platform-section__screenshot">
+          <div class="platform-screenshot-placeholder">
+            <span class="platform-screenshot-placeholder__number">01</span>
+            <span>Screenshot<br>da plataforma</span>
+          </div>
+          <figcaption>Painel de Progresso</figcaption>
+        </figure>
+        <figure class="platform-section__screenshot">
+          <div class="platform-screenshot-placeholder">
+            <span class="platform-screenshot-placeholder__number">02</span>
+            <span>Screenshot<br>da plataforma</span>
+          </div>
+          <figcaption>Diagnóstico por Matéria</figcaption>
+        </figure>
+        <figure class="platform-section__screenshot">
+          <div class="platform-screenshot-placeholder">
+            <span class="platform-screenshot-placeholder__number">03</span>
+            <span>Screenshot<br>da plataforma</span>
+          </div>
+          <figcaption>Simulados e Revisão</figcaption>
+        </figure>
+      </div>
+    </div>
+  `;
+  return section;
+}
+
+function insertPlatformSection() {
+  const videoSection = document.getElementById("depoimento-video");
+  if (!videoSection || document.querySelector(".platform-section")) return;
+  videoSection.parentElement?.insertBefore(createPlatformSection(), videoSection);
+}
+
 function enhancePlanSection() {
   const planSection = [...document.querySelectorAll("section")].find((section) => {
     const text = section.textContent || "";
@@ -614,6 +680,7 @@ function replaceMaterialSection() {
   if (!currentSection || !problemSection) return false;
   problemSection.replaceWith(createMaterialSection());
   currentSection.remove();
+  insertPlatformSection();
   enhancePlanSection();
   enhanceFaqSection();
   setupRevealAnimations();
