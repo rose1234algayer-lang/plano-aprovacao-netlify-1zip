@@ -369,6 +369,44 @@ function setupRevealAnimations() {
   });
 }
 
+function enhanceBenefitsSection() {
+  const benefitsSection = [...document.querySelectorAll("section")].find((section) => {
+    const text = section.textContent || "";
+    return text.includes("Foco no que realmente cai") &&
+      text.includes("Cronograma pronto para seguir") &&
+      text.includes("Questões comentadas e diretas") &&
+      text.includes("Chegue preparado e confiante");
+  });
+
+  if (!benefitsSection || benefitsSection.dataset.benefitsEnhanced === "true") return;
+
+  const grid = benefitsSection.querySelector(".grid-cols-2");
+  if (!grid) return;
+
+  const emblems = [
+    `<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15"></circle><circle cx="24" cy="24" r="8"></circle><circle cx="24" cy="24" r="2.5" fill="currentColor" stroke="none"></circle></svg>`,
+    `<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="13" width="26" height="25" rx="3"></rect><path d="M16 10v7M32 10v7M11 21h26"></path></svg>`,
+    `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10h14l7 7v21H14z"></path><path d="M28 10v8h7M19 32l3-8 8-8 4 4-8 8zM19 32l-4 1 1-4"></path></svg>`,
+    `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="m8 21 16-8 16 8-16 8z"></path><path d="M15 25v7c4 4 14 4 18 0v-7M40 22v10"></path></svg>`
+  ];
+
+  const cards = [...grid.children]
+    .map((wrapper) => wrapper.firstElementChild)
+    .filter((card) => card && card.querySelector("p"));
+
+  cards.forEach((card, index) => {
+    card.classList.add("benefit-card");
+    const emblem = document.createElement("span");
+    emblem.className = "benefit-emblem";
+    emblem.setAttribute("aria-hidden", "true");
+    emblem.innerHTML = emblems[index] || emblems[0];
+    card.insertBefore(emblem, card.firstElementChild);
+  });
+
+  benefitsSection.classList.add("benefits-section");
+  benefitsSection.dataset.benefitsEnhanced = "true";
+}
+
 function enhanceFaqSection() {
   document.querySelectorAll(".faq-trust-section").forEach((section) => section.remove());
 
@@ -640,6 +678,7 @@ let videoOptimized = false;
 function runOptimizations() {
   optimizeImagesSmoothly();
   bindCheckoutButtons();
+  enhanceBenefitsSection();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
   }

@@ -1004,6 +1004,68 @@
       .video-facade-card:active .video-facade-play {
         transform: translate(-50%, -50%) scale(0.95);
       }
+
+      /* Benefit emblems: spacious, outlined badges matching the reference design. */
+      .benefits-section .benefit-card {
+        min-height: 15rem;
+        padding: 1.5rem 1rem 1.35rem !important;
+        gap: 1rem !important;
+        border: 1px solid rgba(7, 27, 53, 0.1) !important;
+        border-radius: 1.45rem !important;
+        box-shadow: 0 0.25rem 0.6rem rgba(7, 27, 53, 0.1) !important;
+      }
+
+      .benefits-section .benefit-card::before {
+        display: none !important;
+      }
+
+      .benefit-emblem {
+        display: grid;
+        width: 7rem;
+        height: 7rem;
+        flex: 0 0 7rem;
+        place-items: center;
+        border: 1px solid rgba(7, 27, 53, 0.1);
+        border-radius: 50%;
+        background: #faf7f0;
+        color: #f15a29;
+      }
+
+      .benefit-emblem svg {
+        width: 3.65rem;
+        height: 3.65rem;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .benefits-section .benefit-card p {
+        max-width: 14rem;
+        margin: 0;
+        font-size: clamp(0.95rem, 2.8vw, 1.2rem) !important;
+        font-weight: 800 !important;
+        line-height: 1.22 !important;
+      }
+
+      @media (max-width: 700px) {
+        .benefits-section .benefit-card {
+          min-height: 18rem;
+          padding: 1.35rem 0.7rem 1.1rem !important;
+        }
+
+        .benefit-emblem {
+          width: 6.5rem;
+          height: 6.5rem;
+          flex-basis: 6.5rem;
+        }
+
+        .benefit-emblem svg {
+          width: 3.25rem;
+          height: 3.25rem;
+        }
+      }
     </style>
     <script type="module" crossorigin src="/assets/landing-section-patch.js?v=checkout_final_direct_v4"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Cwo0zfvo.css">
