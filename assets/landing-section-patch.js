@@ -407,6 +407,45 @@ function enhanceBenefitsSection() {
   benefitsSection.dataset.benefitsEnhanced = "true";
 }
 
+function enhanceProblemEmblems() {
+  const problemSection = [...document.querySelectorAll("section")].find((section) => {
+    const text = section.textContent || "";
+    return text.includes("Muito conteúdo para estudar") &&
+      text.includes("Pouco tempo na rotina") &&
+      text.includes("Falta de direção clara") &&
+      text.includes("Já tentou e não passou antes");
+  });
+
+  if (!problemSection || problemSection.dataset.problemEmblemsEnhanced === "true") return;
+
+  const icons = [
+    `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v17H6.5A2.5 2.5 0 0 0 4 22z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H12v17h5.5A2.5 2.5 0 0 1 20 22z"></path></svg>`,
+    `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>`,
+    `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle></svg>`,
+    `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6z"></path><path d="m9 12 2 2 4-4"></path></svg>`
+  ];
+
+  const labels = [
+    "Muito conteúdo para estudar",
+    "Pouco tempo na rotina",
+    "Falta de direção clara",
+    "Já tentou e não passou antes"
+  ];
+
+  labels.forEach((label, index) => {
+    const textElement = [...problemSection.querySelectorAll("span")].find((span) => {
+      return span.textContent.trim() === label;
+    });
+    const iconContainer = textElement?.parentElement?.firstElementChild;
+    if (iconContainer) {
+      iconContainer.innerHTML = icons[index];
+      iconContainer.classList.add("problem-emblem");
+    }
+  });
+
+  problemSection.dataset.problemEmblemsEnhanced = "true";
+}
+
 function enhanceFaqSection() {
   document.querySelectorAll(".faq-trust-section").forEach((section) => section.remove());
 
@@ -679,6 +718,7 @@ function runOptimizations() {
   optimizeImagesSmoothly();
   bindCheckoutButtons();
   enhanceBenefitsSection();
+  enhanceProblemEmblems();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
   }
