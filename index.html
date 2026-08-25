@@ -1068,12 +1068,15 @@
       .platform-section {
         background: #faf7f0;
         border-top: 1px solid rgba(7, 27, 53, 0.06);
-        padding: 4rem 1.25rem 4.25rem;
+        width: 100%;
+        margin: 0 !important;
+        padding: 4rem 1.25rem 4.25rem !important;
       }
 
-      .platform-section__inner {
+      .platform-section > .platform-section__inner {
         width: min(100%, 40rem);
-        margin: 0 auto;
+        margin: 0 auto !important;
+        padding: 0 !important;
         text-align: center;
       }
 
