@@ -63,7 +63,8 @@
   }
 
   let detectedLocation = sessionStorage.getItem("geo_location") || "";
-  let isFirstNotification = true;
+  let notificationCount = 0;
+  let locationReady = Boolean(detectedLocation);
 
   // Real IP Geolocation retrieval with fallbacks
   function fetchLocation() {
@@ -76,6 +77,7 @@
           sessionStorage.setItem("geo_city", d.city);
           sessionStorage.setItem("geo_location", loc);
           detectedLocation = loc;
+          locationReady = true;
         } else throw new Error();
       })
       .catch(() => {
@@ -87,6 +89,9 @@
               sessionStorage.setItem("geo_city", d.city);
               sessionStorage.setItem("geo_location", loc);
               detectedLocation = loc;
+              locationReady = true;
+            } else {
+              throw new Error();
             }
           })
           .catch(() => {
@@ -98,8 +103,13 @@
                   sessionStorage.setItem("geo_city", d.city);
                   sessionStorage.setItem("geo_location", loc);
                   detectedLocation = loc;
+                  locationReady = true;
+                } else {
+                  throw new Error();
                 }
-              }).catch(() => {});
+              }).catch(() => {
+                locationReady = true;
+              });
           });
       });
   }
@@ -171,14 +181,20 @@
   document.body ? document.body.appendChild(container) : document.addEventListener("DOMContentLoaded", () => document.body.appendChild(container));
 
   function showNotification() {
-    const name = getNextName();
-    let loc;
-    if (isFirstNotification) {
-      isFirstNotification = false;
-      loc = detectedLocation || sessionStorage.getItem("geo_location") || sessionStorage.getItem("geo_city") || getNextCity();
-    } else {
-      loc = getNextCity();
+    const nextNotification = notificationCount + 1;
+
+    // The third notification is reserved for the visitor's actual IP city.
+    // Wait briefly instead of showing a random city before the lookup finishes.
+    if (nextNotification === 3 && !locationReady) {
+      setTimeout(showNotification, 500);
+      return;
     }
+
+    notificationCount = nextNotification;
+    const name = getNextName();
+    const loc = notificationCount === 3
+      ? (detectedLocation || sessionStorage.getItem("geo_location") || sessionStorage.getItem("geo_city") || getNextCity())
+      : getNextCity();
 
     const mins = Math.floor(Math.random() * 3) + 1;
     const timeStr = mins === 1 ? "há 1 min" : `há ${mins} min`;
