@@ -16,29 +16,41 @@ app.use(compression({
   level: 6
 }));
 
-// Optimized static asset serving with caching headers
+// Optimized static asset serving with cache-busting headers for instant preview
 app.use("/assets", express.static(path.join(__dirname, "assets"), {
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith(".html") || filePath.endsWith(".js")) {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+  }
+}));
+
+app.use("/src/assets", express.static(path.join(__dirname, "src", "assets"), {
+  setHeaders: (res, filePath) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+  }
+}));
+
+// Serve root static assets (favicon, robots, etc.) with no-cache for instant live updates
+app.use(express.static(__dirname, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith("index.html")) {
       res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       res.setHeader("Pragma", "no-cache");
       res.setHeader("Expires", "0");
-    } else if (/\.(png|jpg|jpeg|webp|svg|gif|ico|woff2|woff|ttf)$/i.test(filePath)) {
-      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     } else {
       res.setHeader("Cache-Control", "no-cache");
     }
   }
 }));
 
-// Serve root static assets (favicon, robots, etc.)
-app.use(express.static(__dirname, {
-  maxAge: "1d"
-}));
-
 // Serve index.html for all routes with fast-revalidate headers
 app.get("*", (req, res) => {
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   res.sendFile(path.join(__dirname, "index.html"));
 });
 

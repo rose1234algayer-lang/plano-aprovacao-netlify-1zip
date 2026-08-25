@@ -531,13 +531,19 @@ function optimizeImagesSmoothly() {
   const images = document.querySelectorAll("img");
   if (!images.length) return;
 
-  const isHeroImage = (src) => src.includes("logo-novo") || src.includes("hero-photo") || src.includes("logo-badge");
+  const isHeroImage = (src) => src.includes("logo-novo") || src.includes("hero-photo") || src.includes("hero_aluna") || src.includes("logo-badge");
 
   images.forEach((img) => {
     const src = img.getAttribute("src") || "";
     if (isHeroImage(src)) {
       img.setAttribute("fetchpriority", "high");
       img.removeAttribute("loading");
+      img.onerror = function() {
+        if (!this.getAttribute("data-fallback-tried")) {
+          this.setAttribute("data-fallback-tried", "true");
+          this.src = "/assets/hero-photo-aluna-2026.jpg";
+        }
+      };
     } else {
       if (!img.getAttribute("loading")) {
         img.setAttribute("loading", "lazy");
@@ -659,4 +665,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-checkout-v3.js?v=direct_checkout_final");
+import("/assets/index-checkout-v4.js?v=hero_photo_aluna_2026");
