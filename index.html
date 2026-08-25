@@ -1007,7 +1007,8 @@
 
       /* Benefit emblems: spacious, outlined badges matching the reference design. */
       .benefits-section .benefit-card {
-        min-height: 15rem;
+        min-height: 0;
+        height: 100%;
         padding: 1.5rem 1rem 1.35rem !important;
         gap: 1rem !important;
         border: 1px solid rgba(7, 27, 53, 0.1) !important;
@@ -1016,7 +1017,7 @@
       }
 
       .benefits-section .grid-cols-2 {
-        grid-auto-rows: 15rem !important;
+        grid-auto-rows: clamp(10rem, 43vw, 15rem) !important;
       }
 
       .benefits-section .benefit-card::before {
@@ -1055,12 +1056,12 @@
 
       @media (max-width: 700px) {
         .benefits-section .benefit-card {
-          min-height: 18rem;
+          min-height: 0;
           padding: 1.35rem 0.7rem 1.1rem !important;
         }
 
         .benefits-section .grid-cols-2 {
-          grid-auto-rows: 18rem !important;
+          grid-auto-rows: clamp(10rem, 43vw, 15rem) !important;
         }
 
         .benefit-emblem {
