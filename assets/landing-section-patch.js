@@ -659,4 +659,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-checkout-v3.js?v=hero_photo_v5");
+import("/assets/index-checkout-v3.js?v=direct_checkout_final");
