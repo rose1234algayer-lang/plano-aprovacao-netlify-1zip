@@ -226,10 +226,10 @@
     }, delay);
   }
 
-  // Initial trigger after 2 seconds
+  // Initial trigger after 5 seconds
   setTimeout(() => {
     showNotification();
-  }, 2000);
+  }, 5000);
 })();
 
 const materialItems = [
