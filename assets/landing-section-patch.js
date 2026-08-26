@@ -232,6 +232,251 @@
   }, 5000);
 })();
 
+const planSystemItems = [
+  "Apostila",
+  "Plano de estudo guiado (7 dias)",
+  "Plataforma Plano Aprovação CNH",
+  "Questões comentadas do DETRAN",
+  "Simulado completo da prova",
+  "Cronograma semanal pronto",
+  "Suporte no WhatsApp",
+  "Aula em vídeo explicativa"
+];
+
+function createPlanSystemSection() {
+  const section = document.createElement("section");
+  section.className = "cnh-plan-system-section";
+  section.setAttribute("aria-labelledby", "cnh-plan-system-heading");
+
+  section.innerHTML = `
+    <style>
+      .cnh-plan-system-section {
+        background: #FAF7F0 !important;
+        background-color: #FAF7F0 !important;
+        width: 100% !important;
+        padding: 3rem 1rem 2.75rem !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        text-align: center !important;
+      }
+      .cnh-plan-system-inner {
+        max-width: 25.5rem !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-plan-system-intro {
+        font-family: 'Plus Jakarta Sans', Inter, -apple-system, sans-serif !important;
+        font-size: clamp(1.2rem, 3.8vw, 1.4rem) !important;
+        font-weight: 800 !important;
+        color: #071B35 !important;
+        margin: 0 0 0.65rem 0 !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.01em !important;
+      }
+      .cnh-plan-system-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.4rem !important;
+        background: #071B35 !important;
+        background-color: #071B35 !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 9999px !important;
+        padding: 0.45rem 1.25rem 0.5rem !important;
+        box-shadow: 0 6px 18px rgba(7, 27, 53, 0.22) !important;
+        margin-bottom: 0.85rem !important;
+      }
+      .cnh-plan-system-badge-white {
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.15rem, 3.8vw, 1.45rem) !important;
+        font-weight: 900 !important;
+        color: #ffffff !important;
+        letter-spacing: 0.02em !important;
+        line-height: 1 !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-plan-system-badge-orange {
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.15rem, 3.8vw, 1.45rem) !important;
+        font-weight: 900 !important;
+        color: #FF5A1F !important;
+        letter-spacing: 0.02em !important;
+        line-height: 1 !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-plan-system-sub {
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: clamp(0.88rem, 2.4vw, 0.98rem) !important;
+        font-weight: 500 !important;
+        color: #5F6673 !important;
+        line-height: 1.4 !important;
+        margin: 0 0 1.6rem 0 !important;
+        max-width: 22rem !important;
+      }
+      .cnh-plan-system-card {
+        background: #071B35 !important;
+        background-color: #071B35 !important;
+        width: 100% !important;
+        border-radius: 1.35rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.09) !important;
+        box-shadow: 0 16px 36px -6px rgba(7, 27, 53, 0.28), 0 4px 12px rgba(7, 27, 53, 0.08) !important;
+        padding: 1.5rem 1.4rem 1.65rem !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-plan-system-card-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        margin-bottom: 1.35rem !important;
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.03em !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-plan-system-card-header-icon {
+        width: 16px !important;
+        height: 16px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 1.8px solid #FF5A1F !important;
+        border-radius: 3px !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-plan-system-card-header-icon svg {
+        width: 10px !important;
+        height: 10px !important;
+        stroke: #FF5A1F !important;
+      }
+      .cnh-plan-system-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.9rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+      }
+      .cnh-plan-system-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+      }
+      .cnh-plan-system-check {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        border-radius: 50% !important;
+        background: #FF5A1F !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        box-shadow: 0 2px 6px rgba(255, 90, 31, 0.35) !important;
+      }
+      .cnh-plan-system-check svg {
+        width: 12px !important;
+        height: 12px !important;
+        stroke: #ffffff !important;
+      }
+      .cnh-plan-system-item-text {
+        color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', Inter, -apple-system, sans-serif !important;
+        font-size: clamp(0.85rem, 2.5vw, 0.92rem) !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.01em !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-plan-system-section {
+          padding: 2.25rem 0.85rem 1.85rem !important;
+        }
+        .cnh-plan-system-inner {
+          max-width: 22.5rem !important;
+        }
+        .cnh-plan-system-intro {
+          font-size: 1.12rem !important;
+          margin-bottom: 0.5rem !important;
+        }
+        .cnh-plan-system-sub {
+          font-size: 0.85rem !important;
+          margin-bottom: 1.25rem !important;
+        }
+        .cnh-plan-system-card {
+          padding: 1.25rem 1.15rem 1.4rem !important;
+          border-radius: 1.15rem !important;
+        }
+        .cnh-plan-system-card-header {
+          font-size: 0.95rem !important;
+          margin-bottom: 1.15rem !important;
+        }
+        .cnh-plan-system-list {
+          gap: 0.75rem !important;
+        }
+        .cnh-plan-system-check {
+          width: 20px !important;
+          height: 20px !important;
+          min-width: 20px !important;
+        }
+        .cnh-plan-system-check svg {
+          width: 11px !important;
+          height: 11px !important;
+        }
+        .cnh-plan-system-item-text {
+          font-size: 0.82rem !important;
+        }
+      }
+    </style>
+
+    <div class="cnh-plan-system-inner">
+      <h2 class="cnh-plan-system-intro" id="cnh-plan-system-heading">Foi por isso que criamos o</h2>
+
+      <div class="cnh-plan-system-badge" aria-label="Plano de Aprovação CNH 2026">
+        <span class="cnh-plan-system-badge-white">PLANO DE APROVAÇÃO</span>
+        <span class="cnh-plan-system-badge-orange">CNH 2026</span>
+      </div>
+
+      <p class="cnh-plan-system-sub">
+        Um plano simples, direto ao ponto e sem enrolação.
+      </p>
+
+      <div class="cnh-plan-system-card">
+        <div class="cnh-plan-system-card-header">
+          <div class="cnh-plan-system-card-header-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span>O QUE VOCÊ RECEBE:</span>
+        </div>
+
+        <ul class="cnh-plan-system-list">
+          ${planSystemItems.map(itemText => `
+            <li class="cnh-plan-system-item">
+              <div class="cnh-plan-system-check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="cnh-plan-system-item-text">${itemText}</span>
+            </li>
+          `).join("")}
+        </ul>
+      </div>
+    </div>
+  `;
+
+  return section;
+}
+
 const materialItems = [
   ["📚", "FOCO NO QUE REALMENTE CAI", "Revise os temas essenciais da prova teórica direto ao ponto, sem perder tempo."],
   ["📅", "CRONOGRAMA DE 7 DIAS", "Organize sua rotina de estudos passo a passo, mesmo com pouco tempo livre."],
@@ -518,6 +763,8 @@ function insertPlatformSection() {
     const text = sec.textContent || "";
     return !sec.classList.contains("cnh-bonus-section") &&
       !sec.classList.contains("cnh-main-offer-section") &&
+      !sec.classList.contains("cnh-plan-system-section") &&
+      !sec.classList.contains("material-section") &&
       text.includes("Foi por isso que criamos o") &&
       text.includes("PLANO DE APROVAÇÃO CNH 2026");
   });
@@ -533,6 +780,8 @@ function removeUnwantedRecebeSection() {
       !sec.classList.contains("cnh-bonus-section") &&
       !sec.classList.contains("cnh-main-offer-section") &&
       !sec.classList.contains("cnh-testimonials-section") &&
+      !sec.classList.contains("cnh-plan-system-section") &&
+      !sec.classList.contains("material-section") &&
       (
         text.includes("TUDO QUE VOCÊ RECEBE AO ENTRAR") ||
         (text.includes("O QUE VOCÊ RECEBE") && text.includes("Plano de Estudos Direcionado")) ||
@@ -3293,6 +3542,7 @@ function replaceMaterialSection() {
   const currentSection = [...document.querySelectorAll("section")].find((section) => {
     const text = section.textContent || "";
     return !section.classList.contains("material-section") &&
+      !section.classList.contains("cnh-plan-system-section") &&
       text.includes("Dentro do plano") &&
       text.includes("TUDO ORGANIZADO.");
   });
@@ -3304,8 +3554,14 @@ function replaceMaterialSection() {
   });
 
   if (!currentSection || !problemSection) return false;
-  problemSection.replaceWith(createMaterialSection());
+  const matSec = createMaterialSection();
+  problemSection.replaceWith(matSec);
   currentSection.remove();
+
+  if (!document.querySelector(".cnh-plan-system-section") && matSec.parentElement) {
+    matSec.parentElement.insertBefore(createPlanSystemSection(), matSec);
+  }
+
   insertPlatformSection();
   enhancePlanSection();
   enhanceFaqSection();
@@ -3470,6 +3726,10 @@ function runOptimizations() {
   insertPlatformSection();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
+  }
+  const matSec = document.querySelector(".material-section");
+  if (matSec && !document.querySelector(".cnh-plan-system-section") && matSec.parentElement) {
+    matSec.parentElement.insertBefore(createPlanSystemSection(), matSec);
   }
   if (!videoOptimized) {
     videoOptimized = enhanceVideoDepoimento();
