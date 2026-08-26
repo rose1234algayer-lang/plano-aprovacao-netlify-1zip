@@ -323,21 +323,21 @@ function createPlatformSection() {
       <div class="platform-section__screenshots" aria-label="Telas da Plataforma Plano Aprovação">
         <figure class="platform-section__screenshot">
           <div class="app-screen-card">
-            <img src="/assets/platform-screen-1.png" alt="Painel de Estudos da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="405" height="712">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_44_42_1787710108509.png" alt="Planejamento e diagnóstico da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="948" height="1659">
           </div>
-          <figcaption>Painel de Estudos</figcaption>
+          <figcaption>Planejamento e diagnóstico</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
           <div class="app-screen-card">
-            <img src="/assets/platform-screen-2.png" alt="Ranking de Alunos da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="380" height="717">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_41_46_1787710096912.png" alt="Painel inicial da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="934" height="1684">
           </div>
-          <figcaption>Ranking de Alunos</figcaption>
+          <figcaption>Painel inicial</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
           <div class="app-screen-card">
-            <img src="/assets/platform-screen-3.png" alt="Salas de Estudo da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="437" height="777">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_43_24_1787710096914.png" alt="Ferramentas de estudo da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="959" height="1641">
           </div>
-          <figcaption>Salas de Estudo</figcaption>
+          <figcaption>Ferramentas de estudo</figcaption>
         </figure>
       </div>
     </div>
