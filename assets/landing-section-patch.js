@@ -3636,14 +3636,42 @@ function getCheckoutUrlWithParams() {
   }
 }
 
+function syncCheckoutLinks() {
+  try {
+    const finalUrl = getCheckoutUrlWithParams();
+    document.querySelectorAll("a[href*='pay.wiapy.com'], #oferta-checkout-btn").forEach((el) => {
+      if (el.tagName === "A") {
+        el.setAttribute("href", finalUrl);
+      }
+    });
+  } catch (e) {}
+}
+
 function redirectToCheckout(e) {
-  if (e) {
-    if (typeof e.preventDefault === "function") e.preventDefault();
-    if (typeof e.stopPropagation === "function") e.stopPropagation();
-    if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
+  const finalUrl = getCheckoutUrlWithParams();
+
+  // Try to fire InitiateCheckout for any active pixel trackers
+  try {
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "InitiateCheckout");
+    }
+  } catch (err) {}
+
+  try {
+    if (typeof window.ttq === "object" && typeof window.ttq.track === "function") {
+      window.ttq.track("InitiateCheckout");
+    }
+  } catch (err) {}
+
+  if (e && e.currentTarget && e.currentTarget.tagName === "A") {
+    e.currentTarget.setAttribute("href", finalUrl);
+    // Let the natural link navigation occur so tracking scripts catch the click
+    return;
   }
 
-  const finalUrl = getCheckoutUrlWithParams();
+  if (e && typeof e.preventDefault === "function") {
+    e.preventDefault();
+  }
 
   try {
     if (window.top && window.top !== window) {
@@ -3664,8 +3692,9 @@ function scrollToOffer(e) {
   if (e) {
     if (typeof e.preventDefault === "function") e.preventDefault();
     if (typeof e.stopPropagation === "function") e.stopPropagation();
+    if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
   }
-  const offerSection = document.getElementById("oferta");
+  const offerSection = document.getElementById("oferta") || document.querySelector(".cnh-main-offer-section");
   if (offerSection) {
     offerSection.scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
@@ -3675,7 +3704,7 @@ function scrollToOffer(e) {
 
 function setupGlobalNavigation() {
   document.addEventListener("click", (e) => {
-    // 1. Final decision button inside #oferta triggers checkout
+    // 1. Final decision button inside #oferta (the price card) triggers checkout
     const checkoutBtn = e.target.closest("#oferta-checkout-btn, [data-final-checkout='true']");
     if (checkoutBtn) {
       redirectToCheckout(e);
@@ -3700,14 +3729,17 @@ function setupGlobalNavigation() {
       return;
     }
 
-    // 3. All commercial CTAs on the page scroll smoothly to #oferta
+    // 3. ALL other buttons & commercial CTAs on the page scroll smoothly to #oferta
     const commercialBtn = e.target.closest("button, a, .material-section__cta-button, .cnh-motivation-cta, .cnh-bonus-cta-btn, [data-scroll-to-offer]");
     if (commercialBtn) {
-      // Allow terms/privacy policy non-commercial links to work normally if any
+      // Allow external policy/terms links if any
       const href = commercialBtn.getAttribute("href") || "";
       if (href.startsWith("http") && !href.includes("wiapy") && !commercialBtn.classList.contains("btn-checkout-trigger")) {
         return;
       }
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      if (typeof e.stopPropagation === "function") e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
       scrollToOffer(e);
     }
   }, true);
