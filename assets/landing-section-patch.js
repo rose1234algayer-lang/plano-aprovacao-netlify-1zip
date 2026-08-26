@@ -557,7 +557,7 @@ const CNH_BONUS_CONFIG = {
       referencePrice: "R$ 37,00",
       freePrice: "AGORA GRÁTIS",
       imagePendingLabel: "Bônus 1 — imagem pendente",
-      imageUrl: "" // Inserir URL da imagem real do Bônus 1 aqui quando disponível
+      imageUrl: "/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_23_40_40_1787712887482.png"
     },
     {
       id: 2,
@@ -568,7 +568,7 @@ const CNH_BONUS_CONFIG = {
       referencePrice: "R$ 37,00",
       freePrice: "AGORA GRÁTIS",
       imagePendingLabel: "Bônus 2 — imagem pendente",
-      imageUrl: "" // Inserir URL da imagem real do Bônus 2 aqui quando disponível
+      imageUrl: "/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_23_46_59_1787712893435.png"
     },
     {
       id: 3,
@@ -579,7 +579,7 @@ const CNH_BONUS_CONFIG = {
       referencePrice: "R$ 37,00",
       freePrice: "AGORA GRÁTIS",
       imagePendingLabel: "Bônus 3 — imagem pendente",
-      imageUrl: "" // Inserir URL da imagem real do Bônus 3 aqui quando disponível
+      imageUrl: "/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_23_52_47_1787712899171.png"
     }
   ],
   totalValue: {
@@ -813,8 +813,9 @@ function createBonusSection() {
       .cnh-bonus-card-top {
         position: relative !important;
         width: 100% !important;
-        height: 270px !important;
-        max-height: 290px !important;
+        height: auto !important;
+        max-height: none !important;
+        aspect-ratio: 3 / 4 !important;
         background: #091c36 !important;
         overflow: hidden !important;
         display: flex !important;
@@ -824,7 +825,8 @@ function createBonusSection() {
       .cnh-bonus-card-img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important;
+        object-fit: contain !important;
+        object-position: center !important;
         display: block !important;
       }
       .cnh-bonus-img-placeholder {
@@ -1106,7 +1108,9 @@ function createBonusSection() {
           padding: 2.25rem 0.75rem 2.75rem !important;
         }
         .cnh-bonus-card-top {
-          height: 245px !important;
+          height: auto !important;
+          max-height: none !important;
+          aspect-ratio: 3 / 4 !important;
         }
       }
     </style>
