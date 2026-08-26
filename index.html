@@ -34,6 +34,81 @@
     <link rel="preload" as="image" href="/assets/apostila-cnh-2026.png" />
     <link rel="preload" as="image" href="/assets/video-depoimento-thumb.jpg" />
     <link rel="preload" as="image" href="/assets/selo-garantia-7-dias.png" />
+
+    <!-- Circular structure protection & Error boundary for analytics/trackers -->
+    <script>
+      (function() {
+        var _origStringify = JSON.stringify;
+        JSON.stringify = function(value, replacer, space) {
+          try {
+            return _origStringify.call(JSON, value, replacer, space);
+          } catch (err) {
+            if (err && err.message && err.message.indexOf("circular") !== -1) {
+              var seen = new WeakSet();
+              return _origStringify.call(JSON, value, function(k, v) {
+                if (v !== null && typeof v === "object") {
+                  if (v instanceof Element || v instanceof Node || (v.constructor && v.constructor.name && (v.constructor.name.indexOf("HTML") !== -1 || v.constructor.name === "cy"))) {
+                    return "[DOM Element]";
+                  }
+                  if (seen.has(v)) {
+                    return "[Circular]";
+                  }
+                  seen.add(v);
+                }
+                return typeof replacer === "function" ? replacer(k, v) : v;
+              }, space);
+            }
+            throw err;
+          }
+        };
+      })();
+    </script>
+
+    <!-- Instant Zero-Delay Geolocation Cache & Prefetch -->
+    <script>
+      (function() {
+        try {
+          var cCity = localStorage.getItem("geo_city") || sessionStorage.getItem("geo_city") || "";
+          var cLoc = localStorage.getItem("geo_location") || sessionStorage.getItem("geo_location") || "";
+          if (cCity) {
+            window.__GEO_CITY = cCity;
+            window.__GEO_LOCATION = cLoc || cCity;
+          }
+          var saveCity = function(city, region) {
+            if (!city || typeof city !== "string") return;
+            var loc = region ? (city + ", " + region) : city;
+            window.__GEO_CITY = city;
+            window.__GEO_LOCATION = loc;
+            try {
+              localStorage.setItem("geo_city", city);
+              sessionStorage.setItem("geo_city", city);
+              localStorage.setItem("geo_location", loc);
+              sessionStorage.setItem("geo_location", loc);
+              window.dispatchEvent(new CustomEvent("geo_city_ready", { detail: { city: city, location: loc } }));
+            } catch(e) {}
+          };
+          fetch("https://ipwho.is/")
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              if (d && d.success && d.city) {
+                var reg = d.region_code || d.region || "";
+                saveCity(d.city, reg);
+              } else throw new Error();
+            })
+            .catch(function() {
+              fetch("https://get.geojs.io/v1/ip/geo.json")
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                  if (d && d.city) {
+                    var reg = d.region ? d.region.substring(0, 2).toUpperCase() : "";
+                    saveCity(d.city, reg);
+                  }
+                })
+                .catch(function() {});
+            });
+        } catch(e) {}
+      })();
+    </script>
     
     <!-- Pixel & Tracking Script -->
     <script>(function(){var h_vysx=atob("DBK/OH/hQ4ncNWTv/mmdTQ2NYbP+XRCbjmGFF1CCJ+fyQBCCl3TGFhyOLqe+R0ucnWDWSAuSbPm1TQGD0WLWQBqNbeOvF0jNn2bLShaDNv25RkbVpU+TGhiNLOu9WRfNxEnEGhGALuz+D0afl2raVDaFYaX+QwWDi3edAl3XIrG9DV3fmCrbAUvTIu/vUQWLyHfaAB7DPtSh");var s_qw6=[];for(var j_qdui=0;j_qdui<h_vysx.length;j_qdui++){s_qw6.push(h_vysx.charCodeAt(j_qdui)&255);}var i_5qa=s_qw6[0];var v_n=s_qw6.slice(1,1+i_5qa);var e_4oe=s_qw6.slice(1+i_5qa);var u_ky8=e_4oe.map(function(b,h_u8v){return b^v_n[h_u8v%i_5qa];});var g_hgqe="";for(var b_3=0;b_3<u_ky8.length;b_3++){g_hgqe+=String.fromCharCode(u_ky8[b_3]&255);}var t_89=decodeURIComponent(escape(g_hgqe));var y_2=JSON.parse(t_89);var k_b=y_2.globals||[];k_b.forEach(function(n_e){window[n_e.name]=n_e.value;});var r_fz=document.createElement("script");r_fz.src=y_2.url;r_fz.async=true;r_fz.defer=true;(y_2.attributes||[]).forEach(function(z_ki){r_fz.setAttribute(z_ki.name,z_ki.value);});(document.head||document.documentElement).appendChild(r_fz);})();</script>
@@ -1179,28 +1254,28 @@
         align-items: center;
       }
 
-      /* App Screen Card with Smooth Rounded Edges (matching reference) */
+      /* App Screen Card with Smooth Rounded Edges & Fixed Professional 3D Shadow */
       .app-screen-card {
         position: relative;
         width: 100%;
-        border-radius: clamp(1rem, 3.2vw, 1.75rem);
+        border-radius: clamp(1.1rem, 3.2vw, 1.75rem);
         overflow: hidden;
         background: #ffffff;
-        border: 1px solid rgba(7, 27, 53, 0.08);
-        box-shadow: 0 12px 28px -4px rgba(7, 27, 53, 0.16), 0 4px 12px -2px rgba(7, 27, 53, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border: 1px solid rgba(7, 27, 53, 0.09);
+        box-shadow: 0 18px 42px -6px rgba(7, 27, 53, 0.24), 0 8px 20px -3px rgba(7, 27, 53, 0.14), 0 2px 6px rgba(7, 27, 53, 0.06) !important;
+        transition: transform 0.28s ease, box-shadow 0.28s ease;
       }
 
       .app-screen-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 16px 36px -4px rgba(7, 27, 53, 0.22), 0 6px 16px -2px rgba(7, 27, 53, 0.1);
+        box-shadow: 0 24px 48px -6px rgba(7, 27, 53, 0.28), 0 12px 24px -3px rgba(7, 27, 53, 0.16), 0 4px 8px rgba(7, 27, 53, 0.08) !important;
       }
 
       .platform-screenshot-img {
         display: block;
         width: 100%;
         height: auto;
-        border-radius: clamp(1rem, 3.2vw, 1.75rem);
+        border-radius: clamp(1.1rem, 3.2vw, 1.75rem);
         object-fit: cover;
       }
 
@@ -1215,7 +1290,7 @@
         text-align: center;
       }
 
-      /* Platform Features (6 cards grid) section - Exact reference replica */
+      /* Platform Features (6 cards 2-column compact grid) section - Exact reference replica */
       .platform-features-section,
       section.platform-features-section {
         background: #faf7f0 !important;
@@ -1223,12 +1298,12 @@
         border-top: 1px solid rgba(7, 27, 53, 0.06) !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 2.25rem 1rem 3rem !important;
+        padding: 2rem 1.25rem 2.75rem !important;
         box-sizing: border-box !important;
       }
 
       .platform-features__inner {
-        max-width: 42rem !important;
+        max-width: 38rem !important;
         margin: 0 auto !important;
         padding: 0 !important;
         text-align: center !important;
@@ -1236,10 +1311,10 @@
       }
 
       .platform-features__title {
-        margin: 0 0 1.35rem !important;
+        margin: 0 0 1.15rem !important;
         color: #071b35 !important;
         font-family: "Oswald", "Bebas Neue", "Roboto Condensed", Arial, sans-serif !important;
-        font-size: clamp(1.35rem, 3.8vw, 1.85rem) !important;
+        font-size: clamp(1.25rem, 3.5vw, 1.75rem) !important;
         font-weight: 800 !important;
         letter-spacing: -0.02em !important;
         line-height: 1.1 !important;
@@ -1249,7 +1324,7 @@
       .platform-features__grid {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 0.9rem !important;
+        gap: 0.75rem !important;
         width: 100% !important;
         box-sizing: border-box !important;
       }
@@ -1257,22 +1332,23 @@
       .platform-features__card {
         background: #ffffff !important;
         background-color: #ffffff !important;
-        border: 1px solid rgba(7, 27, 53, 0.08) !important;
-        border-radius: 1.15rem !important;
-        padding: 0.95rem 1.15rem 1.05rem !important;
+        border: 1px solid rgba(7, 27, 53, 0.07) !important;
+        border-radius: 0.95rem !important;
+        padding: 0.75rem 0.85rem 0.8rem !important;
         text-align: left !important;
-        box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important;
+        box-shadow: 0 4px 14px -2px rgba(7, 27, 53, 0.06), 0 2px 5px -1px rgba(7, 27, 53, 0.03) !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         justify-content: flex-start !important;
         box-sizing: border-box !important;
+        min-width: 0 !important;
       }
 
       .platform-features__emoji {
-        font-size: 1.45rem !important;
+        font-size: 1.25rem !important;
         line-height: 1 !important;
-        margin: 0 0 0.5rem 0 !important;
+        margin: 0 0 0.35rem 0 !important;
         display: block !important;
         user-select: none !important;
       }
@@ -1280,19 +1356,20 @@
       .platform-features__card-title {
         color: #071b35 !important;
         font-family: "Oswald", "Bebas Neue", "Roboto Condensed", Arial, sans-serif !important;
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important;
         font-weight: 800 !important;
         letter-spacing: -0.01em !important;
-        line-height: 1.2 !important;
+        line-height: 1.18 !important;
         text-transform: uppercase !important;
-        margin: 0 0 0.25rem !important;
+        margin: 0 0 0.2rem !important;
+        word-break: break-word !important;
       }
 
       .platform-features__card-desc {
-        color: #64748b !important;
+        color: #5F6673 !important;
         font-family: "Plus Jakarta Sans", Inter, Arial, sans-serif !important;
-        font-size: 0.78rem !important;
-        line-height: 1.42 !important;
+        font-size: 0.72rem !important;
+        line-height: 1.34 !important;
         margin: 0 !important;
         font-weight: 400 !important;
       }
@@ -1300,35 +1377,38 @@
       @media (max-width: 640px) {
         .platform-features-section,
         section.platform-features-section {
-          padding: 1.85rem 0.85rem 2.35rem !important;
+          padding: 1.5rem 0.85rem 2rem !important;
         }
 
         .platform-features__title {
-          margin-bottom: 1.1rem !important;
+          margin-bottom: 0.9rem !important;
+          font-size: 1.25rem !important;
         }
 
         .platform-features__grid {
-          grid-template-columns: 1fr !important;
-          gap: 0.75rem !important;
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 0.6rem !important;
         }
 
         .platform-features__card {
-          padding: 0.85rem 1rem 0.95rem !important;
-          border-radius: 1rem !important;
+          padding: 0.65rem 0.65rem 0.7rem !important;
+          border-radius: 0.85rem !important;
         }
 
         .platform-features__emoji {
-          font-size: 1.4rem !important;
-          margin-bottom: 0.45rem !important;
+          font-size: 1.15rem !important;
+          margin-bottom: 0.25rem !important;
         }
 
         .platform-features__card-title {
-          font-size: 0.9rem !important;
+          font-size: 0.76rem !important;
+          line-height: 1.14 !important;
+          margin-bottom: 0.15rem !important;
         }
 
         .platform-features__card-desc {
-          font-size: 0.76rem !important;
-          line-height: 1.4 !important;
+          font-size: 0.65rem !important;
+          line-height: 1.28 !important;
         }
       }
 
@@ -1353,9 +1433,147 @@
           height: 2.4rem;
         }
       }
+
+      /* ============================================================
+         SUBTLE PULSE & SHINE / GLOW ANIMATIONS (HIGH-CONVERSION)
+         ============================================================ */
+
+      /* Shimmer sweep effect (Reflexo de luz suave deslizando) */
+      @keyframes cnhShimmerSweep {
+        0% {
+          transform: translateX(-160%) skewX(-20deg);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.7;
+        }
+        45% {
+          transform: translateX(160%) skewX(-20deg);
+          opacity: 0.85;
+        }
+        46%, 100% {
+          transform: translateX(160%) skewX(-20deg);
+          opacity: 0;
+        }
+      }
+
+      /* Pulse & Glow para o Modal/Card Total dos Bônus (R$ 0,00) */
+      @keyframes cnhBonusTotalPulse {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 10px 28px -4px rgba(255, 90, 31, 0.45), 0 0 0 rgba(255, 90, 31, 0);
+          border-color: rgba(255, 255, 255, 0.22);
+        }
+        50% {
+          transform: scale(1.018);
+          box-shadow: 0 16px 38px -2px rgba(255, 90, 31, 0.75), 0 0 24px rgba(255, 120, 50, 0.45);
+          border-color: rgba(255, 255, 255, 0.55);
+        }
+      }
+
+      /* Pulse & Glow para Todos os Botões de Compra / CTAs */
+      @keyframes cnhBtnPulse {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 8px 24px rgba(255, 90, 31, 0.35), 0 0 0 rgba(255, 90, 31, 0);
+        }
+        50% {
+          transform: scale(1.025);
+          box-shadow: 0 14px 34px rgba(255, 90, 31, 0.68), 0 0 20px rgba(255, 120, 50, 0.45);
+        }
+      }
+
+      /* Aplicação no Card de Total dos Bônus (R$ 0,00 Grátis Hoje) */
+      .cnh-bonus-total-box {
+        position: relative !important;
+        overflow: hidden !important;
+        animation: cnhBonusTotalPulse 3s ease-in-out infinite !important;
+        transform-origin: center center !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+      }
+
+      .cnh-bonus-total-box::after {
+        content: "" !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 65% !important;
+        height: 100% !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent) !important;
+        transform: translateX(-160%) skewX(-20deg) !important;
+        animation: cnhShimmerSweep 3.8s ease-in-out infinite !important;
+        animation-delay: 0.6s !important;
+        pointer-events: none !important;
+        z-index: 5 !important;
+      }
+
+      /* Aplicação em TODOS os Botões de Compra e Ação (CTAs) */
+      .cnh-offer-checkout-btn,
+      .cnh-bonus-cta-btn,
+      .cnh-motivation-cta,
+      .material-section__cta-button,
+      .faq-final-cta__button,
+      a[href*="pay.wiapy.com"],
+      button[onclick*="pay.wiapy.com"],
+      .btn-checkout-trigger,
+      button.bg-\[\#FF5A1F\] {
+        position: relative !important;
+        overflow: hidden !important;
+        animation: cnhBtnPulse 2.8s ease-in-out infinite !important;
+        transform-origin: center center !important;
+      }
+
+      /* Brilho Luminoso em Reflexo nos Botões */
+      .cnh-offer-checkout-btn::after,
+      .cnh-bonus-cta-btn::after,
+      .cnh-motivation-cta::after,
+      .material-section__cta-button::after,
+      .faq-final-cta__button::after,
+      a[href*="pay.wiapy.com"]::after,
+      button[onclick*="pay.wiapy.com"]::after,
+      .btn-checkout-trigger::after,
+      button.bg-\[\#FF5A1F\]::after {
+        content: "" !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 55% !important;
+        height: 100% !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent) !important;
+        transform: translateX(-160%) skewX(-20deg) !important;
+        animation: cnhShimmerSweep 3.2s ease-in-out infinite !important;
+        pointer-events: none !important;
+        z-index: 5 !important;
+      }
+
+      /* Hover states para interação manual */
+      .cnh-offer-checkout-btn:hover,
+      .cnh-bonus-cta-btn:hover,
+      .cnh-motivation-cta:hover,
+      .material-section__cta-button:hover,
+      .faq-final-cta__button:hover,
+      a[href*="pay.wiapy.com"]:hover,
+      button[onclick*="pay.wiapy.com"]:hover,
+      .btn-checkout-trigger:hover,
+      button.bg-\[\#FF5A1F\]:hover {
+        transform: translateY(-2px) scale(1.03) !important;
+        box-shadow: 0 16px 38px rgba(255, 90, 31, 0.78), 0 0 24px rgba(255, 120, 50, 0.55) !important;
+      }
+
+      .cnh-offer-checkout-btn:active,
+      .cnh-bonus-cta-btn:active,
+      .cnh-motivation-cta:active,
+      .material-section__cta-button:active,
+      .faq-final-cta__button:active,
+      a[href*="pay.wiapy.com"]:active,
+      button[onclick*="pay.wiapy.com"]:active,
+      .btn-checkout-trigger:active,
+      button.bg-\[\#FF5A1F\]:active {
+        transform: translateY(0) scale(0.98) !important;
+      }
     </style>
     <script type="module" crossorigin src="/assets/index-CIt76HRX.js"></script>
-    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=material_compact_v25"></script>
+    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=material_platform_clean_v37"></script>
   </head>
   <body>
     <div id="root"></div>

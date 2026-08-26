@@ -62,9 +62,16 @@
     return remainingCities.pop();
   }
 
-  let detectedLocation = sessionStorage.getItem("geo_location") || "";
+  let detectedLocation = (typeof window !== "undefined" && window.__GEO_LOCATION) || localStorage.getItem("geo_location") || sessionStorage.getItem("geo_location") || "";
   let notificationCount = 0;
   let locationReady = Boolean(detectedLocation);
+
+  window.addEventListener("geo_city_ready", (e) => {
+    if (e && e.detail) {
+      detectedLocation = e.detail.location || e.detail.city || "";
+      locationReady = Boolean(detectedLocation);
+    }
+  });
 
   // Real IP Geolocation retrieval with fallbacks
   function fetchLocation() {
@@ -74,7 +81,9 @@
       .then(d => {
         if (d.success && d.city) {
           const loc = d.region_code ? (d.city + ", " + d.region_code) : (d.region ? (d.city + ", " + d.region) : d.city);
+          localStorage.setItem("geo_city", d.city);
           sessionStorage.setItem("geo_city", d.city);
+          localStorage.setItem("geo_location", loc);
           sessionStorage.setItem("geo_location", loc);
           detectedLocation = loc;
           locationReady = true;
@@ -86,7 +95,9 @@
           .then(d => {
             if (d.city) {
               const loc = d.region ? (d.city + ", " + d.region.substring(0, 2).toUpperCase()) : d.city;
+              localStorage.setItem("geo_city", d.city);
               sessionStorage.setItem("geo_city", d.city);
+              localStorage.setItem("geo_location", loc);
               sessionStorage.setItem("geo_location", loc);
               detectedLocation = loc;
               locationReady = true;
@@ -95,30 +106,14 @@
             }
           })
           .catch(() => {
-            fetch("https://ipapi.co/json/")
-              .then(r => r.json())
-              .then(d => {
-                if (d.city) {
-                  const loc = d.region_code ? (d.city + ", " + d.region_code) : d.city;
-                  sessionStorage.setItem("geo_city", d.city);
-                  sessionStorage.setItem("geo_location", loc);
-                  detectedLocation = loc;
-                  locationReady = true;
-                } else {
-                  throw new Error();
-                }
-              }).catch(() => {
-                locationReady = true;
-              });
+            locationReady = true;
           });
       });
   }
 
-  // Defer location lookup to idle time so initial load is instant
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(fetchLocation, { timeout: 3500 });
-  } else {
-    setTimeout(fetchLocation, 2500);
+  // Instant or idle lookup
+  if (!detectedLocation) {
+    fetchLocation();
   }
 
   // Create Popup Toast in DOM
@@ -565,19 +560,19 @@ function createPlatformSection() {
       </div>
       <div class="platform-section__screenshots" aria-label="Telas da Plataforma Plano Aprovação">
         <figure class="platform-section__screenshot">
-          <div class="app-screen-card">
+          <div class="app-screen-card" style="box-shadow: 0 18px 42px -6px rgba(7, 27, 53, 0.24), 0 8px 20px -3px rgba(7, 27, 53, 0.14), 0 2px 6px rgba(7, 27, 53, 0.06) !important;">
             <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_44_42_1787710108509.png" alt="Planejamento e diagnóstico da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="948" height="1659">
           </div>
           <figcaption>Planejamento e diagnóstico</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
-          <div class="app-screen-card">
+          <div class="app-screen-card" style="box-shadow: 0 18px 42px -6px rgba(7, 27, 53, 0.24), 0 8px 20px -3px rgba(7, 27, 53, 0.14), 0 2px 6px rgba(7, 27, 53, 0.06) !important;">
             <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_41_46_1787710096912.png" alt="Painel inicial da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="934" height="1684">
           </div>
           <figcaption>Painel inicial</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
-          <div class="app-screen-card">
+          <div class="app-screen-card" style="box-shadow: 0 18px 42px -6px rgba(7, 27, 53, 0.24), 0 8px 20px -3px rgba(7, 27, 53, 0.14), 0 2px 6px rgba(7, 27, 53, 0.06) !important;">
             <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_43_24_1787710096914.png" alt="Ferramentas de estudo da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="959" height="1641">
           </div>
           <figcaption>Ferramentas de estudo</figcaption>
@@ -592,33 +587,33 @@ function createPlatformFeaturesSection() {
   const section = document.createElement("section");
   section.className = "platform-features-section";
   section.setAttribute("aria-labelledby", "platform-features-title");
-  section.style.cssText = "background: #faf7f0 !important; background-color: #faf7f0 !important; border-top: 1px solid rgba(7, 27, 53, 0.06); padding: 2.25rem 1rem 3rem !important; width: 100%; box-sizing: border-box; display: block;";
+  section.style.cssText = "background: #faf7f0 !important; background-color: #faf7f0 !important; border-top: 1px solid rgba(7, 27, 53, 0.06); padding: 2rem 1.25rem 2.75rem !important; width: 100%; box-sizing: border-box; display: block;";
 
-  const cardStyle = "background: #ffffff !important; background-color: #ffffff !important; border: 1px solid rgba(7, 27, 53, 0.08) !important; border-radius: 1.15rem !important; padding: 0.95rem 1.15rem 1.05rem !important; box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important; text-align: left !important; display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: flex-start !important; box-sizing: border-box !important;";
-  const emojiStyle = "font-size: 1.45rem !important; line-height: 1 !important; margin: 0 0 0.5rem 0 !important; display: block !important; user-select: none !important;";
-  const titleStyle = "color: #071b35 !important; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', 'Outfit', Arial, sans-serif !important; font-size: 0.95rem !important; font-weight: 800 !important; letter-spacing: -0.01em !important; line-height: 1.2 !important; text-transform: uppercase !important; margin: 0 0 0.25rem 0 !important;";
-  const descStyle = "color: #64748b !important; font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important; font-size: 0.78rem !important; line-height: 1.42 !important; margin: 0 !important; font-weight: 400 !important;";
+  const cardStyle = "background: #ffffff !important; background-color: #ffffff !important; border: 1px solid rgba(7, 27, 53, 0.07) !important; border-radius: 0.95rem !important; padding: 0.75rem 0.85rem 0.8rem !important; box-shadow: 0 4px 14px -2px rgba(7, 27, 53, 0.06), 0 2px 5px -1px rgba(7, 27, 53, 0.03) !important; text-align: left !important; display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: flex-start !important; box-sizing: border-box !important; min-width: 0 !important;";
+  const emojiStyle = "font-size: 1.25rem !important; line-height: 1 !important; margin: 0 0 0.35rem 0 !important; display: block !important; user-select: none !important;";
+  const titleStyle = "color: #071b35 !important; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', 'Outfit', Arial, sans-serif !important; font-size: 0.85rem !important; font-weight: 800 !important; letter-spacing: -0.01em !important; line-height: 1.18 !important; text-transform: uppercase !important; margin: 0 0 0.2rem 0 !important; word-break: break-word !important;";
+  const descStyle = "color: #5F6673 !important; font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important; font-size: 0.72rem !important; line-height: 1.34 !important; margin: 0 !important; font-weight: 400 !important;";
 
   section.innerHTML = `
     <style>
       .platform-features-section {
         background: #faf7f0 !important;
         width: 100% !important;
-        padding: 2.25rem 1rem 3rem !important;
+        padding: 2rem 1.25rem 2.75rem !important;
         box-sizing: border-box !important;
       }
       .platform-features__inner {
-        max-width: 42rem !important;
+        max-width: 38rem !important;
         margin: 0 auto !important;
         padding: 0 !important;
         text-align: center !important;
         box-sizing: border-box !important;
       }
       .platform-features__title {
-        margin: 0 0 1.35rem !important;
+        margin: 0 0 1.15rem !important;
         color: #071b35 !important;
         font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
-        font-size: clamp(1.35rem, 3.8vw, 1.85rem) !important;
+        font-size: clamp(1.25rem, 3.5vw, 1.75rem) !important;
         font-weight: 800 !important;
         letter-spacing: -0.02em !important;
         line-height: 1.1 !important;
@@ -627,43 +622,58 @@ function createPlatformFeaturesSection() {
       .platform-features__grid {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 0.9rem !important;
+        gap: 0.75rem !important;
         width: 100% !important;
         box-sizing: border-box !important;
       }
       .platform-features__card {
         background: #ffffff !important;
         background-color: #ffffff !important;
-        border: 1px solid rgba(7, 27, 53, 0.08) !important;
-        border-radius: 1.15rem !important;
-        padding: 0.95rem 1.15rem 1.05rem !important;
-        box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important;
+        border: 1px solid rgba(7, 27, 53, 0.07) !important;
+        border-radius: 0.95rem !important;
+        padding: 0.75rem 0.85rem 0.8rem !important;
+        box-shadow: 0 4px 14px -2px rgba(7, 27, 53, 0.06), 0 2px 5px -1px rgba(7, 27, 53, 0.03) !important;
         text-align: left !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         justify-content: flex-start !important;
         box-sizing: border-box !important;
+        min-width: 0 !important;
       }
       @media (max-width: 640px) {
         .platform-features-section {
-          padding: 1.85rem 0.85rem 2.35rem !important;
+          padding: 1.5rem 0.85rem 2rem !important;
         }
         .platform-features__title {
-          margin-bottom: 1.1rem !important;
+          margin-bottom: 0.9rem !important;
+          font-size: 1.25rem !important;
         }
         .platform-features__grid {
-          grid-template-columns: 1fr !important;
-          gap: 0.75rem !important;
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 0.6rem !important;
         }
         .platform-features__card {
-          padding: 0.85rem 1rem 0.95rem !important;
-          border-radius: 1rem !important;
+          padding: 0.65rem 0.65rem 0.7rem !important;
+          border-radius: 0.85rem !important;
+        }
+        .platform-features__emoji {
+          font-size: 1.15rem !important;
+          margin-bottom: 0.25rem !important;
+        }
+        .platform-features__card-title {
+          font-size: 0.76rem !important;
+          line-height: 1.14 !important;
+          margin-bottom: 0.15rem !important;
+        }
+        .platform-features__card-desc {
+          font-size: 0.65rem !important;
+          line-height: 1.28 !important;
         }
       }
     </style>
-    <div class="platform-features__inner" style="max-width: 42rem; margin: 0 auto !important; padding: 0 !important; text-align: center; box-sizing: border-box;">
-      <h2 class="platform-features__title" id="platform-features-title" style="margin: 0 0 1.35rem; color: #071b35; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif; font-size: clamp(1.35rem, 3.8vw, 1.85rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-transform: uppercase;">
+    <div class="platform-features__inner" style="max-width: 38rem; margin: 0 auto !important; padding: 0 !important; text-align: center; box-sizing: border-box;">
+      <h2 class="platform-features__title" id="platform-features-title" style="margin: 0 0 1.15rem; color: #071b35; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif; font-size: clamp(1.25rem, 3.5vw, 1.75rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-transform: uppercase;">
         O QUE VOCÊ TERÁ NA PLATAFORMA
       </h2>
       <div class="platform-features__grid">
