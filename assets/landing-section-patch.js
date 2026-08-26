@@ -322,22 +322,22 @@ function createPlatformSection() {
       </div>
       <div class="platform-section__screenshots" aria-label="Telas da Plataforma Plano Aprovação">
         <figure class="platform-section__screenshot">
+          <figcaption>Veja sua evolução</figcaption>
           <div class="app-screen-card">
-            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_44_42_1787710108509.png" alt="Planejamento e diagnóstico da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="948" height="1659">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_44_42_1787710108509.png" alt="Veja sua evolução na Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="948" height="1659">
           </div>
-          <figcaption>Planejamento e diagnóstico</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
+          <figcaption>Acompanhe seu progresso</figcaption>
           <div class="app-screen-card">
-            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_41_46_1787710096912.png" alt="Painel inicial da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="934" height="1684">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_41_46_1787710096912.png" alt="Acompanhe seu progresso na Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="934" height="1684">
           </div>
-          <figcaption>Painel inicial</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
+          <figcaption>Estude e pratique!</figcaption>
           <div class="app-screen-card">
-            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_43_24_1787710096914.png" alt="Ferramentas de estudo da Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="959" height="1641">
+            <img src="/attached_assets/ChatGPT_Image_25_de_ago._de_2026,_22_43_24_1787710096914.png" alt="Estude e pratique na Plataforma Plano Aprovação" loading="lazy" decoding="async" class="platform-screenshot-img" width="959" height="1641">
           </div>
-          <figcaption>Ferramentas de estudo</figcaption>
         </figure>
       </div>
     </div>
@@ -712,7 +712,7 @@ function createBonusSection() {
         display: block !important;
       }
       .cnh-bonus-inner {
-        max-width: 24.5rem !important;
+        max-width: 22rem !important;
         margin: 0 auto !important;
         padding: 0 !important;
         text-align: center !important;
@@ -1105,7 +1105,10 @@ function createBonusSection() {
       }
       @media (max-width: 640px) {
         .cnh-bonus-section {
-          padding: 2.25rem 0.75rem 2.75rem !important;
+          padding: 2.25rem 1rem 2.75rem !important;
+        }
+        .cnh-bonus-inner {
+          max-width: 22rem !important;
         }
         .cnh-bonus-card-top {
           height: auto !important;
