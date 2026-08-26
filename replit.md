@@ -3,10 +3,11 @@
 ## Como executar
 
 Este projeto é uma página estática já compilada. O preview é servido pelo workflow
-`Start application` com:
+`Start application`, que executa:
 
 ```text
-python3 -m http.server 5000 --bind 0.0.0.0
+npm run dev
 ```
 
+O servidor usa a porta 5000 no preview (ou a porta definida pela variável `PORT`).
 Para visualizar a página, inicie o workflow `Start application` e abra o Preview.
