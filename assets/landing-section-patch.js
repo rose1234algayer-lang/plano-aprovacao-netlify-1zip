@@ -288,9 +288,7 @@ function createMaterialSection() {
     </div>
   `;
   section.querySelector(".material-section__cta-button").addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.location.href = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+    scrollToOffer(e);
   });
   return section;
 }
@@ -485,7 +483,7 @@ function insertPlatformSection() {
     videoSection.parentElement?.insertBefore(createTestimonialsSection(), videoSection);
   }
 
-  // Insert Bonus Section and Main Offer Section directly after video section
+  // Insert Bonus Section, Not-Just-A-Book Section, and Main Offer Section directly after video section
   const currentTestimonials = document.querySelector(".cnh-testimonials-section");
   const targetAnchor = videoSection || currentTestimonials;
   if (targetAnchor) {
@@ -494,8 +492,13 @@ function insertPlatformSection() {
     }
 
     const bonusSec = document.querySelector(".cnh-bonus-section");
-    if (bonusSec && !document.querySelector(".cnh-main-offer-section")) {
-      bonusSec.parentElement?.insertBefore(createMainOfferSection(), bonusSec.nextSibling);
+    if (bonusSec && !document.querySelector(".cnh-not-just-book-section")) {
+      bonusSec.parentElement?.insertBefore(createNotJustABookSection(), bonusSec.nextSibling);
+    }
+
+    const notJustBookSec = document.querySelector(".cnh-not-just-book-section") || bonusSec;
+    if (notJustBookSec && !document.querySelector(".cnh-main-offer-section")) {
+      notJustBookSec.parentElement?.insertBefore(createMainOfferSection(), notJustBookSec.nextSibling);
     }
   }
 
@@ -601,7 +604,7 @@ const CNH_OFFER_CONFIG = {
   titlePart2: "COMECE A PASSAR!",
   productImage: {
     pendingLabel: "IMAGEM DO PRODUTO — PENDENTE",
-    imageUrl: "" // Inserir URL da imagem real da composição do produto aqui quando disponível
+    imageUrl: "/assets/oferta-combo-postimg.png"
   },
   whatsIncludedTitle: "TUDO O QUE VOCÊ LEVA HOJE",
   items: [
@@ -725,20 +728,33 @@ function createBonusSection() {
         gap: 0.65rem !important;
         margin-bottom: 0.75rem !important;
       }
+      @keyframes cnhGiftFloating {
+        0%, 100% {
+          transform: translateY(0px) rotate(-6deg) scale(1);
+          box-shadow: 0 6px 16px rgba(255, 90, 31, 0.45), 0 0 12px rgba(255, 90, 31, 0.25);
+        }
+        50% {
+          transform: translateY(-9px) rotate(-10deg) scale(1.05);
+          box-shadow: 0 14px 28px rgba(255, 90, 31, 0.7), 0 0 20px rgba(255, 90, 31, 0.45);
+        }
+      }
       .cnh-bonus-gift-badge {
-        width: 40px !important;
-        height: 40px !important;
-        background: #FF5A1F !important;
-        border-radius: 12px !important;
+        width: 48px !important;
+        height: 48px !important;
+        background: linear-gradient(135deg, #FF6B35 0%, #FF5A1F 100%) !important;
+        border-radius: 14px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        box-shadow: 0 4px 14px rgba(255, 90, 31, 0.45) !important;
+        box-shadow: 0 6px 16px rgba(255, 90, 31, 0.45) !important;
         flex-shrink: 0 !important;
+        animation: cnhGiftFloating 2.4s ease-in-out infinite !important;
+        transform-origin: center center !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
       }
       .cnh-bonus-gift-svg {
-        width: 21px !important;
-        height: 21px !important;
+        width: 25px !important;
+        height: 25px !important;
         stroke: #ffffff !important;
       }
       .cnh-bonus-badge-top {
@@ -1212,6 +1228,252 @@ function initOfferTimer(section) {
   return setInterval(update, 1000);
 }
 
+function createNotJustABookSection() {
+  const section = document.createElement("section");
+  section.className = "cnh-not-just-book-section";
+  section.setAttribute("aria-labelledby", "cnh-njb-heading");
+
+  section.innerHTML = `
+    <style>
+      .cnh-not-just-book-section {
+        background: #faf7f0 !important;
+        width: 100% !important;
+        padding: 0.6rem 0.85rem !important;
+        box-sizing: border-box !important;
+        display: block !important;
+      }
+      .cnh-njb-container {
+        max-width: 42rem !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-njb-card {
+        background: #071B35 !important;
+        background-color: #071B35 !important;
+        border-radius: 0.85rem !important;
+        border-top: 3px solid #FF5A1F !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.07) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+        box-shadow: 0 10px 24px -4px rgba(7, 27, 53, 0.2), 0 2px 6px rgba(7, 27, 53, 0.06) !important;
+        padding: 1.1rem 1.3rem 1.15rem !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+      }
+      .cnh-njb-title {
+        margin: 0 0 0.45rem 0 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.05rem, 3vw, 1.35rem) !important;
+        font-weight: 900 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1.15 !important;
+        text-transform: uppercase !important;
+        color: #ffffff !important;
+      }
+      .cnh-njb-emoji {
+        display: inline-block !important;
+        margin-right: 0.25rem !important;
+        font-size: 1.1em !important;
+        vertical-align: -0.06em !important;
+      }
+      .cnh-njb-title-white {
+        color: #ffffff !important;
+      }
+      .cnh-njb-title-orange {
+        color: #FF5A1F !important;
+        display: block !important;
+      }
+      .cnh-njb-text {
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        color: #cbd5e1 !important;
+        font-size: clamp(0.75rem, 1.9vw, 0.84rem) !important;
+        font-weight: 400 !important;
+        line-height: 1.4 !important;
+        margin: 0 0 0.85rem 0 !important;
+      }
+      .cnh-njb-text strong {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+      }
+      .cnh-njb-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.45rem 1.25rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        align-items: center !important;
+      }
+      .cnh-njb-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.45rem !important;
+        min-height: 22px !important;
+      }
+      .cnh-njb-check {
+        width: 16px !important;
+        height: 16px !important;
+        min-width: 16px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #FF5A1F !important;
+        background: rgba(255, 90, 31, 0.12) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-njb-check svg {
+        width: 9px !important;
+        height: 9px !important;
+        stroke: #FF5A1F !important;
+      }
+      .cnh-njb-item-text {
+        color: #cbd5e1 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: clamp(0.72rem, 1.7vw, 0.82rem) !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.01em !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-not-just-book-section {
+          padding: 0.6rem 0.6rem 0.5rem !important;
+        }
+        .cnh-njb-card {
+          padding: 0.85rem 0.85rem 0.95rem !important;
+          border-radius: 0.75rem !important;
+        }
+        .cnh-njb-title {
+          font-size: 1.05rem !important;
+          margin-bottom: 0.35rem !important;
+        }
+        .cnh-njb-text {
+          margin-bottom: 0.7rem !important;
+          font-size: 0.74rem !important;
+          line-height: 1.35 !important;
+        }
+        .cnh-njb-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 0.4rem 0.55rem !important;
+          align-items: center !important;
+        }
+        .cnh-njb-item {
+          gap: 0.35rem !important;
+          min-height: 20px !important;
+        }
+        .cnh-njb-check {
+          width: 14px !important;
+          height: 14px !important;
+          min-width: 14px !important;
+        }
+        .cnh-njb-check svg {
+          width: 8px !important;
+          height: 8px !important;
+        }
+        .cnh-njb-item-text {
+          font-size: 0.69rem !important;
+          line-height: 1.2 !important;
+        }
+      }
+    </style>
+
+    <div class="cnh-njb-container">
+      <div class="cnh-njb-card">
+        <h2 class="cnh-njb-title" id="cnh-njb-heading">
+          <span class="cnh-njb-emoji" aria-hidden="true">🚀</span>
+          <span class="cnh-njb-title-white">VOCÊ NÃO ESTÁ ADQUIRINDO</span>
+          <span class="cnh-njb-title-orange">APENAS UMA APOSTILA.</span>
+        </h2>
+
+        <p class="cnh-njb-text">
+          Você está entrando para um <strong>sistema completo</strong>, com tudo o que precisa para estudar, praticar e chegar mais preparado para a prova teórica da CNH.
+        </p>
+
+        <div class="cnh-njb-grid">
+          <!-- Linha 1 -->
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Apostila Plano Aprovação CNH 2026</span>
+          </div>
+
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Plataforma Plano Aprovação</span>
+          </div>
+
+          <!-- Linha 2 -->
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Professores IA</span>
+          </div>
+
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Simulados CNH</span>
+          </div>
+
+          <!-- Linha 3 -->
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Plano de Estudos</span>
+          </div>
+
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Questões Direcionadas</span>
+          </div>
+
+          <!-- Linha 4 -->
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Grupo VIP de Alunos</span>
+          </div>
+
+          <div class="cnh-njb-item">
+            <div class="cnh-njb-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="cnh-njb-item-text">Suporte pelo WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return section;
+}
+
 function createMainOfferSection() {
   const section = document.createElement("section");
   section.id = "oferta";
@@ -1309,16 +1571,22 @@ function createMainOfferSection() {
       }
       .cnh-offer-product-wrap {
         width: 100% !important;
-        margin: 0 auto 0.55rem !important;
+        margin: 0.15rem auto 0.65rem !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
       }
       .cnh-offer-product-img {
         width: 100% !important;
+        max-width: 195px !important;
         height: auto !important;
-        max-height: 180px !important;
+        max-height: 135px !important;
         object-fit: contain !important;
         display: block !important;
         margin: 0 auto !important;
+        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4)) !important;
+        transform: translateZ(0) !important;
       }
       .cnh-offer-product-placeholder {
         width: 100% !important;
@@ -1783,10 +2051,10 @@ function createMainOfferSection() {
         </div>
       </div>
 
-      <button id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" type="button">
+      <a href="https://pay.wiapy.com/Ejh7VyX6eSxN" id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" role="button" target="_self">
         <span class="cnh-offer-checkout-main">${CNH_OFFER_CONFIG.cta.mainText}</span>
         <span class="cnh-offer-checkout-sub">${CNH_OFFER_CONFIG.cta.subText}</span>
-      </button>
+      </a>
 
       <div class="cnh-offer-whatsapp-note">
         <svg class="cnh-offer-whatsapp-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3064,7 +3332,53 @@ function optimizeImagesSmoothly() {
   });
 }
 
-const CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+const BASE_CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+
+function getCheckoutUrlWithParams() {
+  try {
+    const targetUrl = new URL(BASE_CHECKOUT_URL);
+    
+    // 1. Merge all query parameters from the current URL (UTMs, src, sck, etc.)
+    if (window.location.search) {
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.forEach((value, key) => {
+        if (value) targetUrl.searchParams.set(key, value);
+      });
+    }
+
+    // 2. Check for UTMify or common UTM session/local storage
+    const trackingKeys = [
+      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+      "src", "sck", "xcod", "fbclid", "gclid", "ttclid", "utmify_lead"
+    ];
+    trackingKeys.forEach((key) => {
+      if (!targetUrl.searchParams.has(key)) {
+        const storedVal = sessionStorage.getItem(key) || localStorage.getItem(key);
+        if (storedVal) targetUrl.searchParams.set(key, storedVal);
+      }
+    });
+
+    // 3. If UTMify already decorated an existing anchor on the page, inherit its params
+    const decoratedAnchor = document.querySelector("a[href*='pay.wiapy.com']");
+    if (decoratedAnchor && decoratedAnchor.href && decoratedAnchor.href.includes("?")) {
+      try {
+        const anchorUrl = new URL(decoratedAnchor.href);
+        anchorUrl.searchParams.forEach((value, key) => {
+          if (value) targetUrl.searchParams.set(key, value);
+        });
+      } catch (e) {}
+    }
+
+    return targetUrl.toString();
+  } catch (err) {
+    const search = window.location.search || "";
+    if (search) {
+      const sep = BASE_CHECKOUT_URL.includes("?") ? "&" : "?";
+      return BASE_CHECKOUT_URL + sep + search.replace(/^\?/, "");
+    }
+    return BASE_CHECKOUT_URL;
+  }
+}
 
 function redirectToCheckout(e) {
   if (e) {
@@ -3073,20 +3387,21 @@ function redirectToCheckout(e) {
     if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
   }
 
+  const finalUrl = getCheckoutUrlWithParams();
+
   try {
     if (window.top && window.top !== window) {
-      window.top.location.href = CHECKOUT_URL;
+      window.top.location.href = finalUrl;
       return;
     }
   } catch (err) {
-    // Cross-origin iframe fallback
     try {
-      window.open(CHECKOUT_URL, "_blank");
+      window.open(finalUrl, "_blank");
       return;
     } catch (e2) {}
   }
 
-  window.location.href = CHECKOUT_URL;
+  window.location.href = finalUrl;
 }
 
 function scrollToOffer(e) {
