@@ -477,6 +477,1927 @@ function insertPlatformSection() {
   if (platformFeaturesSec && !document.querySelector(".cnh-motivation-section")) {
     platformFeaturesSec.parentElement?.insertBefore(createMotivationSection(), platformFeaturesSec.nextSibling);
   }
+
+  const motivationSec = document.querySelector(".cnh-motivation-section");
+  if (motivationSec && !document.querySelector(".cnh-testimonials-section")) {
+    motivationSec.parentElement?.insertBefore(createTestimonialsSection(), motivationSec.nextSibling);
+  } else if (!document.querySelector(".cnh-testimonials-section") && videoSection) {
+    videoSection.parentElement?.insertBefore(createTestimonialsSection(), videoSection);
+  }
+
+  // Insert Bonus Section and Main Offer Section directly after video section
+  const currentTestimonials = document.querySelector(".cnh-testimonials-section");
+  const targetAnchor = videoSection || currentTestimonials;
+  if (targetAnchor) {
+    if (!document.querySelector(".cnh-bonus-section")) {
+      targetAnchor.parentElement?.insertBefore(createBonusSection(), targetAnchor.nextSibling);
+    }
+
+    const bonusSec = document.querySelector(".cnh-bonus-section");
+    if (bonusSec && !document.querySelector(".cnh-main-offer-section")) {
+      bonusSec.parentElement?.insertBefore(createMainOfferSection(), bonusSec.nextSibling);
+    }
+  }
+
+  // Remove the unwanted "TUDO QUE VOCÊ RECEBE AO ENTRAR" / "O QUE VOCÊ RECEBE" fold
+  removeUnwantedRecebeSection();
+
+  // Remove the old React offer section if present to avoid duplication
+  const oldReactOffer = [...document.querySelectorAll("section#oferta")].find(
+    (sec) => !sec.classList.contains("cnh-main-offer-section")
+  );
+  if (oldReactOffer) {
+    oldReactOffer.remove();
+  }
+
+  // Remove the old duplicate plan cards if present
+  const oldPlanSection = [...document.querySelectorAll("section")].find((sec) => {
+    const text = sec.textContent || "";
+    return !sec.classList.contains("cnh-bonus-section") &&
+      !sec.classList.contains("cnh-main-offer-section") &&
+      text.includes("Foi por isso que criamos o") &&
+      text.includes("PLANO DE APROVAÇÃO CNH 2026");
+  });
+  if (oldPlanSection) {
+    oldPlanSection.remove();
+  }
+}
+
+function removeUnwantedRecebeSection() {
+  document.querySelectorAll("section").forEach((sec) => {
+    const text = sec.textContent || "";
+    if (
+      !sec.classList.contains("cnh-bonus-section") &&
+      !sec.classList.contains("cnh-main-offer-section") &&
+      !sec.classList.contains("cnh-testimonials-section") &&
+      (
+        text.includes("TUDO QUE VOCÊ RECEBE AO ENTRAR") ||
+        (text.includes("O QUE VOCÊ RECEBE") && text.includes("Plano de Estudos Direcionado")) ||
+        (text.includes("Plano de Estudos Direcionado") && text.includes("Resumos Objetivos") && text.includes("Simulados"))
+      )
+    ) {
+      sec.remove();
+    }
+  });
+}
+
+// ================= 3 EXCLUSIVE BONUSES CONFIGURATION (EASILY EDITABLE) =================
+const CNH_BONUS_CONFIG = {
+  headerBadge: "COMPRANDO HOJE VOCÊ GANHA",
+  titlePart1: "3 BÔNUS",
+  titlePart2: "EXCLUSIVOS",
+  subtitle: "Liberados gratuitamente junto com o seu Plano de Aprovação CNH 2026.",
+  bonuses: [
+    {
+      id: 1,
+      tag: "BÔNUS 1",
+      icon: "🎧",
+      title: "ACOMPANHAMENTO NO WHATSAPP",
+      description: "Suporte e orientações para ajudar você durante toda a sua preparação.",
+      referencePrice: "R$ 37,00",
+      freePrice: "AGORA GRÁTIS",
+      imagePendingLabel: "Bônus 1 — imagem pendente",
+      imageUrl: "" // Inserir URL da imagem real do Bônus 1 aqui quando disponível
+    },
+    {
+      id: 2,
+      tag: "BÔNUS 2",
+      icon: "👥",
+      title: "GRUPO VIP DE ALUNOS",
+      description: "Comunidade exclusiva para trocar experiências, receber orientações e acompanhar sua preparação.",
+      referencePrice: "R$ 37,00",
+      freePrice: "AGORA GRÁTIS",
+      imagePendingLabel: "Bônus 2 — imagem pendente",
+      imageUrl: "" // Inserir URL da imagem real do Bônus 2 aqui quando disponível
+    },
+    {
+      id: 3,
+      tag: "BÔNUS 3",
+      icon: "📚",
+      title: "GUIA DE REVISÃO FINAL",
+      description: "Material de apoio para revisar os conteúdos essenciais antes da prova.",
+      referencePrice: "R$ 37,00",
+      freePrice: "AGORA GRÁTIS",
+      imagePendingLabel: "Bônus 3 — imagem pendente",
+      imageUrl: "" // Inserir URL da imagem real do Bônus 3 aqui quando disponível
+    }
+  ],
+  totalValue: {
+    badge: "VALOR TOTAL DOS BÔNUS",
+    referenceTotal: "R$ 111,00",
+    freeTotal: "R$ 0,00",
+    highlightText: "100% GRÁTIS HOJE",
+    footerText: "junto com o Plano Aprovação CNH 2026."
+  },
+  cta: {
+    mainText: "QUERO MEU PLANO + BÔNUS →",
+    subText: "ACESSO AO PLANO APROVAÇÃO CNH 2026"
+  }
+};
+
+// ================= MAIN OFFER CONFIGURATION (EASILY EDITABLE) =================
+const CNH_OFFER_CONFIG = {
+  titlePart1: "PARE DE TENTAR.",
+  titlePart2: "COMECE A PASSAR!",
+  productImage: {
+    pendingLabel: "IMAGEM DO PRODUTO — PENDENTE",
+    imageUrl: "" // Inserir URL da imagem real da composição do produto aqui quando disponível
+  },
+  whatsIncludedTitle: "TUDO O QUE VOCÊ LEVA HOJE",
+  items: [
+    { title: "Apostila Plano de Aprovação", icon: "📖", tag: "PRINCIPAL", tagType: "pill-primary" },
+    { title: "Plataforma Plano Aprovação", icon: "💻", tag: "INCLUSO", tagType: "pill-secondary" },
+    { title: "3 Bônus exclusivos", icon: "🎁", tag: "GRÁTIS", tagType: "pill-highlight" },
+    { title: "Acompanhamento no WhatsApp", icon: "💬", tag: "✓", tagType: "check" },
+    { title: "Grupo VIP de alunos", icon: "👥", tag: "✓", tagType: "check" },
+    { title: "Simulados e materiais de preparação", icon: "🎯", tag: "✓", tagType: "check" }
+  ],
+  pricing: {
+    referencePrice: "De: R$ 67,00",
+    leadText: "POR APENAS",
+    mainPrice: "R$ 27,90",
+    termsText: "à vista"
+  },
+  timer: {
+    labelActive: "OFERTA EXPIRA EM",
+    labelExpired: "OFERTA EXPIRADA",
+    minutes: 10
+  },
+  cta: {
+    mainText: "QUERO SER APROVADO →",
+    subText: "GARANTA AGORA SUA APOSTILA"
+  },
+  whatsappDeliveryText: "Após a compra, você recebe o acesso direto no seu WhatsApp — sem complicação.",
+  trustBadges: [
+    { type: "lock", label: "Compra 100% segura" },
+    { type: "shield", label: "Dados criptografados" },
+    { type: "seal", label: "Garantia de 7 dias" }
+  ],
+  footerNote: "Pagamento processado com SSL 256-bit"
+};
+
+function createBonusSection() {
+  const section = document.createElement("section");
+  section.className = "cnh-bonus-section";
+  section.setAttribute("aria-labelledby", "cnh-bonus-title");
+
+  const cardsHtml = CNH_BONUS_CONFIG.bonuses.map((b) => {
+    let imageAreaContent = "";
+    if (b.imageUrl) {
+      imageAreaContent = `<img src="${b.imageUrl}" alt="${b.title}" class="cnh-bonus-card-img" loading="lazy" decoding="async">`;
+    } else {
+      // Professional compact placeholder matching reference aesthetic
+      imageAreaContent = `
+        <div class="cnh-bonus-img-placeholder">
+          <div class="cnh-bonus-placeholder-badge">
+            <span class="cnh-bonus-ph-icon" aria-hidden="true">${b.icon}</span>
+          </div>
+          <div class="cnh-bonus-placeholder-title">${b.title}</div>
+          <div class="cnh-bonus-placeholder-tag">[${b.imagePendingLabel.toUpperCase()}]</div>
+          <div class="cnh-bonus-placeholder-note">Plano Aprovação CNH 2026</div>
+        </div>
+      `;
+    }
+
+    return `
+      <article class="cnh-bonus-card" data-bonus-id="${b.id}">
+        <div class="cnh-bonus-card-top">
+          ${imageAreaContent}
+          <div class="cnh-bonus-gratis-badge" aria-label="Bônus Gratuito">
+            <span>GRÁTIS</span>
+          </div>
+        </div>
+
+        <div class="cnh-bonus-card-bottom">
+          <div class="cnh-bonus-tag-row">
+            <span class="cnh-bonus-tag-icon">${b.icon}</span>
+            <span class="cnh-bonus-tag-text">${b.tag}</span>
+          </div>
+
+          <h3 class="cnh-bonus-card-title">${b.title}</h3>
+
+          <p class="cnh-bonus-card-desc">${b.description}</p>
+
+          <div class="cnh-bonus-divider"></div>
+
+          <div class="cnh-bonus-price-row">
+            <div class="cnh-bonus-price-de">
+              <span class="cnh-bonus-price-label">DE</span>
+              <span class="cnh-bonus-price-old">${b.referencePrice}</span>
+            </div>
+            <div class="cnh-bonus-price-por">
+              <span class="cnh-bonus-price-label">POR</span>
+              <span class="cnh-bonus-price-new">${b.freePrice}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  section.innerHTML = `
+    <style>
+      .cnh-bonus-section {
+        background: #051329 !important;
+        background-color: #051329 !important;
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) !important;
+        background-size: 32px 32px !important;
+        width: 100% !important;
+        padding: 2.75rem 0.85rem 3.25rem !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        overflow: hidden !important;
+        display: block !important;
+      }
+      .cnh-bonus-inner {
+        max-width: 24.5rem !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-bonus-header-lockup {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.65rem !important;
+        margin-bottom: 0.75rem !important;
+      }
+      .cnh-bonus-gift-badge {
+        width: 40px !important;
+        height: 40px !important;
+        background: #FF5A1F !important;
+        border-radius: 12px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 4px 14px rgba(255, 90, 31, 0.45) !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-bonus-gift-svg {
+        width: 21px !important;
+        height: 21px !important;
+        stroke: #ffffff !important;
+      }
+      .cnh-bonus-badge-top {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        background: rgba(255, 90, 31, 0.12) !important;
+        border: 1.5px solid rgba(255, 90, 31, 0.45) !important;
+        border-radius: 9999px !important;
+        padding: 0.32rem 0.85rem !important;
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+      }
+      .cnh-bonus-badge-sparkle {
+        color: #FF5A1F !important;
+        font-size: 0.75rem !important;
+      }
+      .cnh-bonus-title {
+        margin: 0 0 0.4rem !important;
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(2rem, 7.5vw, 2.75rem) !important;
+        font-weight: 900 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1 !important;
+        text-transform: uppercase !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.05rem !important;
+      }
+      .cnh-bonus-title-highlight {
+        color: #FF5A1F !important;
+      }
+      .cnh-bonus-subtitle {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+        line-height: 1.35 !important;
+        margin: 0 auto 1.6rem !important;
+        max-width: 22rem !important;
+      }
+      .cnh-bonus-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.25rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 1.35rem !important;
+      }
+      .cnh-bonus-card {
+        background: #FAF7F0 !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 1.25rem !important;
+        overflow: hidden !important;
+        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45) !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+      }
+      .cnh-bonus-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 16px 34px -4px rgba(0, 0, 0, 0.55) !important;
+      }
+      .cnh-bonus-card-top {
+        position: relative !important;
+        width: 100% !important;
+        height: 270px !important;
+        max-height: 290px !important;
+        background: #091c36 !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-bonus-card-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+      }
+      .cnh-bonus-img-placeholder {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 1.35rem 1.1rem !important;
+        box-sizing: border-box !important;
+        background: linear-gradient(180deg, #0d274c 0%, #06152b 100%) !important;
+        text-align: center !important;
+      }
+      .cnh-bonus-placeholder-badge {
+        width: 56px !important;
+        height: 56px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 90, 31, 0.15) !important;
+        border: 2px solid #FF5A1F !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 0 18px rgba(255, 90, 31, 0.3) !important;
+        margin-bottom: 0.75rem !important;
+      }
+      .cnh-bonus-ph-icon {
+        font-size: 1.6rem !important;
+        line-height: 1 !important;
+      }
+      .cnh-bonus-placeholder-title {
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 1.12rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.4rem !important;
+        line-height: 1.15 !important;
+      }
+      .cnh-bonus-placeholder-tag {
+        display: inline-block !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px dashed rgba(255, 255, 255, 0.3) !important;
+        border-radius: 9999px !important;
+        padding: 0.2rem 0.65rem !important;
+        color: #FF5A1F !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.64rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        margin-bottom: 0.4rem !important;
+      }
+      .cnh-bonus-placeholder-note {
+        color: #64748b !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+      }
+      .cnh-bonus-gratis-badge {
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        background: #FF5A1F !important;
+        border: 1.5px solid #ffffff !important;
+        border-radius: 9999px !important;
+        padding: 0.22rem 0.68rem !important;
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.06em !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
+        z-index: 2 !important;
+      }
+      .cnh-bonus-card-bottom {
+        padding: 0.95rem 1.05rem 0.85rem !important;
+        background: #FAF7F0 !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-bonus-tag-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+      .cnh-bonus-tag-icon {
+        font-size: 0.85rem !important;
+        line-height: 1 !important;
+      }
+      .cnh-bonus-tag-text {
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-bonus-card-title {
+        margin: 0 0 0.35rem !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1.15 !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-bonus-card-desc {
+        margin: 0 0 0.75rem !important;
+        color: #475569 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.76rem !important;
+        line-height: 1.38 !important;
+        font-weight: 500 !important;
+      }
+      .cnh-bonus-divider {
+        border-top: 1px dashed rgba(7, 27, 53, 0.15) !important;
+        margin: 0 0 0.65rem !important;
+      }
+      .cnh-bonus-price-row {
+        display: flex !important;
+        align-items: flex-end !important;
+        justify-content: space-between !important;
+      }
+      .cnh-bonus-price-de {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      .cnh-bonus-price-por {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+      }
+      .cnh-bonus-price-label {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        line-height: 1 !important;
+        margin-bottom: 0.15rem !important;
+      }
+      .cnh-bonus-price-old {
+        color: #64748b !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.92rem !important;
+        font-weight: 700 !important;
+        text-decoration: line-through !important;
+        line-height: 1 !important;
+      }
+      .cnh-bonus-price-new {
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 1.08rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1 !important;
+      }
+      .cnh-bonus-total-box {
+        position: relative !important;
+        background: linear-gradient(135deg, #FF5A1F 0%, #FF4500 100%) !important;
+        border-radius: 1.25rem !important;
+        padding: 1.15rem 1rem 1.05rem !important;
+        box-shadow: 0 12px 30px -4px rgba(255, 90, 31, 0.45) !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        margin-bottom: 0.85rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      .cnh-bonus-total-sparkle {
+        position: absolute !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        font-size: 0.95rem !important;
+        pointer-events: none !important;
+        user-select: none !important;
+      }
+      .cnh-bonus-total-sparkle-tl { top: 8px; left: 10px; }
+      .cnh-bonus-total-sparkle-tr { top: 8px; right: 10px; }
+      .cnh-bonus-total-sparkle-br { bottom: 8px; right: 10px; }
+      .cnh-bonus-total-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+        background: rgba(255, 255, 255, 0.22) !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
+        border-radius: 9999px !important;
+        padding: 0.22rem 0.75rem !important;
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.45rem !important;
+      }
+      .cnh-bonus-total-old {
+        color: rgba(255, 255, 255, 0.75) !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 800 !important;
+        text-decoration: line-through !important;
+        line-height: 1 !important;
+        margin-bottom: 0.15rem !important;
+      }
+      .cnh-bonus-total-zero {
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(2.4rem, 8vw, 3.2rem) !important;
+        font-weight: 900 !important;
+        line-height: 0.95 !important;
+        letter-spacing: -0.03em !important;
+        margin: 0 0 0.25rem !important;
+        text-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+      }
+      .cnh-bonus-total-free-label {
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.25rem !important;
+      }
+      .cnh-bonus-total-footnote {
+        color: rgba(255, 255, 255, 0.92) !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+      }
+      .cnh-bonus-cta-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        background: #FF5A1F !important;
+        border: none !important;
+        border-radius: 1rem !important;
+        padding: 0.95rem 1.15rem !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 8px 20px -3px rgba(255, 90, 31, 0.4) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-bonus-cta-btn:hover {
+        background: #e04b14 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 25px -3px rgba(255, 90, 31, 0.5) !important;
+      }
+      .cnh-bonus-cta-btn:active {
+        transform: translateY(0) !important;
+      }
+      .cnh-bonus-cta-main {
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(1.05rem, 3.4vw, 1.22rem) !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1.1 !important;
+      }
+      .cnh-bonus-cta-sub {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.66rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        opacity: 0.95 !important;
+        margin-top: 0.2rem !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-bonus-section {
+          padding: 2.25rem 0.75rem 2.75rem !important;
+        }
+        .cnh-bonus-card-top {
+          height: 245px !important;
+        }
+      }
+    </style>
+    <div class="cnh-bonus-inner">
+      <div class="cnh-bonus-header-lockup">
+        <div class="cnh-bonus-gift-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="cnh-bonus-gift-svg">
+            <polyline points="20 12 20 22 4 22 4 12"></polyline>
+            <rect x="2" y="7" width="20" height="5" rx="1.5"></rect>
+            <line x1="12" y1="22" x2="12" y2="7"></line>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+          </svg>
+        </div>
+        <div class="cnh-bonus-badge-top">
+          <span class="cnh-bonus-badge-sparkle" aria-hidden="true">✦</span>
+          <span>${CNH_BONUS_CONFIG.headerBadge}</span>
+        </div>
+      </div>
+
+      <h2 class="cnh-bonus-title" id="cnh-bonus-title">
+        <span>${CNH_BONUS_CONFIG.titlePart1}</span>
+        <span class="cnh-bonus-title-highlight">${CNH_BONUS_CONFIG.titlePart2}</span>
+      </h2>
+
+      <p class="cnh-bonus-subtitle">
+        ${CNH_BONUS_CONFIG.subtitle}
+      </p>
+
+      <div class="cnh-bonus-list">
+        ${cardsHtml}
+      </div>
+
+      <div class="cnh-bonus-total-box">
+        <span class="cnh-bonus-total-sparkle cnh-bonus-total-sparkle-tl" aria-hidden="true">✦</span>
+        <span class="cnh-bonus-total-sparkle cnh-bonus-total-sparkle-tr" aria-hidden="true">✦</span>
+        <span class="cnh-bonus-total-sparkle cnh-bonus-total-sparkle-br" aria-hidden="true">✦</span>
+
+        <div class="cnh-bonus-total-pill">
+          <span aria-hidden="true">🎁</span>
+          <span>${CNH_BONUS_CONFIG.totalValue.badge}</span>
+        </div>
+
+        <div class="cnh-bonus-total-old">${CNH_BONUS_CONFIG.totalValue.referenceTotal}</div>
+
+        <div class="cnh-bonus-total-zero">${CNH_BONUS_CONFIG.totalValue.freeTotal}</div>
+
+        <div class="cnh-bonus-total-free-label">${CNH_BONUS_CONFIG.totalValue.highlightText}</div>
+
+        <p class="cnh-bonus-total-footnote">${CNH_BONUS_CONFIG.totalValue.footerText}</p>
+      </div>
+
+      <a href="#oferta" class="cnh-bonus-cta-btn" data-scroll-to-offer="true" role="button">
+        <span class="cnh-bonus-cta-main">${CNH_BONUS_CONFIG.cta.mainText}</span>
+        <span class="cnh-bonus-cta-sub">${CNH_BONUS_CONFIG.cta.subText}</span>
+      </a>
+    </div>
+  `;
+
+  return section;
+}
+
+function initOfferTimer(section) {
+  const minEl = section.querySelector("#cnh-timer-min");
+  const secEl = section.querySelector("#cnh-timer-sec");
+  const statusEl = section.querySelector("#cnh-timer-status");
+  if (!minEl || !secEl) return;
+
+  const STORAGE_KEY = "cnh_offer_timer_expires_v2";
+  const DURATION_MS = (CNH_OFFER_CONFIG.timer?.minutes || 10) * 60 * 1000;
+
+  let expiresAt = parseInt(sessionStorage.getItem(STORAGE_KEY) || "0", 10);
+  const now = Date.now();
+  if (!expiresAt || expiresAt < now || expiresAt > now + DURATION_MS + 5000) {
+    expiresAt = now + DURATION_MS;
+    sessionStorage.setItem(STORAGE_KEY, expiresAt.toString());
+  }
+
+  function update() {
+    const current = Date.now();
+    const remainingMs = expiresAt - current;
+    if (remainingMs <= 0) {
+      minEl.textContent = "00";
+      secEl.textContent = "00";
+      if (statusEl) statusEl.textContent = CNH_OFFER_CONFIG.timer?.labelExpired || "OFERTA EXPIRADA";
+      return;
+    }
+
+    const totalSeconds = Math.floor(remainingMs / 1000);
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+
+    minEl.textContent = String(mins).padStart(2, "0");
+    secEl.textContent = String(secs).padStart(2, "0");
+    if (statusEl) statusEl.textContent = CNH_OFFER_CONFIG.timer?.labelActive || "OFERTA EXPIRA EM";
+  }
+
+  update();
+  return setInterval(update, 1000);
+}
+
+function createMainOfferSection() {
+  const section = document.createElement("section");
+  section.id = "oferta";
+  section.className = "cnh-main-offer-section";
+  section.setAttribute("aria-labelledby", "cnh-main-offer-title");
+
+  const itemsHtml = CNH_OFFER_CONFIG.items.map((item) => {
+    let rightBadge = "";
+    if (item.tagType === "pill-primary") {
+      rightBadge = `<span class="cnh-offer-item-pill cnh-offer-item-pill-primary">${item.tag}</span>`;
+    } else if (item.tagType === "pill-secondary") {
+      rightBadge = `<span class="cnh-offer-item-pill cnh-offer-item-pill-secondary">${item.tag}</span>`;
+    } else if (item.tagType === "pill-highlight") {
+      rightBadge = `<span class="cnh-offer-item-pill cnh-offer-item-pill-highlight">${item.tag}</span>`;
+    } else {
+      rightBadge = `
+        <span class="cnh-offer-item-check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+      `;
+    }
+
+    return `
+      <li class="cnh-offer-included-item">
+        <div class="cnh-offer-item-left">
+          <span class="cnh-offer-item-icon" aria-hidden="true">${item.icon}</span>
+          <span class="cnh-offer-item-text">${item.title}</span>
+        </div>
+        <div class="cnh-offer-item-right">
+          ${rightBadge}
+        </div>
+      </li>
+    `;
+  }).join("");
+
+  let productImageHtml = "";
+  if (CNH_OFFER_CONFIG.productImage.imageUrl) {
+    productImageHtml = `<img src="${CNH_OFFER_CONFIG.productImage.imageUrl}" alt="Plano Aprovação CNH 2026" class="cnh-offer-product-img" loading="lazy" decoding="async">`;
+  } else {
+    // Professional product mockup composition placeholder (compact)
+    productImageHtml = `
+      <div class="cnh-offer-product-placeholder">
+        <div class="cnh-offer-mockup-stack">
+          <div class="cnh-offer-mock-sheet cnh-offer-mock-sheet-left"></div>
+          <div class="cnh-offer-mock-sheet cnh-offer-mock-sheet-right"></div>
+          <div class="cnh-offer-mock-main">
+            <div class="cnh-offer-mock-logo">PLANO DE APROVAÇÃO</div>
+            <div class="cnh-offer-mock-badge">CNH 2026</div>
+            <div class="cnh-offer-mock-ph-text">[${CNH_OFFER_CONFIG.productImage.pendingLabel}]</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  section.innerHTML = `
+    <style>
+      .cnh-main-offer-section {
+        background: #FAF7F0 !important;
+        background-color: #FAF7F0 !important;
+        width: 100% !important;
+        padding: 2.25rem 0.75rem 3rem !important;
+        box-sizing: border-box !important;
+        scroll-margin-top: 2rem !important;
+        display: block !important;
+      }
+      .cnh-offer-card-wrapper {
+        max-width: 23.5rem !important;
+        margin: 0 auto !important;
+        background: #071B35 !important;
+        background-color: #071B35 !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 1.3rem !important;
+        padding: 1.15rem 0.95rem 1.05rem !important;
+        box-shadow: 0 20px 44px -6px rgba(7, 27, 53, 0.35), 0 6px 16px rgba(0,0,0,0.25) !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-offer-title {
+        margin: 0 0 0.65rem !important;
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.48rem, 5.4vw, 1.95rem) !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.01em !important;
+        line-height: 1.08 !important;
+        text-transform: uppercase !important;
+        text-align: center !important;
+      }
+      .cnh-offer-title-highlight {
+        color: #FF5A1F !important;
+        display: inline !important;
+      }
+      .cnh-offer-product-wrap {
+        width: 100% !important;
+        margin: 0 auto 0.55rem !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-offer-product-img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 180px !important;
+        object-fit: contain !important;
+        display: block !important;
+        margin: 0 auto !important;
+      }
+      .cnh-offer-product-placeholder {
+        width: 100% !important;
+        padding: 0.2rem 0.2rem !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        justify-content: center !important;
+      }
+      .cnh-offer-mockup-stack {
+        position: relative !important;
+        width: 155px !important;
+        height: 96px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-offer-mock-sheet {
+        position: absolute !important;
+        width: 90px !important;
+        height: 90px !important;
+        border-radius: 9px !important;
+        background: #0f274a !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+      .cnh-offer-mock-sheet-left {
+        transform: rotate(-10deg) translate(-18px, -3px) !important;
+        opacity: 0.65 !important;
+      }
+      .cnh-offer-mock-sheet-right {
+        transform: rotate(12deg) translate(18px, -2px) !important;
+        opacity: 0.65 !important;
+      }
+      .cnh-offer-mock-main {
+        position: relative !important;
+        width: 114px !important;
+        height: 96px !important;
+        border-radius: 11px !important;
+        background: linear-gradient(145deg, #0d284e 0%, #06152a 100%) !important;
+        border: 1.5px solid rgba(255, 90, 31, 0.4) !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.35rem !important;
+        box-sizing: border-box !important;
+        z-index: 2 !important;
+      }
+      .cnh-offer-mock-logo {
+        color: #ffffff !important;
+        font-family: 'Oswald', sans-serif !important;
+        font-size: 0.58rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1 !important;
+        margin-bottom: 0.12rem !important;
+      }
+      .cnh-offer-mock-badge {
+        color: #FF5A1F !important;
+        font-family: 'Oswald', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        margin-bottom: 0.25rem !important;
+      }
+      .cnh-offer-mock-ph-text {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.46rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
+        text-align: center !important;
+      }
+      .cnh-offer-included-box {
+        background: #0f274a !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0.95rem !important;
+        padding: 0.65rem 0.75rem 0.6rem !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        margin-bottom: 0.55rem !important;
+      }
+      .cnh-offer-included-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.8rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.45rem !important;
+      }
+      .cnh-offer-included-list {
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.35rem !important;
+      }
+      .cnh-offer-included-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 0.35rem !important;
+      }
+      .cnh-offer-item-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.4rem !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+      }
+      .cnh-offer-item-icon {
+        font-size: 0.82rem !important;
+        line-height: 1 !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-offer-item-text {
+        color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+      }
+      .cnh-offer-item-pill {
+        display: inline-block !important;
+        border-radius: 9999px !important;
+        padding: 0.12rem 0.44rem !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.54rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        line-height: 1 !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-offer-item-pill-primary {
+        background: #EA580C !important;
+        color: #ffffff !important;
+      }
+      .cnh-offer-item-pill-secondary {
+        background: #C2410C !important;
+        color: #ffffff !important;
+      }
+      .cnh-offer-item-pill-highlight {
+        background: #854D0E !important;
+        color: #FEF08A !important;
+      }
+      .cnh-offer-item-check {
+        width: 13px !important;
+        height: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-offer-item-check svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .cnh-offer-price-box {
+        background: #0a1f3c !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0.95rem !important;
+        padding: 0.7rem 0.65rem 0.6rem !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        margin-bottom: 0.55rem !important;
+      }
+      .cnh-offer-price-old {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        text-decoration: line-through !important;
+        margin-bottom: 0.1rem !important;
+      }
+      .cnh-offer-price-lead {
+        color: #cbd5e1 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.64rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.05rem !important;
+      }
+      .cnh-offer-price-main {
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(2.35rem, 8vw, 2.95rem) !important;
+        font-weight: 900 !important;
+        line-height: 0.95 !important;
+        letter-spacing: -0.03em !important;
+        margin: 0.05rem 0 0.18rem !important;
+        text-shadow: 0 4px 16px rgba(255, 90, 31, 0.35) !important;
+      }
+      .cnh-offer-price-terms {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 500 !important;
+      }
+      .cnh-offer-timer-box {
+        background: #06152a !important;
+        border: 1.5px solid rgba(255, 90, 31, 0.45) !important;
+        border-radius: 0.95rem !important;
+        padding: 0.55rem 0.75rem 0.6rem !important;
+        margin-bottom: 0.55rem !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+      }
+      .cnh-offer-timer-header {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem !important;
+        color: #FF5A1F !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 0.8rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.35rem !important;
+      }
+      .cnh-offer-timer-clock-icon {
+        width: 14px !important;
+        height: 14px !important;
+        stroke: #FF5A1F !important;
+      }
+      .cnh-offer-timer-digits-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.45rem !important;
+      }
+      .cnh-offer-timer-tile {
+        background: #091c36 !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 10px !important;
+        min-width: 52px !important;
+        padding: 0.3rem 0.55rem 0.35rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-timer-digit {
+        color: #ffffff !important;
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: 1.55rem !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        letter-spacing: 0.02em !important;
+      }
+      .cnh-timer-unit {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.58rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        margin-top: 0.15rem !important;
+        line-height: 1 !important;
+      }
+      .cnh-offer-timer-colon {
+        color: #94a3b8 !important;
+        font-family: 'Oswald', sans-serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        margin-bottom: 0.5rem !important;
+      }
+      .cnh-offer-checkout-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        background: linear-gradient(180deg, #FF6827 0%, #FF5A1F 100%) !important;
+        border: none !important;
+        border-radius: 0.95rem !important;
+        padding: 0.85rem 1.05rem !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 10px 24px rgba(255, 90, 31, 0.45) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+        box-sizing: border-box !important;
+        margin-bottom: 0.6rem !important;
+      }
+      .cnh-offer-checkout-btn:hover {
+        background: linear-gradient(180deg, #FF7638 0%, #e04b14 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 14px 30px rgba(255, 90, 31, 0.55) !important;
+      }
+      .cnh-offer-checkout-btn:active {
+        transform: translateY(0) !important;
+      }
+      .cnh-offer-checkout-main {
+        font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif !important;
+        font-size: clamp(1.02rem, 3.3vw, 1.18rem) !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1.1 !important;
+      }
+      .cnh-offer-checkout-sub {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        opacity: 0.95 !important;
+        margin-top: 0.18rem !important;
+      }
+      .cnh-offer-whatsapp-note {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.55rem !important;
+        background: rgba(16, 185, 129, 0.08) !important;
+        border: 1px solid rgba(34, 197, 94, 0.35) !important;
+        border-radius: 0.85rem !important;
+        padding: 0.5rem 0.75rem !important;
+        color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', Inter, sans-serif !important;
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.65rem !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-offer-whatsapp-svg {
+        flex-shrink: 0 !important;
+      }
+      .cnh-offer-whatsapp-text {
+        color: #ffffff !important;
+        font-size: 0.68rem !important;
+        line-height: 1.3 !important;
+      }
+      .cnh-wa-highlight {
+        color: #22c55e !important;
+        font-weight: 700 !important;
+      }
+      .cnh-offer-trust-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.35rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 0.6rem !important;
+      }
+      .cnh-offer-trust-item {
+        background: #0b1f3c !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0.75rem !important;
+        padding: 0.55rem 0.25rem 0.5rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem !important;
+        min-height: 62px !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-trust-svg {
+        display: block !important;
+        flex-shrink: 0 !important;
+      }
+      .cnh-trust-seal-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-offer-trust-label {
+        color: #cbd5e1 !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.56rem !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+      }
+      .cnh-offer-footer-note {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem !important;
+        color: #64748b !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 0.64rem !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+      }
+      .cnh-offer-footer-note svg {
+        flex-shrink: 0 !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-main-offer-section {
+          padding: 2rem 0.65rem 2.6rem !important;
+        }
+        .cnh-offer-card-wrapper {
+          padding: 1.05rem 0.8rem 0.95rem !important;
+          border-radius: 1.15rem !important;
+        }
+        .cnh-offer-trust-label {
+          font-size: 0.52rem !important;
+        }
+      }
+    </style>
+    <div class="cnh-offer-card-wrapper">
+      <h2 class="cnh-offer-title" id="cnh-main-offer-title">
+        <span>${CNH_OFFER_CONFIG.titlePart1}</span> <span class="cnh-offer-title-highlight">${CNH_OFFER_CONFIG.titlePart2}</span>
+      </h2>
+
+      <div class="cnh-offer-product-wrap">
+        ${productImageHtml}
+      </div>
+
+      <div class="cnh-offer-included-box">
+        <div class="cnh-offer-included-header">
+          <span aria-hidden="true">🎁</span>
+          <span>${CNH_OFFER_CONFIG.whatsIncludedTitle}</span>
+        </div>
+        <ul class="cnh-offer-included-list">
+          ${itemsHtml}
+        </ul>
+      </div>
+
+      <div class="cnh-offer-price-box">
+        <div class="cnh-offer-price-old">${CNH_OFFER_CONFIG.pricing.referencePrice}</div>
+        <div class="cnh-offer-price-lead">${CNH_OFFER_CONFIG.pricing.leadText}</div>
+        <div class="cnh-offer-price-main">${CNH_OFFER_CONFIG.pricing.mainPrice}</div>
+        <div class="cnh-offer-price-terms">${CNH_OFFER_CONFIG.pricing.termsText}</div>
+      </div>
+
+      <div class="cnh-offer-timer-box">
+        <div class="cnh-offer-timer-header">
+          <svg class="cnh-offer-timer-clock-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span id="cnh-timer-status">${CNH_OFFER_CONFIG.timer?.labelActive || "OFERTA EXPIRA EM"}</span>
+        </div>
+        <div class="cnh-offer-timer-digits-row">
+          <div class="cnh-offer-timer-tile">
+            <span id="cnh-timer-min" class="cnh-timer-digit">10</span>
+            <span class="cnh-timer-unit">MIN</span>
+          </div>
+          <span class="cnh-offer-timer-colon" aria-hidden="true">:</span>
+          <div class="cnh-offer-timer-tile">
+            <span id="cnh-timer-sec" class="cnh-timer-digit">00</span>
+            <span class="cnh-timer-unit">SEG</span>
+          </div>
+        </div>
+      </div>
+
+      <button id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" type="button">
+        <span class="cnh-offer-checkout-main">${CNH_OFFER_CONFIG.cta.mainText}</span>
+        <span class="cnh-offer-checkout-sub">${CNH_OFFER_CONFIG.cta.subText}</span>
+      </button>
+
+      <div class="cnh-offer-whatsapp-note">
+        <svg class="cnh-offer-whatsapp-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <div class="cnh-offer-whatsapp-text">
+          Após a compra, você recebe o acesso <span class="cnh-wa-highlight">direto no seu WhatsApp</span> — sem complicação.
+        </div>
+      </div>
+
+      <div class="cnh-offer-trust-grid">
+        <div class="cnh-offer-trust-item">
+          <svg class="cnh-trust-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span class="cnh-offer-trust-label">Compra 100% segura</span>
+        </div>
+
+        <div class="cnh-offer-trust-item">
+          <svg class="cnh-trust-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="M9 12l2 2 4-4"></path>
+          </svg>
+          <span class="cnh-offer-trust-label">Dados criptografados</span>
+        </div>
+
+        <div class="cnh-offer-trust-item">
+          <div class="cnh-trust-seal-wrap">
+            <svg viewBox="0 0 100 100" width="30" height="30" fill="none">
+              <defs>
+                <!-- Path for circular text on the white ring -->
+                <path id="cnhSealTopArc" d="M 22 50 A 28 28 0 0 1 78 50" fill="none"/>
+                <path id="cnhSealBottomArc" d="M 78 50 A 28 28 0 0 1 22 50" fill="none"/>
+              </defs>
+              
+              <!-- Outer Golden Scalloped Rosette (16 rounded lobes) -->
+              <path d="M 50 3 
+                       C 54 3, 56 7, 60 8.5 
+                       C 64 10, 68 8.5, 71.5 12 
+                       C 75 15.5, 73.5 19.5, 75 23.5 
+                       C 76.5 27.5, 80.5 29.5, 80.5 33.5 
+                       C 80.5 37.5, 76.5 39.5, 75 43.5 
+                       C 73.5 47.5, 75 51.5, 71.5 55 
+                       C 68 58.5, 64 57, 60 58.5 
+                       C 56 60, 54 64, 50 64 
+                       C 46 64, 44 60, 40 58.5 
+                       C 36 57, 32 58.5, 28.5 55 
+                       C 25 51.5, 26.5 47.5, 25 43.5 
+                       C 23.5 39.5, 19.5 37.5, 19.5 33.5 
+                       C 19.5 29.5, 23.5 27.5, 25 23.5 
+                       C 26.5 19.5, 25 15.5, 28.5 12 
+                       C 32 8.5, 36 10, 40 8.5 
+                       C 44 7, 46 3, 50 3 Z" 
+                    transform="translate(0, 16) scale(1, 1)" 
+                    style="display:none;" />
+
+              <!-- Highly accurate multi-point scalloped medal -->
+              <path d="M50 4 
+                       Q54 4 57 7 Q60 10 64 9 Q68 8 70 12 Q72 16 76 17 Q80 18 81 22 Q82 26 86 28 Q90 30 89 34 Q88 38 91 42 Q94 46 92 50 Q90 54 91 58 Q92 62 89 66 Q86 70 86 74 Q86 78 81 80 Q76 82 74 86 Q72 90 68 90 Q64 90 60 93 Q56 96 50 96 Q44 96 40 93 Q36 90 32 90 Q28 90 26 86 Q24 82 19 80 Q14 78 14 74 Q14 70 11 66 Q8 62 9 58 Q10 54 8 50 Q6 46 9 42 Q12 38 11 34 Q10 30 14 28 Q18 26 19 22 Q20 18 24 17 Q28 16 30 12 Q32 8 36 9 Q40 10 43 7 Q46 4 50 4 Z" 
+                    fill="#F59E0B" stroke="#D97706" stroke-width="1.5"/>
+
+              <!-- White middle ring -->
+              <circle cx="50" cy="50" r="37" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="0.5"/>
+
+              <!-- Arc text on white ring -->
+              <text font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="6.2" fill="#1F2937" letter-spacing="0.5">
+                <textPath href="#cnhSealTopArc" startOffset="50%" text-anchor="middle">
+                  100% GARANTIA DE
+                </textPath>
+              </text>
+
+              <!-- Star accents on sides -->
+              <text x="17" y="52" font-size="5" fill="#F59E0B" text-anchor="middle" dominant-baseline="middle">★</text>
+              <text x="83" y="52" font-size="5" fill="#F59E0B" text-anchor="middle" dominant-baseline="middle">★</text>
+
+              <text font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="6.2" fill="#1F2937" letter-spacing="0.8">
+                <textPath href="#cnhSealBottomArc" startOffset="50%" text-anchor="middle">
+                  SATISFAÇÃO
+                </textPath>
+              </text>
+
+              <!-- Center Dark Circle -->
+              <circle cx="50" cy="50" r="23" fill="#1E232F"/>
+              <circle cx="50" cy="50" r="21.5" fill="none" stroke="#F59E0B" stroke-width="0.8" stroke-dasharray="1.5 1.5"/>
+
+              <!-- Center "7" and "DIAS" in Yellow -->
+              <text x="50" y="46" font-family="'Oswald', Arial, sans-serif" font-weight="900" font-size="20" fill="#F59E0B" text-anchor="middle" dominant-baseline="middle">7</text>
+              <text x="50" y="60" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="7.5" fill="#F59E0B" text-anchor="middle" dominant-baseline="middle" letter-spacing="0.6">DIAS</text>
+            </svg>
+          </div>
+          <span class="cnh-offer-trust-label">Garantia de 7 dias</span>
+        </div>
+      </div>
+
+      <p class="cnh-offer-footer-note">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>${CNH_OFFER_CONFIG.footerNote}</span>
+      </p>
+    </div>
+  `;
+
+  initOfferTimer(section);
+
+  const checkoutBtn = section.querySelector("#oferta-checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", (e) => {
+      redirectToCheckout(e);
+    });
+  }
+
+  return section;
+}
+
+// ================= TESTIMONIALS CONFIGURATION (EASILY EDITABLE) =================
+const CNH_TESTIMONIALS_CONFIG = {
+  headerBadge: "QUEM JÁ PASSOU CONTA",
+  ratingScore: "4,9/5",
+  studentsCount: "+12.000 alunos",
+  closingTextPart1: "Mais de",
+  closingTextCount: "12.000 brasileiros",
+  closingTextPart2: "já garantiram sua aprovação com o nosso plano.",
+  closingTextHighlight: "A próxima aprovação pode ser a sua.",
+  testimonials: [
+    {
+      name: "CAMILA RIBEIRO",
+      age: "25 anos",
+      location: "Recife, PE",
+      avatarUrl: "",
+      avatarBg: "#FFE4D6",
+      avatarColor: "#EA580C",
+      gender: "female",
+      quote: "Eu não sabia exatamente o que estudar e estava com medo de chegar despreparada para a prova. Com o plano consegui organizar meus estudos, praticar com os simulados e chegar muito mais confiante no dia.",
+      badgeText: "APROVADA NA PROVA TEÓRICA",
+      verified: true
+    },
+    {
+      name: "ROBERTO ALMEIDA",
+      age: "38 anos",
+      location: "Belo Horizonte, MG",
+      avatarUrl: "",
+      avatarBg: "#E0F2FE",
+      avatarColor: "#0284C7",
+      gender: "male",
+      quote: "Eu trabalhava o dia inteiro e tinha pouco tempo para estudar. O conteúdo direto ao ponto e os simulados me ajudaram a focar no que realmente precisava revisar. Finalmente consegui organizar minha preparação.",
+      badgeText: "PREPARAÇÃO CONCLUÍDA",
+      verified: true
+    },
+    {
+      name: "MARLENE SOUZA",
+      age: "53 anos",
+      location: "Salvador, BA",
+      avatarUrl: "",
+      avatarBg: "#FEF3C7",
+      avatarColor: "#D97706",
+      gender: "female",
+      quote: "Eu já tinha tentado estudar sozinha e sempre acabava perdida no meio de tanta informação. Com o Plano Aprovação ficou muito mais fácil saber o que estudar, revisar meus erros e praticar antes da prova.",
+      badgeText: "OBJETIVO CONQUISTADO",
+      verified: true
+    }
+  ]
+};
+
+function createTestimonialsSection() {
+  const section = document.createElement("section");
+  section.className = "cnh-testimonials-section";
+  section.setAttribute("aria-labelledby", "cnh-testimonials-title");
+  section.style.cssText = "background: #faf7f0 !important; background-color: #faf7f0 !important; border-top: 1px solid rgba(7, 27, 53, 0.06); padding: 2.75rem 1rem 3.5rem !important; width: 100%; box-sizing: border-box; display: block;";
+
+  const getAvatarSvg = (t) => {
+    if (t.avatarUrl) {
+      return `<img src="${t.avatarUrl}" alt="${t.name}" class="cnh-testi-avatar-img" loading="lazy" decoding="async">`;
+    }
+    // High-fidelity illustrated vector avatar placeholder matching reference aesthetic
+    if (t.gender === "female" && t.name.includes("CAMILA")) {
+      return `
+        <svg viewBox="0 0 64 64" class="cnh-testi-avatar-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="32" fill="#FED7AA"/>
+          <path d="M16 54C16 44 23 38 32 38C41 38 48 44 48 54" fill="#0284C7"/>
+          <circle cx="32" cy="27" r="13" fill="#FDBA74"/>
+          <path d="M20 25C20 17 25 12 32 12C39 12 44 17 44 25C44 27 43 32 40 35C38 31 38 27 32 27C26 27 26 31 24 35C21 32 20 27 20 25Z" fill="#78350F"/>
+        </svg>
+      `;
+    } else if (t.gender === "male") {
+      return `
+        <svg viewBox="0 0 64 64" class="cnh-testi-avatar-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="32" fill="#BAE6FD"/>
+          <path d="M16 54C16 44 23 38 32 38C41 38 48 44 48 54" fill="#0369A1"/>
+          <circle cx="32" cy="27" r="12.5" fill="#FED7AA"/>
+          <path d="M21 24C21 16 26 13 32 13C38 13 43 16 43 24C41 23 37 22 32 22C27 22 23 23 21 24Z" fill="#451A03"/>
+          <path d="M24 30C26 34 38 34 40 30C40 35 37 38 32 38C27 38 24 35 24 30Z" fill="#78350F" opacity="0.3"/>
+        </svg>
+      `;
+    } else {
+      return `
+        <svg viewBox="0 0 64 64" class="cnh-testi-avatar-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="32" fill="#FEF08A"/>
+          <path d="M16 54C16 44 23 38 32 38C41 38 48 44 48 54" fill="#B45309"/>
+          <circle cx="32" cy="27" r="13" fill="#FED7AA"/>
+          <path d="M19 26C19 16 25 13 32 13C39 13 45 16 45 26C45 34 42 37 40 36C38 31 38 27 32 27C26 27 26 31 24 36C22 37 19 34 19 26Z" fill="#713F12"/>
+        </svg>
+      `;
+    }
+  };
+
+  const cardsHtml = CNH_TESTIMONIALS_CONFIG.testimonials.map((t, idx) => `
+    <article class="cnh-testi-card" data-index="${idx}">
+      <!-- Decorative quotes in top right -->
+      <span class="cnh-testi-quote-mark" aria-hidden="true">”</span>
+
+      <div class="cnh-testi-card-header">
+        <div class="cnh-testi-avatar-wrapper">
+          <div class="cnh-testi-avatar">
+            ${getAvatarSvg(t)}
+          </div>
+          <div class="cnh-testi-avatar-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div class="cnh-testi-info">
+          <div class="cnh-testi-name-row">
+            <h3 class="cnh-testi-name">${t.name}</h3>
+            <span class="cnh-testi-age">· ${t.age}</span>
+          </div>
+          <div class="cnh-testi-location">
+            <span class="cnh-testi-pin" aria-hidden="true">📍</span>
+            <span>${t.location}</span>
+          </div>
+          <div class="cnh-testi-stars" aria-label="Avaliação: 5 de 5 estrelas">
+            <span class="cnh-testi-star">★</span>
+            <span class="cnh-testi-star">★</span>
+            <span class="cnh-testi-star">★</span>
+            <span class="cnh-testi-star">★</span>
+            <span class="cnh-testi-star">★</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="cnh-testi-body">
+        “${t.quote}”
+      </p>
+
+      <div class="cnh-testi-divider"></div>
+
+      <div class="cnh-testi-card-footer">
+        <div class="cnh-testi-result-pill">
+          <span class="cnh-testi-result-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+          </span>
+          <span class="cnh-testi-result-text">${t.badgeText}</span>
+        </div>
+
+        <div class="cnh-testi-verified">
+          <span class="cnh-testi-verified-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+          </span>
+          <span class="cnh-testi-verified-text">Depoimento verificado</span>
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  section.innerHTML = `
+    <style>
+      .cnh-testimonials-section {
+        background: #faf7f0 !important;
+        width: 100% !important;
+        padding: 2.75rem 1rem 3.5rem !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-testimonials-inner {
+        max-width: 40rem !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-testimonials-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.4rem !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(7, 27, 53, 0.1) !important;
+        border-radius: 9999px !important;
+        padding: 0.35rem 0.95rem !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        margin-bottom: 0.95rem !important;
+        box-shadow: 0 2px 6px rgba(7, 27, 53, 0.04) !important;
+      }
+      .cnh-testimonials-title {
+        margin: 0 0 0.85rem !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif !important;
+        font-size: clamp(1.45rem, 4.2vw, 2.15rem) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        line-height: 1.15 !important;
+        text-transform: uppercase !important;
+      }
+      .cnh-testimonials-title-highlight {
+        color: #FF5A1F !important;
+      }
+      .cnh-testimonials-rating-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.45rem !important;
+        margin-bottom: 2rem !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.92rem !important;
+      }
+      .cnh-testimonials-stars-summary {
+        display: inline-flex !important;
+        gap: 2px !important;
+        color: #FF5A1F !important;
+        font-size: 1.05rem !important;
+        line-height: 1 !important;
+      }
+      .cnh-testimonials-score {
+        color: #071b35 !important;
+        font-weight: 800 !important;
+      }
+      .cnh-testimonials-count {
+        color: #64748b !important;
+        font-weight: 500 !important;
+      }
+      .cnh-testimonials-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.15rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-testi-card {
+        position: relative !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(7, 27, 53, 0.08) !important;
+        border-radius: 1.25rem !important;
+        padding: 1.25rem 1.4rem 1.15rem !important;
+        box-shadow: 0 8px 24px -4px rgba(7, 27, 53, 0.06), 0 2px 6px -1px rgba(7, 27, 53, 0.03) !important;
+        text-align: left !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+      }
+      .cnh-testi-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 28px -4px rgba(7, 27, 53, 0.09) !important;
+      }
+      .cnh-testi-quote-mark {
+        position: absolute !important;
+        top: 0.85rem !important;
+        right: 1.35rem !important;
+        font-family: Georgia, serif !important;
+        font-size: 2.85rem !important;
+        line-height: 1 !important;
+        font-weight: 700 !important;
+        color: rgba(255, 90, 31, 0.2) !important;
+        pointer-events: none !important;
+        user-select: none !important;
+      }
+      .cnh-testi-card-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.85rem !important;
+      }
+      .cnh-testi-avatar-wrapper {
+        position: relative !important;
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+      }
+      .cnh-testi-avatar {
+        width: 52px !important;
+        height: 52px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 0 0 1.5px #FF5A1F, 0 2px 6px rgba(0,0,0,0.08) !important;
+        background: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-testi-avatar-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+      }
+      .cnh-testi-avatar-svg {
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+      }
+      .cnh-testi-avatar-check {
+        position: absolute !important;
+        bottom: -2px !important;
+        right: -2px !important;
+        width: 17px !important;
+        height: 17px !important;
+        border-radius: 50% !important;
+        background: #FF5A1F !important;
+        border: 1.5px solid #ffffff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+      }
+      .cnh-testi-avatar-check svg {
+        width: 9px !important;
+        height: 9px !important;
+      }
+      .cnh-testi-info {
+        flex: 1 !important;
+        min-width: 0 !important;
+      }
+      .cnh-testi-name-row {
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 0.35rem !important;
+        flex-wrap: wrap !important;
+      }
+      .cnh-testi-name {
+        margin: 0 !important;
+        color: #071b35 !important;
+        font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', sans-serif !important;
+        font-size: 1.02rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+      }
+      .cnh-testi-age {
+        color: #94a3b8 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+      }
+      .cnh-testi-location {
+        color: #64748b !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 500 !important;
+        margin-top: 0.15rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.25rem !important;
+      }
+      .cnh-testi-pin {
+        font-size: 0.75rem !important;
+        line-height: 1 !important;
+      }
+      .cnh-testi-stars {
+        display: flex !important;
+        gap: 1.5px !important;
+        color: #FF5A1F !important;
+        font-size: 0.82rem !important;
+        margin-top: 0.2rem !important;
+      }
+      .cnh-testi-body {
+        margin: 1rem 0 1.15rem !important;
+        color: #1e293b !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.92rem !important;
+        font-style: italic !important;
+        line-height: 1.55 !important;
+        font-weight: 400 !important;
+      }
+      .cnh-testi-divider {
+        border-top: 1px dashed rgba(7, 27, 53, 0.12) !important;
+        margin: 0 0 0.85rem !important;
+        width: 100% !important;
+      }
+      .cnh-testi-card-footer {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 0.75rem !important;
+        flex-wrap: wrap !important;
+      }
+      .cnh-testi-result-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        background: rgba(255, 90, 31, 0.08) !important;
+        border: 1px solid rgba(255, 90, 31, 0.22) !important;
+        border-radius: 9999px !important;
+        padding: 0.28rem 0.7rem !important;
+        color: #FF5A1F !important;
+      }
+      .cnh-testi-result-check {
+        width: 13px !important;
+        height: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-testi-result-check svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .cnh-testi-result-text {
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
+        text-transform: uppercase !important;
+        line-height: 1 !important;
+      }
+      .cnh-testi-verified {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        color: #64748b !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: 0.76rem !important;
+        font-weight: 500 !important;
+      }
+      .cnh-testi-verified-icon {
+        width: 14px !important;
+        height: 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .cnh-testi-verified-icon svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .cnh-testimonials-closing {
+        margin-top: 1.85rem !important;
+        text-align: center !important;
+        padding: 0 0.5rem !important;
+      }
+      .cnh-testimonials-closing p {
+        margin: 0 !important;
+        color: #475569 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: clamp(0.92rem, 2.5vw, 1.02rem) !important;
+        line-height: 1.48 !important;
+      }
+      .cnh-testimonials-closing strong {
+        color: #071b35 !important;
+        font-weight: 800 !important;
+      }
+      .cnh-testimonials-closing-highlight {
+        color: #FF5A1F !important;
+        font-weight: 700 !important;
+      }
+      @media (max-width: 640px) {
+        .cnh-testimonials-section {
+          padding: 2.25rem 0.85rem 2.85rem !important;
+        }
+        .cnh-testi-card {
+          padding: 1.1rem 1.15rem 1rem !important;
+          border-radius: 1.1rem !important;
+        }
+        .cnh-testi-body {
+          font-size: 0.88rem !important;
+          margin: 0.85rem 0 1rem !important;
+        }
+        .cnh-testi-card-footer {
+          gap: 0.5rem !important;
+        }
+      }
+    </style>
+    <div class="cnh-testimonials-inner">
+      <div class="cnh-testimonials-badge">
+        <span aria-hidden="true">👍</span>
+        <span>${CNH_TESTIMONIALS_CONFIG.headerBadge}</span>
+      </div>
+
+      <h2 class="cnh-testimonials-title" id="cnh-testimonials-title">
+        HISTÓRIAS REAIS DE QUEM FOI <span class="cnh-testimonials-title-highlight">APROVADO</span>
+      </h2>
+
+      <div class="cnh-testimonials-rating-row">
+        <div class="cnh-testimonials-stars-summary" aria-hidden="true">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <span class="cnh-testimonials-score">${CNH_TESTIMONIALS_CONFIG.ratingScore}</span>
+        <span class="cnh-testimonials-count">· ${CNH_TESTIMONIALS_CONFIG.studentsCount}</span>
+      </div>
+
+      <div class="cnh-testimonials-list">
+        ${cardsHtml}
+      </div>
+
+      <div class="cnh-testimonials-closing">
+        <p>
+          ${CNH_TESTIMONIALS_CONFIG.closingTextPart1} <strong>${CNH_TESTIMONIALS_CONFIG.closingTextCount}</strong> ${CNH_TESTIMONIALS_CONFIG.closingTextPart2} <span class="cnh-testimonials-closing-highlight">${CNH_TESTIMONIALS_CONFIG.closingTextHighlight}</span>
+        </p>
+      </div>
+    </div>
+  `;
+
+  return section;
 }
 
 function createMotivationSection() {
@@ -496,12 +2417,13 @@ function createMotivationSection() {
   ];
 
   const optionsHtml = options.map((text, index) => `
-    <div class="cnh-motivation-option" role="button" tabindex="0" data-index="${index}" aria-pressed="false"
-      style="background: #ffffff; border: 1.5px solid rgba(7, 27, 53, 0.09); border-radius: 1.15rem; padding: 1.05rem 1.35rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; text-align: left; box-shadow: 0 4px 16px -2px rgba(7, 27, 53, 0.04); transition: all 180ms ease-in-out; box-sizing: border-box; width: 100%; user-select: none;">
-      <div class="cnh-motivation-radio" style="width: 22px; height: 22px; min-width: 22px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; background: #ffffff; transition: all 180ms ease-in-out; box-sizing: border-box;">
-        <span class="cnh-motivation-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #FF5A1F; transform: scale(0); opacity: 0; transition: transform 180ms ease, opacity 180ms ease;"></span>
+    <div class="cnh-motivation-option" role="checkbox" tabindex="0" data-index="${index}" aria-checked="false">
+      <div class="cnh-motivation-checkbox">
+        <svg class="cnh-motivation-check-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
       </div>
-      <span class="cnh-motivation-text" style="color: #071b35; font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif; font-size: clamp(0.92rem, 2.5vw, 1.02rem); font-weight: 600; line-height: 1.38; flex: 1;">${text}</span>
+      <span class="cnh-motivation-text">${text}</span>
     </div>
   `).join("");
 
@@ -566,7 +2488,9 @@ function createMotivationSection() {
       }
       .cnh-motivation-option {
         background: #ffffff !important;
-        border: 1.5px solid rgba(7, 27, 53, 0.09) !important;
+        border: 2px solid transparent !important;
+        outline: 1.5px solid rgba(7, 27, 53, 0.09) !important;
+        outline-offset: -1.5px !important;
         border-radius: 1.15rem !important;
         padding: 1.05rem 1.35rem !important;
         display: flex !important;
@@ -581,20 +2505,50 @@ function createMotivationSection() {
         user-select: none !important;
       }
       .cnh-motivation-option:hover {
-        border-color: rgba(255, 90, 31, 0.45) !important;
+        outline-color: rgba(255, 90, 31, 0.45) !important;
         background: #fffdfb !important;
       }
       .cnh-motivation-option.is-selected {
-        background: #fff9f5 !important;
-        border-color: #FF5A1F !important;
-        box-shadow: 0 6px 20px -2px rgba(255, 90, 31, 0.14) !important;
+        background: #ffffff !important;
+        border: 2px solid #FF5A1F !important;
+        outline: none !important;
+        box-shadow: 0 6px 20px -2px rgba(255, 90, 31, 0.12) !important;
       }
-      .cnh-motivation-option.is-selected .cnh-motivation-radio {
+      .cnh-motivation-checkbox {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        border-radius: 50% !important;
+        border: 2px solid #cbd5e1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #ffffff !important;
+        transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-sizing: border-box !important;
+      }
+      .cnh-motivation-check-icon {
+        width: 13px !important;
+        height: 13px !important;
+        transform: scale(0);
+        opacity: 0;
+        transition: transform 180ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 180ms ease !important;
+      }
+      .cnh-motivation-option.is-selected .cnh-motivation-checkbox {
+        background: #FF5A1F !important;
         border-color: #FF5A1F !important;
       }
-      .cnh-motivation-option.is-selected .cnh-motivation-dot {
+      .cnh-motivation-option.is-selected .cnh-motivation-check-icon {
         transform: scale(1) !important;
         opacity: 1 !important;
+      }
+      .cnh-motivation-text {
+        color: #071b35 !important;
+        font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif !important;
+        font-size: clamp(0.92rem, 2.5vw, 1.02rem) !important;
+        font-weight: 600 !important;
+        line-height: 1.38 !important;
+        flex: 1 !important;
       }
       .cnh-motivation-closing-card {
         margin-top: 1.65rem !important;
@@ -724,8 +2678,8 @@ function createMotivationSection() {
       </div>
 
       <div class="cnh-motivation-closing-card">
-        <div class="cnh-motivation-closing-line1">INDEPENDENTE DO SEU MOTIVO...</div>
-        <div class="cnh-motivation-closing-line2">TUDO COMEÇA COM UMA BOA PREPARAÇÃO.</div>
+        <div class="cnh-motivation-closing-line1">Independente do seu motivo…</div>
+        <div class="cnh-motivation-closing-line2">tudo começa com a aprovação.</div>
       </div>
 
       <a href="#oferta" class="cnh-motivation-cta btn-checkout-trigger" role="button">
@@ -735,16 +2689,18 @@ function createMotivationSection() {
     </div>
   `;
 
-  // Attach interactive click handler
+  // Attach interactive multi-select toggle click handler
   const optionEls = section.querySelectorAll(".cnh-motivation-option");
   optionEls.forEach((el) => {
     el.addEventListener("click", () => {
-      optionEls.forEach((other) => {
-        other.classList.remove("is-selected");
-        other.setAttribute("aria-pressed", "false");
-      });
-      el.classList.add("is-selected");
-      el.setAttribute("aria-pressed", "true");
+      const isSelected = el.classList.contains("is-selected");
+      if (isSelected) {
+        el.classList.remove("is-selected");
+        el.setAttribute("aria-checked", "false");
+      } else {
+        el.classList.add("is-selected");
+        el.setAttribute("aria-checked", "true");
+      }
     });
 
     el.addEventListener("keydown", (e) => {
@@ -1106,18 +3062,6 @@ function optimizeImagesSmoothly() {
 
 const CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
 
-// Global blocker: Never allow any script or browser call to scroll to oferta
-if (typeof Element !== "undefined" && Element.prototype.scrollIntoView) {
-  const originalScrollIntoView = Element.prototype.scrollIntoView;
-  Element.prototype.scrollIntoView = function(options) {
-    if (this && (this.id === "oferta" || (this.closest && this.closest("#oferta")))) {
-      redirectToCheckout();
-      return;
-    }
-    return originalScrollIntoView.apply(this, arguments);
-  };
-}
-
 function redirectToCheckout(e) {
   if (e) {
     if (typeof e.preventDefault === "function") e.preventDefault();
@@ -1141,63 +3085,67 @@ function redirectToCheckout(e) {
   window.location.href = CHECKOUT_URL;
 }
 
-function bindCheckoutButtons() {
-  const elements = document.querySelectorAll("button, a, .material-section__cta-button");
-  elements.forEach((el) => {
-    // Skip FAQ accordion collapse/expand question headers
-    if (el.closest(".space-y-2") && el.classList.contains("text-left")) {
-      return;
-    }
-    // Skip video player triggers
-    if (el.closest(".video-facade-card") || el.closest("#depoimento-video iframe")) {
-      return;
-    }
-    // Skip toast notifications
-    if (el.closest(".toast") || el.closest(".social-proof-toast")) {
-      return;
-    }
-
-    // Attach direct handler
-    el.setAttribute("data-direct-checkout", "true");
-    el.onclick = (e) => {
-      redirectToCheckout(e);
-    };
-  });
+function scrollToOffer(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  const offerSection = document.getElementById("oferta");
+  if (offerSection) {
+    offerSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.location.hash = "#oferta";
+  }
 }
 
-function setupCheckoutHandler() {
+function setupGlobalNavigation() {
   document.addEventListener("click", (e) => {
-    // Ignore video facade card or video player triggers
+    // 1. Final decision button inside #oferta triggers checkout
+    const checkoutBtn = e.target.closest("#oferta-checkout-btn, [data-final-checkout='true']");
+    if (checkoutBtn) {
+      redirectToCheckout(e);
+      return;
+    }
+
+    // 2. Ignore non-commercial interactions:
+    // - Video player facade & iframe
     if (e.target.closest(".video-facade-card") || e.target.closest("#depoimento-video iframe")) {
       return;
     }
-
-    const btn = e.target.closest("button, a, .material-section__cta-button, [data-direct-checkout]");
-    if (!btn) return;
-
-    // Ignore FAQ accordion collapse/expand question headers
-    if (btn.closest(".space-y-2") && btn.classList.contains("text-left")) {
+    // - FAQ accordion collapse/expand question triggers
+    if (e.target.closest(".space-y-2") && (e.target.closest("button.text-left") || e.target.closest(".faq-title-btn"))) {
+      return;
+    }
+    // - Interactive motivation multi-select checkbox items
+    if (e.target.closest(".cnh-motivation-option")) {
+      return;
+    }
+    // - Toast notification or social proof
+    if (e.target.closest(".toast") || e.target.closest("#cnh-social-proof-toast")) {
       return;
     }
 
-    // Ignore toast notification interactions if any
-    if (btn.closest(".toast") || btn.closest(".social-proof-toast")) {
-      return;
+    // 3. All commercial CTAs on the page scroll smoothly to #oferta
+    const commercialBtn = e.target.closest("button, a, .material-section__cta-button, .cnh-motivation-cta, .cnh-bonus-cta-btn, [data-scroll-to-offer]");
+    if (commercialBtn) {
+      // Allow terms/privacy policy non-commercial links to work normally if any
+      const href = commercialBtn.getAttribute("href") || "";
+      if (href.startsWith("http") && !href.includes("wiapy") && !commercialBtn.classList.contains("btn-checkout-trigger")) {
+        return;
+      }
+      scrollToOffer(e);
     }
-
-    // Every other button/link on the page goes straight to checkout
-    redirectToCheckout(e);
   }, true);
 }
 
-setupCheckoutHandler();
+setupGlobalNavigation();
 
 let materialReplaced = false;
 let videoOptimized = false;
 
 function runOptimizations() {
+  removeUnwantedRecebeSection();
   optimizeImagesSmoothly();
-  bindCheckoutButtons();
   enhanceBenefitsSection();
   enhanceProblemEmblems();
   insertPlatformSection();
