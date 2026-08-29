@@ -182,13 +182,10 @@
         -webkit-transform: translateZ(0);
       }
 
-      /* Optimize offscreen paint cycles on mobile */
-      @media (min-width: 1px) {
-        .material-section,
-        .faq-enhanced {
-          content-visibility: auto;
-          contain-intrinsic-size: auto 500px;
-        }
+      /* Prevent layout shifts */
+      .material-section,
+      .faq-enhanced {
+        content-visibility: visible !important;
       }
       /* Hero character card: full fidelity display without clipping stickers or badges */
       section:nth-of-type(2) {
@@ -1573,7 +1570,7 @@
       }
     </style>
     <script type="module" crossorigin src="/assets/index-CIt76HRX.js"></script>
-    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=back_redirect_testmode_v58"></script>
+    <script type="module" crossorigin src="/assets/landing-section-patch.js?v=back_redirect_testmode_v59"></script>
   </head>
   <body>
     <div id="root"></div>

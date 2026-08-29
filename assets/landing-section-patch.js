@@ -3705,10 +3705,10 @@ function scrollToOffer(e) {
     if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
   }
 
-  // Ensure offer section is rendered if not yet present
-  if (!document.querySelector(".cnh-main-offer-section")) {
-    insertPlatformSection();
-  }
+  // Force synchronous full rendering of all injected sections immediately
+  try {
+    runOptimizations();
+  } catch (err) {}
 
   // Clean any old React duplicate offer section to prevent conflict
   const oldReactOffer = [...document.querySelectorAll("section#oferta")].find(
@@ -3718,19 +3718,44 @@ function scrollToOffer(e) {
     oldReactOffer.remove();
   }
 
-  const targetCard = document.getElementById("cnh-offer-pricing-card") ||
-                     document.querySelector(".cnh-offer-card-wrapper") ||
-                     document.querySelector(".cnh-main-offer-section") ||
-                     document.getElementById("oferta");
+  const getTarget = () => {
+    return document.getElementById("cnh-offer-pricing-card") ||
+           document.querySelector(".cnh-offer-card-wrapper") ||
+           document.querySelector(".cnh-main-offer-section") ||
+           document.getElementById("oferta");
+  };
+
+  const targetCard = getTarget();
 
   if (targetCard) {
-    const rect = targetCard.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const targetY = rect.top + scrollTop - 16;
+    try {
+      targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      const rect = targetCard.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({
+        top: Math.max(0, rect.top + scrollTop - 16),
+        behavior: "smooth"
+      });
+    }
 
-    window.scrollTo({
-      top: Math.max(0, targetY),
-      behavior: "smooth"
+    // Accurate multi-frame alignment loop to counteract any mobile reflow / image lazy loading
+    const alignDelays = [60, 160, 320, 520, 800, 1100];
+    alignDelays.forEach((delay) => {
+      setTimeout(() => {
+        const currentTarget = getTarget();
+        if (currentTarget) {
+          const rect = currentTarget.getBoundingClientRect();
+          // If element top is off by more than 28px from desired position (-16px)
+          if (Math.abs(rect.top - 16) > 28) {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo({
+              top: Math.max(0, rect.top + scrollTop - 16),
+              behavior: delay > 500 ? "smooth" : "auto"
+            });
+          }
+        }
+      }, delay);
     });
   } else {
     window.location.hash = "#oferta";
@@ -3738,7 +3763,7 @@ function scrollToOffer(e) {
 }
 
 function setupGlobalNavigation() {
-  document.addEventListener("click", (e) => {
+  const handleNavClick = (e) => {
     // 1. Final decision button inside #oferta (the price card) triggers checkout
     const checkoutBtn = e.target.closest("#oferta-checkout-btn, [data-final-checkout='true']");
     if (checkoutBtn) {
@@ -3782,7 +3807,9 @@ function setupGlobalNavigation() {
       if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
       scrollToOffer(e);
     }
-  }, true);
+  };
+
+  document.addEventListener("click", handleNavClick, true);
 }
 
 // ================= BACK REDIRECT MODAL ENGINE (PLANO APROVAÇÃO CNH 2026) =================
