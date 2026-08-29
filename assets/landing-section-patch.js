@@ -2263,7 +2263,7 @@ function createMainOfferSection() {
         }
       }
     </style>
-    <div class="cnh-offer-card-wrapper">
+    <div class="cnh-offer-card-wrapper" id="cnh-offer-pricing-card" data-scroll-anchor="oferta">
       <h2 class="cnh-offer-title" id="cnh-main-offer-title">
         <span>${CNH_OFFER_CONFIG.titlePart1}</span> <span class="cnh-offer-title-highlight">${CNH_OFFER_CONFIG.titlePart2}</span>
       </h2>
@@ -3704,9 +3704,34 @@ function scrollToOffer(e) {
     if (typeof e.stopPropagation === "function") e.stopPropagation();
     if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
   }
-  const offerSection = document.getElementById("oferta") || document.querySelector(".cnh-main-offer-section");
-  if (offerSection) {
-    offerSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Ensure offer section is rendered if not yet present
+  if (!document.querySelector(".cnh-main-offer-section")) {
+    insertPlatformSection();
+  }
+
+  // Clean any old React duplicate offer section to prevent conflict
+  const oldReactOffer = [...document.querySelectorAll("section#oferta")].find(
+    (sec) => !sec.classList.contains("cnh-main-offer-section")
+  );
+  if (oldReactOffer) {
+    oldReactOffer.remove();
+  }
+
+  const targetCard = document.getElementById("cnh-offer-pricing-card") ||
+                     document.querySelector(".cnh-offer-card-wrapper") ||
+                     document.querySelector(".cnh-main-offer-section") ||
+                     document.getElementById("oferta");
+
+  if (targetCard) {
+    const rect = targetCard.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const targetY = rect.top + scrollTop - 16;
+
+    window.scrollTo({
+      top: Math.max(0, targetY),
+      behavior: "smooth"
+    });
   } else {
     window.location.hash = "#oferta";
   }
@@ -3739,6 +3764,11 @@ function setupGlobalNavigation() {
       return;
     }
 
+    // - Back redirect modal elements
+    if (e.target.closest("#cnh-back-redirect-modal") || e.target.closest(".cnh-back-modal-dialog")) {
+      return;
+    }
+
     // 3. ALL other buttons & commercial CTAs on the page scroll smoothly to #oferta
     const commercialBtn = e.target.closest("button, a, .material-section__cta-button, .cnh-motivation-cta, .cnh-bonus-cta-btn, [data-scroll-to-offer]");
     if (commercialBtn) {
@@ -3754,6 +3784,428 @@ function setupGlobalNavigation() {
     }
   }, true);
 }
+
+// ================= BACK REDIRECT MODAL ENGINE (PLANO APROVAÇÃO CNH 2026) =================
+const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://pay.wiapy.com/qG28wLhYTgry";
+
+function injectBackRedirectStyles() {
+  if (document.getElementById("cnh-back-redirect-styles")) return;
+
+  const style = document.createElement("style");
+  style.id = "cnh-back-redirect-styles";
+  style.textContent = `
+    @keyframes cnhBackOverlayFadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes cnhBackModalPopIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cnhModalGentlePulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 20px 48px -8px rgba(7, 27, 53, 0.28), 0 8px 18px -4px rgba(7, 27, 53, 0.12), 0 0 0 1px rgba(255, 90, 31, 0.4);
+      }
+      50% {
+        transform: scale(1.025);
+        box-shadow: 0 26px 58px -6px rgba(7, 27, 53, 0.36), 0 12px 28px -4px rgba(255, 90, 31, 0.28), 0 0 0 2px rgba(255, 90, 31, 0.65);
+      }
+    }
+
+    @keyframes cnhPricePulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.06);
+      }
+    }
+
+    @keyframes cnhSubtleCtaPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.015);
+      }
+    }
+
+    .cnh-back-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 12px;
+      box-sizing: border-box;
+      animation: cnhBackOverlayFadeIn 200ms ease forwards;
+    }
+
+    .cnh-back-modal-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      background: #FAF7F0;
+      border: 1px solid rgba(255, 90, 31, 0.45);
+      border-radius: 20px;
+      padding: 1.35rem 1.25rem 1.1rem;
+      box-shadow: 0 20px 48px -8px rgba(7, 27, 53, 0.28), 0 8px 18px -4px rgba(7, 27, 53, 0.12), 0 0 0 1px rgba(255, 90, 31, 0.4);
+      text-align: center;
+      box-sizing: border-box;
+      animation: cnhBackModalPopIn 220ms ease-out forwards, cnhModalGentlePulse 2.6s ease-in-out 240ms infinite;
+    }
+
+    @media (max-width: 640px) {
+      .cnh-back-modal-dialog {
+        width: calc(100% - 24px);
+        max-width: 400px;
+        padding: 1.2rem 1.05rem 1rem;
+        border-radius: 18px;
+      }
+    }
+
+    .cnh-back-headline {
+      font-family: 'Oswald', 'Bebas Neue', 'Roboto Condensed', Arial, sans-serif;
+      font-size: clamp(1.45rem, 5.2vw, 1.75rem);
+      font-weight: 900;
+      line-height: 1.02;
+      color: #071B35;
+      text-transform: uppercase;
+      margin: 0 0 0.45rem;
+      letter-spacing: -0.01em;
+    }
+
+    .cnh-back-headline .cnh-highlight-orange {
+      color: #FF5A1F;
+      display: inline-block;
+    }
+
+    .cnh-back-anchor {
+      font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif;
+      font-size: clamp(0.72rem, 2.4vw, 0.8rem);
+      font-weight: 600;
+      color: #5F6673;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin: 0 0 0.8rem;
+      line-height: 1.35;
+    }
+
+    .cnh-back-pricing-box {
+      background: transparent;
+      border: none;
+      border-top: 1px solid rgba(7, 21, 47, 0.12);
+      border-bottom: 1px solid rgba(7, 21, 47, 0.12);
+      border-radius: 0;
+      padding: 9px 0 10px;
+      margin: 0 0 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      box-sizing: border-box;
+      text-align: center;
+      width: 100%;
+    }
+
+    .cnh-back-old-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      margin-bottom: 6px;
+    }
+
+    .cnh-back-old-label {
+      font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #8C929D;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .cnh-back-old-value {
+      font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #8C929D;
+      text-decoration: line-through;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+    }
+
+    .cnh-back-now-label {
+      font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: #07152F;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .cnh-back-main-price {
+      font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif;
+      font-size: clamp(2.6rem, 8.8vw, 2.95rem);
+      font-weight: 900;
+      color: #07152F;
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      display: block;
+      margin-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .cnh-back-discount-tag {
+      background: #ECF9F0;
+      color: #14823B;
+      border: 1px solid #AFE6BF;
+      font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .cnh-back-body-text {
+      font-family: 'Plus Jakarta Sans', Inter, -apple-system, sans-serif;
+      font-size: clamp(0.76rem, 2.4vw, 0.82rem);
+      color: #5F6673;
+      line-height: 1.48;
+      margin: 0 0 0.85rem;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .cnh-back-body-text strong {
+      color: #071B35;
+      font-weight: 700;
+    }
+
+    .cnh-back-cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 52px;
+      padding: 0.75rem 1rem;
+      background: #FF5A1F;
+      color: #FFFFFF !important;
+      font-family: 'Oswald', 'Bebas Neue', Arial, sans-serif;
+      font-size: clamp(0.98rem, 3.2vw, 1.1rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(255, 90, 31, 0.20);
+      cursor: pointer;
+      text-decoration: none;
+      box-sizing: border-box;
+      transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+      animation: cnhSubtleCtaPulse 3s ease-in-out infinite;
+    }
+
+    .cnh-back-cta-btn:hover {
+      transform: translateY(-1px);
+      background: #E84E18;
+      box-shadow: 0 10px 24px rgba(255, 90, 31, 0.30);
+    }
+
+    .cnh-back-cta-btn:active {
+      transform: scale(0.985);
+    }
+
+    .cnh-back-refusal-btn {
+      display: block;
+      width: 100%;
+      margin-top: 0.55rem;
+      background: transparent;
+      border: none;
+      color: #64748B;
+      font-family: 'Plus Jakarta Sans', Inter, Arial, sans-serif;
+      font-size: clamp(0.68rem, 2.1vw, 0.74rem);
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      padding: 0.35rem 0.2rem;
+      transition: color 150ms ease, text-decoration-color 150ms ease;
+      text-decoration: underline;
+      text-decoration-color: #64748B;
+      text-underline-offset: 3px;
+      letter-spacing: 0.01em;
+    }
+
+    .cnh-back-refusal-btn:hover {
+      color: #071B35;
+      text-decoration-color: #071B35;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cnh-back-modal-overlay,
+      .cnh-back-modal-dialog,
+      .cnh-back-cta-btn {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function openBackRedirectModal() {
+  if (document.getElementById("cnh-back-redirect-modal")) return;
+
+  injectBackRedirectStyles();
+
+  const overlay = document.createElement("div");
+  overlay.id = "cnh-back-redirect-modal";
+  overlay.className = "cnh-back-modal-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-labelledby", "cnh-back-title");
+
+  // Keep URL tracking queries when forwarding to Wiapy checkout
+  const currentParams = window.location.search || "";
+  let finalCheckoutUrl = CNH_BACK_REDIRECT_CHECKOUT_URL;
+  if (currentParams) {
+    const separator = finalCheckoutUrl.includes("?") ? "&" : "?";
+    finalCheckoutUrl = finalCheckoutUrl + separator + currentParams.replace(/^\?/, "");
+  }
+
+  overlay.innerHTML = `
+    <div class="cnh-back-modal-dialog">
+      <h3 id="cnh-back-title" class="cnh-back-headline">
+        VAI DEIXAR SUA PREPARAÇÃO <span class="cnh-highlight-orange">PARA DEPOIS?</span>
+      </h3>
+
+      <p class="cnh-back-anchor">
+        ANTES DE VOCÊ SAIR, LIBERAMOS UMA CONDIÇÃO ESPECIAL
+      </p>
+
+      <div class="cnh-back-pricing-box">
+        <div class="cnh-back-old-group">
+          <span class="cnh-back-old-label">ANTES</span>
+          <span class="cnh-back-old-value">R$ 27,90</span>
+        </div>
+        <span class="cnh-back-now-label">AGORA POR</span>
+        <span class="cnh-back-main-price">R$ 15,90</span>
+        <div class="cnh-back-discount-tag">
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+            <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#14823B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>ECONOMIZE R$ 12</span>
+        </div>
+      </div>
+
+      <p class="cnh-back-body-text">
+        Chegar à prova ainda cometendo erros pode custar caro. Como você estava saindo, reduzimos para <strong>R$ 15,90</strong> para você reforçar sua preparação, corrigir pontos fracos e evitar repetir os mesmos erros na prova.
+      </p>
+
+      <a href="${finalCheckoutUrl}" class="cnh-back-cta-btn" id="cnh-back-accept-btn" role="button">
+        GARANTIR MEU PLANO POR R$ 15,90
+      </a>
+
+      <button type="button" class="cnh-back-refusal-btn" id="cnh-back-refusal-btn">
+        PREFIRO CHEGAR MENOS PREPARADO À PROVA
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Close modal and stay on site
+  const refusalBtn = overlay.querySelector("#cnh-back-refusal-btn");
+  if (refusalBtn) {
+    refusalBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      overlay.remove();
+    });
+  }
+
+  // Allow clicking on overlay background to close and stay on site
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      overlay.remove();
+    }
+  });
+}
+
+// Expose globally for manual testing if desired
+window.openBackRedirectModal = openBackRedirectModal;
+
+let hasTriggeredBackModal = false;
+
+function initBackRedirectEngine() {
+  if (window.__cnhBackRedirectInitialized) return;
+  window.__cnhBackRedirectInitialized = true;
+
+  // Prime initial history state so first back press can be caught
+  try {
+    window.history.pushState({ cnh_back_guard: 1 }, document.title, window.location.href);
+  } catch (err) {
+    console.warn("History pushState guard:", err);
+  }
+
+  // Intercept back button
+  window.addEventListener("popstate", () => {
+    const existingModal = document.getElementById("cnh-back-redirect-modal");
+    
+    // If modal is currently open and user presses back, close it and return to the site
+    if (existingModal) {
+      existingModal.remove();
+      return;
+    }
+
+    // If modal hasn't been shown yet, display it on 1st back press
+    if (!hasTriggeredBackModal) {
+      hasTriggeredBackModal = true;
+      openBackRedirectModal();
+      try {
+        // Push a state so that pressing back while viewing the modal will close it back to the site
+        window.history.pushState({ cnh_back_modal: true }, document.title, window.location.href);
+      } catch (err) {}
+      return;
+    }
+
+    // If modal was already shown/closed, allow user to exit naturally on subsequent back
+  });
+}
+
+initBackRedirectEngine();
 
 setupGlobalNavigation();
 
