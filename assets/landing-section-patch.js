@@ -4153,7 +4153,7 @@ function openBackRedirectModal() {
           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
             <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#14823B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>ECONOMIZE R$ 12</span>
+          <span>ECONOMIZE 50%</span>
         </div>
       </div>
 
