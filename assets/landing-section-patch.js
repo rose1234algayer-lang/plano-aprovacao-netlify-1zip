@@ -4200,12 +4200,30 @@ function initBackRedirectEngine() {
   if (window.__cnhBackRedirectInitialized) return;
   window.__cnhBackRedirectInitialized = true;
 
-  // Prime initial history state so first back press can be caught
-  try {
-    window.history.pushState({ cnh_back_guard: 1 }, document.title, window.location.href);
-  } catch (err) {
-    console.warn("History pushState guard:", err);
-  }
+  // Function to prime browser history
+  const primeHistoryState = () => {
+    if (hasTriggeredBackModal) return;
+    try {
+      if (!window.history.state || !window.history.state.cnh_guard) {
+        window.history.pushState({ cnh_guard: true }, document.title, window.location.href);
+      }
+    } catch (err) {
+      console.warn("History pushState guard:", err);
+    }
+  };
+
+  // Immediate priming & delayed priming for mobile browsers (Chrome, Safari, Android Webview)
+  primeHistoryState();
+  setTimeout(primeHistoryState, 300);
+  setTimeout(primeHistoryState, 1000);
+
+  // Mobile user gestures (touch, scroll, click) guarantee the browser acknowledges history entry
+  const onFirstInteraction = () => {
+    primeHistoryState();
+  };
+  window.addEventListener("touchstart", onFirstInteraction, { passive: true });
+  window.addEventListener("scroll", onFirstInteraction, { passive: true });
+  window.addEventListener("click", onFirstInteraction, { passive: true });
 
   // Intercept back button
   window.addEventListener("popstate", () => {
@@ -4222,13 +4240,13 @@ function initBackRedirectEngine() {
       hasTriggeredBackModal = true;
       openBackRedirectModal();
       try {
-        // Push a state so that pressing back while viewing the modal will close it back to the site
-        window.history.pushState({ cnh_back_modal: true }, document.title, window.location.href);
+        // Push state so pressing back with modal open simply closes the modal
+        window.history.pushState({ cnh_modal_open: true }, document.title, window.location.href);
       } catch (err) {}
       return;
     }
 
-    // If modal was already shown/closed, allow user to exit naturally on subsequent back
+    // If already triggered, allow natural back exit
   });
 }
 
