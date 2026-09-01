@@ -2310,7 +2310,7 @@ function createMainOfferSection() {
         </div>
       </div>
 
-      <a href="https://pay.wiapy.com/Ejh7VyX6eSxN" id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" role="button" target="_self">
+      <a href="https://ggcheckout.app/checkout/v5/cqXuS3l8MVTxF4UyzST9" id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" role="button" target="_self">
         <span class="cnh-offer-checkout-main">${CNH_OFFER_CONFIG.cta.mainText}</span>
         <span class="cnh-offer-checkout-sub">${CNH_OFFER_CONFIG.cta.subText}</span>
       </a>
@@ -3598,13 +3598,14 @@ function optimizeImagesSmoothly() {
   });
 }
 
-const BASE_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
+const CNH_MAIN_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/cqXuS3l8MVTxF4UyzST9";
+const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
 
-function getCheckoutUrlWithParams() {
+function decorateCheckoutUrl(baseUrl) {
   try {
-    const targetUrl = new URL(BASE_CHECKOUT_URL);
+    const targetUrl = new URL(baseUrl);
     
-    // 1. Merge all query parameters from the current URL (UTMs, src, sck, etc.)
+    // 1. Merge all query parameters from current page URL (UTMs, src, sck, etc.)
     if (window.location.search) {
       const currentParams = new URLSearchParams(window.location.search);
       currentParams.forEach((value, key) => {
@@ -3624,7 +3625,7 @@ function getCheckoutUrlWithParams() {
       }
     });
 
-    // 3. If UTMify already decorated an existing anchor on the page, inherit its params
+    // 3. Inherit any decorated params if UTMify decorated existing anchors
     const decoratedAnchor = document.querySelector("a[href*='ggcheckout.app'], a[href*='pay.wiapy.com']");
     if (decoratedAnchor && decoratedAnchor.href && decoratedAnchor.href.includes("?")) {
       try {
@@ -3639,26 +3640,53 @@ function getCheckoutUrlWithParams() {
   } catch (err) {
     const search = window.location.search || "";
     if (search) {
-      const sep = BASE_CHECKOUT_URL.includes("?") ? "&" : "?";
-      return BASE_CHECKOUT_URL + sep + search.replace(/^\?/, "");
+      const sep = baseUrl.includes("?") ? "&" : "?";
+      return baseUrl + sep + search.replace(/^\?/, "");
     }
-    return BASE_CHECKOUT_URL;
+    return baseUrl;
   }
+}
+
+function getMainCheckoutUrlWithParams() {
+  return decorateCheckoutUrl(CNH_MAIN_CHECKOUT_URL);
+}
+
+function getBackRedirectCheckoutUrlWithParams() {
+  return decorateCheckoutUrl(CNH_BACK_REDIRECT_CHECKOUT_URL);
 }
 
 function syncCheckoutLinks() {
   try {
-    const finalUrl = getCheckoutUrlWithParams();
-    document.querySelectorAll("a[href*='ggcheckout.app'], a[href*='pay.wiapy.com'], #oferta-checkout-btn").forEach((el) => {
+    const mainUrl = getMainCheckoutUrlWithParams();
+    const backUrl = getBackRedirectCheckoutUrlWithParams();
+
+    // 1. Sync main offer button and final checkout triggers
+    document.querySelectorAll("#oferta-checkout-btn, [data-final-checkout='true']").forEach((el) => {
       if (el.tagName === "A") {
-        el.setAttribute("href", finalUrl);
+        el.setAttribute("href", mainUrl);
+      }
+    });
+
+    // 2. Sync back redirect button
+    document.querySelectorAll("#cnh-back-accept-btn, .cnh-back-cta-btn").forEach((el) => {
+      if (el.tagName === "A") {
+        el.setAttribute("href", backUrl);
+      }
+    });
+
+    // 3. Any other checkout links
+    document.querySelectorAll("a[href*='ggcheckout.app'], a[href*='pay.wiapy.com']").forEach((el) => {
+      if (el.id === "cnh-back-accept-btn" || el.closest("#cnh-back-redirect-modal")) {
+        el.setAttribute("href", backUrl);
+      } else {
+        el.setAttribute("href", mainUrl);
       }
     });
   } catch (e) {}
 }
 
 function redirectToCheckout(e) {
-  const finalUrl = getCheckoutUrlWithParams();
+  const finalUrl = getMainCheckoutUrlWithParams();
 
   // Try to fire InitiateCheckout for any active pixel trackers
   try {
@@ -3673,10 +3701,9 @@ function redirectToCheckout(e) {
     }
   } catch (err) {}
 
-  if (e && e.currentTarget && e.currentTarget.tagName === "A") {
-    e.currentTarget.setAttribute("href", finalUrl);
-    // Let the natural link navigation occur so tracking scripts catch the click
-    return;
+  const targetAnchor = e && e.target ? e.target.closest("a") : null;
+  if (targetAnchor) {
+    targetAnchor.setAttribute("href", finalUrl);
   }
 
   if (e && typeof e.preventDefault === "function") {
@@ -3813,8 +3840,6 @@ function setupGlobalNavigation() {
 }
 
 // ================= BACK REDIRECT MODAL ENGINE (PLANO APROVAÇÃO CNH 2026) =================
-const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
-
 function injectBackRedirectStyles() {
   if (document.getElementById("cnh-back-redirect-styles")) return;
 
@@ -3876,16 +3901,16 @@ function injectBackRedirectStyles() {
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 999999;
+      z-index: 9999999;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
       padding: 12px;
       box-sizing: border-box;
-      animation: cnhBackOverlayFadeIn 200ms ease forwards;
+      animation: cnhBackOverlayFadeIn 180ms ease forwards;
     }
 
     .cnh-back-modal-dialog {
@@ -3899,14 +3924,14 @@ function injectBackRedirectStyles() {
       box-shadow: 0 20px 48px -8px rgba(7, 27, 53, 0.28), 0 8px 18px -4px rgba(7, 27, 53, 0.12), 0 0 0 1px rgba(255, 90, 31, 0.4);
       text-align: center;
       box-sizing: border-box;
-      animation: cnhBackModalPopIn 220ms ease-out forwards, cnhModalGentlePulse 2.6s ease-in-out 240ms infinite;
+      animation: cnhBackModalPopIn 200ms ease-out forwards, cnhModalGentlePulse 2.6s ease-in-out 240ms infinite;
     }
 
     @media (max-width: 640px) {
       .cnh-back-modal-dialog {
-        width: calc(100% - 24px);
-        max-width: 400px;
-        padding: 1.2rem 1.05rem 1rem;
+        width: calc(100% - 20px);
+        max-width: 390px;
+        padding: 1.2rem 1rem 0.95rem;
         border-radius: 18px;
       }
     }
@@ -4124,34 +4149,7 @@ function openBackRedirectModal() {
   overlay.setAttribute("aria-modal", "true");
   overlay.setAttribute("aria-labelledby", "cnh-back-title");
 
-  // Keep URL tracking queries when forwarding to GGCheckout
-  let finalCheckoutUrl = CNH_BACK_REDIRECT_CHECKOUT_URL;
-  try {
-    const targetUrl = new URL(CNH_BACK_REDIRECT_CHECKOUT_URL);
-    if (window.location.search) {
-      const currentParams = new URLSearchParams(window.location.search);
-      currentParams.forEach((value, key) => {
-        if (value) targetUrl.searchParams.set(key, value);
-      });
-    }
-    const trackingKeys = [
-      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
-      "src", "sck", "xcod", "fbclid", "gclid", "ttclid", "utmify_lead"
-    ];
-    trackingKeys.forEach((key) => {
-      if (!targetUrl.searchParams.has(key)) {
-        const storedVal = sessionStorage.getItem(key) || localStorage.getItem(key);
-        if (storedVal) targetUrl.searchParams.set(key, storedVal);
-      }
-    });
-    finalCheckoutUrl = targetUrl.toString();
-  } catch (err) {
-    const currentParams = window.location.search || "";
-    if (currentParams) {
-      const separator = finalCheckoutUrl.includes("?") ? "&" : "?";
-      finalCheckoutUrl = finalCheckoutUrl + separator + currentParams.replace(/^\?/, "");
-    }
-  }
+  const finalCheckoutUrl = getBackRedirectCheckoutUrlWithParams();
 
   overlay.innerHTML = `
     <div class="cnh-back-modal-dialog">
@@ -4182,7 +4180,7 @@ function openBackRedirectModal() {
         Chegar à prova ainda cometendo erros pode custar caro. Como você estava saindo, reduzimos para <strong>R$ 15,90</strong> para você reforçar sua preparação, corrigir pontos fracos e evitar repetir os mesmos erros na prova.
       </p>
 
-      <a href="${finalCheckoutUrl}" class="cnh-back-cta-btn" id="cnh-back-accept-btn" role="button">
+      <a href="${finalCheckoutUrl}" class="cnh-back-cta-btn" id="cnh-back-accept-btn" role="button" target="_self">
         GARANTIR MEU PLANO POR R$ 15,90
       </a>
 
@@ -4193,6 +4191,28 @@ function openBackRedirectModal() {
   `;
 
   document.body.appendChild(overlay);
+  try {
+    document.body.style.overflow = "hidden";
+  } catch (e) {}
+
+  const closeModal = () => {
+    try {
+      document.body.style.overflow = "";
+    } catch (e) {}
+    overlay.remove();
+  };
+
+  const acceptBtn = overlay.querySelector("#cnh-back-accept-btn");
+  if (acceptBtn) {
+    acceptBtn.addEventListener("click", () => {
+      const liveUrl = getBackRedirectCheckoutUrlWithParams();
+      acceptBtn.setAttribute("href", liveUrl);
+      try {
+        if (typeof window.fbq === "function") window.fbq("track", "InitiateCheckout");
+        if (typeof window.ttq === "object" && typeof window.ttq.track === "function") window.ttq.track("InitiateCheckout");
+      } catch (err) {}
+    });
+  }
 
   // Close modal and stay on site
   const refusalBtn = overlay.querySelector("#cnh-back-refusal-btn");
@@ -4200,14 +4220,14 @@ function openBackRedirectModal() {
     refusalBtn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      overlay.remove();
+      closeModal();
     });
   }
 
   // Allow clicking on overlay background to close and stay on site
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
-      overlay.remove();
+      closeModal();
     }
   });
 }
@@ -4221,53 +4241,58 @@ function initBackRedirectEngine() {
   if (window.__cnhBackRedirectInitialized) return;
   window.__cnhBackRedirectInitialized = true;
 
-  // Function to prime browser history
-  const primeHistoryState = () => {
+  const pushGuard = () => {
     if (hasTriggeredBackModal) return;
     try {
-      if (!window.history.state || !window.history.state.cnh_guard) {
-        window.history.pushState({ cnh_guard: true }, document.title, window.location.href);
-      }
-    } catch (err) {
-      console.warn("History pushState guard:", err);
+      window.history.pushState({ cnh_back_guard: true }, document.title, window.location.href);
+    } catch (err) {}
+  };
+
+  // Push immediately and with scheduled intervals
+  pushGuard();
+  setTimeout(pushGuard, 150);
+  setTimeout(pushGuard, 400);
+  setTimeout(pushGuard, 1000);
+
+  // User interactions guarantee mobile browser history stack registration
+  const onInteraction = () => {
+    pushGuard();
+  };
+  ["touchstart", "touchend", "scroll", "click", "pointerdown"].forEach((evt) => {
+    window.addEventListener(evt, onInteraction, { passive: true });
+  });
+
+  // Desktop exit intent
+  document.addEventListener("mouseleave", (e) => {
+    if (e.clientY <= 8 && !hasTriggeredBackModal && !document.getElementById("cnh-back-redirect-modal")) {
+      hasTriggeredBackModal = true;
+      openBackRedirectModal();
     }
-  };
+  });
 
-  // Immediate priming & delayed priming for mobile browsers (Chrome, Safari, Android Webview)
-  primeHistoryState();
-  setTimeout(primeHistoryState, 300);
-  setTimeout(primeHistoryState, 1000);
-
-  // Mobile user gestures (touch, scroll, click) guarantee the browser acknowledges history entry
-  const onFirstInteraction = () => {
-    primeHistoryState();
-  };
-  window.addEventListener("touchstart", onFirstInteraction, { passive: true });
-  window.addEventListener("scroll", onFirstInteraction, { passive: true });
-  window.addEventListener("click", onFirstInteraction, { passive: true });
-
-  // Intercept back button
+  // Intercept back button / swipe back gesture
   window.addEventListener("popstate", () => {
     const existingModal = document.getElementById("cnh-back-redirect-modal");
     
-    // If modal is currently open and user presses back, close it and return to the site
+    // If modal is currently open and user presses back, dismiss modal and return to page
     if (existingModal) {
+      try {
+        document.body.style.overflow = "";
+      } catch (err) {}
       existingModal.remove();
       return;
     }
 
-    // If modal hasn't been shown yet, display it on 1st back press
+    // First back press -> trigger modal
     if (!hasTriggeredBackModal) {
       hasTriggeredBackModal = true;
       openBackRedirectModal();
       try {
-        // Push state so pressing back with modal open simply closes the modal
+        // Push a state so pressing back while viewing the modal will close it cleanly
         window.history.pushState({ cnh_modal_open: true }, document.title, window.location.href);
       } catch (err) {}
       return;
     }
-
-    // If already triggered, allow natural back exit
   });
 }
 
