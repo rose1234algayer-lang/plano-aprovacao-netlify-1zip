@@ -3598,7 +3598,7 @@ function optimizeImagesSmoothly() {
   });
 }
 
-const BASE_CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+const BASE_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
 
 function getCheckoutUrlWithParams() {
   try {
@@ -3625,7 +3625,7 @@ function getCheckoutUrlWithParams() {
     });
 
     // 3. If UTMify already decorated an existing anchor on the page, inherit its params
-    const decoratedAnchor = document.querySelector("a[href*='pay.wiapy.com']");
+    const decoratedAnchor = document.querySelector("a[href*='ggcheckout.app'], a[href*='pay.wiapy.com']");
     if (decoratedAnchor && decoratedAnchor.href && decoratedAnchor.href.includes("?")) {
       try {
         const anchorUrl = new URL(decoratedAnchor.href);
@@ -3649,7 +3649,7 @@ function getCheckoutUrlWithParams() {
 function syncCheckoutLinks() {
   try {
     const finalUrl = getCheckoutUrlWithParams();
-    document.querySelectorAll("a[href*='pay.wiapy.com'], #oferta-checkout-btn").forEach((el) => {
+    document.querySelectorAll("a[href*='ggcheckout.app'], a[href*='pay.wiapy.com'], #oferta-checkout-btn").forEach((el) => {
       if (el.tagName === "A") {
         el.setAttribute("href", finalUrl);
       }
@@ -3799,7 +3799,7 @@ function setupGlobalNavigation() {
     if (commercialBtn) {
       // Allow external policy/terms links if any
       const href = commercialBtn.getAttribute("href") || "";
-      if (href.startsWith("http") && !href.includes("wiapy") && !commercialBtn.classList.contains("btn-checkout-trigger")) {
+      if (href.startsWith("http") && !href.includes("wiapy") && !href.includes("ggcheckout") && !commercialBtn.classList.contains("btn-checkout-trigger")) {
         return;
       }
       if (typeof e.preventDefault === "function") e.preventDefault();
