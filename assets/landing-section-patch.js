@@ -3813,7 +3813,7 @@ function setupGlobalNavigation() {
 }
 
 // ================= BACK REDIRECT MODAL ENGINE (PLANO APROVAÇÃO CNH 2026) =================
-const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://pay.wiapy.com/qG28wLhYTgry";
+const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
 
 function injectBackRedirectStyles() {
   if (document.getElementById("cnh-back-redirect-styles")) return;
@@ -4124,12 +4124,33 @@ function openBackRedirectModal() {
   overlay.setAttribute("aria-modal", "true");
   overlay.setAttribute("aria-labelledby", "cnh-back-title");
 
-  // Keep URL tracking queries when forwarding to Wiapy checkout
-  const currentParams = window.location.search || "";
+  // Keep URL tracking queries when forwarding to GGCheckout
   let finalCheckoutUrl = CNH_BACK_REDIRECT_CHECKOUT_URL;
-  if (currentParams) {
-    const separator = finalCheckoutUrl.includes("?") ? "&" : "?";
-    finalCheckoutUrl = finalCheckoutUrl + separator + currentParams.replace(/^\?/, "");
+  try {
+    const targetUrl = new URL(CNH_BACK_REDIRECT_CHECKOUT_URL);
+    if (window.location.search) {
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.forEach((value, key) => {
+        if (value) targetUrl.searchParams.set(key, value);
+      });
+    }
+    const trackingKeys = [
+      "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+      "src", "sck", "xcod", "fbclid", "gclid", "ttclid", "utmify_lead"
+    ];
+    trackingKeys.forEach((key) => {
+      if (!targetUrl.searchParams.has(key)) {
+        const storedVal = sessionStorage.getItem(key) || localStorage.getItem(key);
+        if (storedVal) targetUrl.searchParams.set(key, storedVal);
+      }
+    });
+    finalCheckoutUrl = targetUrl.toString();
+  } catch (err) {
+    const currentParams = window.location.search || "";
+    if (currentParams) {
+      const separator = finalCheckoutUrl.includes("?") ? "&" : "?";
+      finalCheckoutUrl = finalCheckoutUrl + separator + currentParams.replace(/^\?/, "");
+    }
   }
 
   overlay.innerHTML = `
