@@ -4236,13 +4236,13 @@ function openBackRedirectModal() {
 window.openBackRedirectModal = openBackRedirectModal;
 
 let hasTriggeredBackModal = false;
-let mouseHasMovedInsideViewport = false;
-const pageInitTimestamp = Date.now();
+let isHistoryPrimed = false;
 
 function primeHistoryGuard() {
-  if (hasTriggeredBackModal) return;
+  if (hasTriggeredBackModal || isHistoryPrimed) return;
   try {
-    window.history.pushState({ cnh_back_guard: true, t: Date.now() }, document.title, window.location.href);
+    isHistoryPrimed = true;
+    window.history.pushState({ cnh_back_guard: true }, document.title, window.location.href);
   } catch (err) {}
 }
 
@@ -4250,50 +4250,19 @@ function initBackRedirectEngine() {
   if (window.__cnhBackRedirectInitialized) return;
   window.__cnhBackRedirectInitialized = true;
 
-  // Prime history state immediately on script run
+  // Prime history once immediately on script execution
   primeHistoryGuard();
 
-  // Multi-event priming for mobile browsers (iOS Safari swipe, Chrome Android, Instagram WebView)
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", primeHistoryGuard, { once: true });
-  }
-  window.addEventListener("pageshow", primeHistoryGuard);
-
-  // User interactions ensure mobile browser history stack registration
-  const onUserInteraction = () => {
+  // If the browser required an initial user interaction, prime once on first touch/click
+  const onFirstInteraction = () => {
     primeHistoryGuard();
   };
-  window.addEventListener("touchstart", onUserInteraction, { passive: true });
-  window.addEventListener("pointerdown", onUserInteraction, { passive: true });
-  window.addEventListener("click", onUserInteraction, { passive: true });
-  window.addEventListener("scroll", onUserInteraction, { passive: true });
+  window.addEventListener("touchstart", onFirstInteraction, { passive: true, once: true });
+  window.addEventListener("pointerdown", onFirstInteraction, { passive: true, once: true });
+  window.addEventListener("click", onFirstInteraction, { passive: true, once: true });
+  window.addEventListener("scroll", onFirstInteraction, { passive: true, once: true });
 
-  // Track if mouse actually enters and moves within page content (to prevent instant trigger on load)
-  document.addEventListener("mousemove", (e) => {
-    if (e.clientY > 60) {
-      mouseHasMovedInsideViewport = true;
-    }
-  }, { passive: true });
-
-  // Desktop exit intent (ONLY if user was interacting with page and moves cursor out to top bar)
-  document.addEventListener("mouseleave", (e) => {
-    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const hasBeenOnPageLongEnough = Date.now() - pageInitTimestamp > 1200;
-    
-    if (
-      isDesktop &&
-      hasBeenOnPageLongEnough &&
-      mouseHasMovedInsideViewport &&
-      e.clientY <= 10 &&
-      !hasTriggeredBackModal &&
-      !document.getElementById("cnh-back-redirect-modal")
-    ) {
-      hasTriggeredBackModal = true;
-      openBackRedirectModal();
-    }
-  });
-
-  // Intercept back button or swipe back gesture
+  // Intercept back button or swipe back gesture (Mobile & Desktop)
   window.addEventListener("popstate", () => {
     const existingModal = document.getElementById("cnh-back-redirect-modal");
     
@@ -4310,10 +4279,6 @@ function initBackRedirectEngine() {
     if (!hasTriggeredBackModal) {
       hasTriggeredBackModal = true;
       openBackRedirectModal();
-      try {
-        // Push state so if user presses phone back while viewing modal, it cleanly closes the modal
-        window.history.pushState({ cnh_modal_active: true }, document.title, window.location.href);
-      } catch (err) {}
       return;
     }
 
