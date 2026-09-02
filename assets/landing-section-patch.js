@@ -4164,10 +4164,10 @@ function openBackRedirectModal() {
       <div class="cnh-back-pricing-box">
         <div class="cnh-back-old-group">
           <span class="cnh-back-old-label">ANTES</span>
-          <span class="cnh-back-old-value">R$ 27,90</span>
+          <span class="cnh-back-old-value">R$ 16,90</span>
         </div>
         <span class="cnh-back-now-label">AGORA POR</span>
-        <span class="cnh-back-main-price">R$ 15,90</span>
+        <span class="cnh-back-main-price">R$ 9,90</span>
         <div class="cnh-back-discount-tag">
           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
             <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#14823B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -4177,11 +4177,11 @@ function openBackRedirectModal() {
       </div>
 
       <p class="cnh-back-body-text">
-        Chegar à prova ainda cometendo erros pode custar caro. Como você estava saindo, reduzimos para <strong>R$ 15,90</strong> para você reforçar sua preparação, corrigir pontos fracos e evitar repetir os mesmos erros na prova.
+        Chegar à prova ainda cometendo erros pode custar caro. Como você estava saindo, reduzimos para <strong>R$ 9,90</strong> para você reforçar sua preparação, corrigir pontos fracos e evitar repetir os mesmos erros na prova.
       </p>
 
       <a href="${finalCheckoutUrl}" class="cnh-back-cta-btn" id="cnh-back-accept-btn" role="button" target="_self">
-        GARANTIR MEU PLANO POR R$ 15,90
+        GARANTIR MEU PLANO POR R$ 9,90
       </a>
 
       <button type="button" class="cnh-back-refusal-btn" id="cnh-back-refusal-btn">
