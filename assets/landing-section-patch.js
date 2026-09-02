@@ -877,7 +877,7 @@ const CNH_OFFER_CONFIG = {
   pricing: {
     referencePrice: "De: R$ 67,00",
     leadText: "POR APENAS",
-    mainPrice: "R$ 27,90",
+    mainPrice: "R$ 16,90",
     termsText: "à vista"
   },
   timer: {
