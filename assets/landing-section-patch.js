@@ -2310,7 +2310,7 @@ function createMainOfferSection() {
         </div>
       </div>
 
-      <a href="https://ggcheckout.app/checkout/v5/cqXuS3l8MVTxF4UyzST9" id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" role="button" target="_self">
+      <a href="https://pay.wiapy.com/Ejh7VyX6eSxN" id="oferta-checkout-btn" class="cnh-offer-checkout-btn" data-final-checkout="true" role="button" target="_self">
         <span class="cnh-offer-checkout-main">${CNH_OFFER_CONFIG.cta.mainText}</span>
         <span class="cnh-offer-checkout-sub">${CNH_OFFER_CONFIG.cta.subText}</span>
       </a>
@@ -3598,8 +3598,8 @@ function optimizeImagesSmoothly() {
   });
 }
 
-const CNH_MAIN_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/cqXuS3l8MVTxF4UyzST9";
-const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://ggcheckout.app/checkout/v5/kQMvWStj4GmaMJnhJsb7";
+const CNH_MAIN_CHECKOUT_URL = "https://pay.wiapy.com/Ejh7VyX6eSxN";
+const CNH_BACK_REDIRECT_CHECKOUT_URL = "https://pay.wiapy.com/qG28wLhYTgry";
 
 function decorateCheckoutUrl(baseUrl) {
   try {
