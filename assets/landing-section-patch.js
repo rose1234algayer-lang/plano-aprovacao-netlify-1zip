@@ -877,7 +877,7 @@ const CNH_OFFER_CONFIG = {
   pricing: {
     referencePrice: "De: R$ 67,00",
     leadText: "POR APENAS",
-    mainPrice: "R$ 16,90",
+    mainPrice: "R$ 27,90",
     termsText: "à vista"
   },
   timer: {
@@ -4164,7 +4164,7 @@ function openBackRedirectModal() {
       <div class="cnh-back-pricing-box">
         <div class="cnh-back-old-group">
           <span class="cnh-back-old-label">ANTES</span>
-          <span class="cnh-back-old-value">R$ 16,90</span>
+          <span class="cnh-back-old-value">R$ 27,90</span>
         </div>
         <span class="cnh-back-now-label">AGORA POR</span>
         <span class="cnh-back-main-price">R$ 9,90</span>
@@ -4172,7 +4172,7 @@ function openBackRedirectModal() {
           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
             <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#14823B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>ECONOMIZE 50%</span>
+          <span>ECONOMIZE 65%</span>
         </div>
       </div>
 
